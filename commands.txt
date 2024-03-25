@@ -15,4 +15,4 @@ mamba env update -f test.yaml
 # Running the commands
 ## this is for phi-1.5
 
-CUDA_VISIBLE_DEVICES=0  python main.py --model microsoft/phi-1_5 --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-phi --masks_per_iter 200 --nsamples 32 --save outdir  --prune_frac 0.05 --bsz 1 --prune_method wanda
+CUDA_VISIBLE_DEVICES=0  python main.py --model microsoft/phi-1_5 --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-phi-wikitext --masks_per_iter 200 --nsamples 32 --save outdir  --prune_frac 0.05 --bsz 1 --prune_method wanda
