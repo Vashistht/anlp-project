@@ -2,6 +2,8 @@
 
 ## Run 0: setting up [Sun Mar 24]
 Device: ml.g4dn.xlarge
+
+
     ```OSError: [Errno 28] No space left on device
     We hit a nan or inf. Stopping
     We hit a nan or inf. Resettinig 
