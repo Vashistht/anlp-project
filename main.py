@@ -550,22 +550,24 @@ def main():
 	model = get_llm(args.model, args.cache_dir)
 	model.eval()
 	tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=False)
-	
+	print('tokenizer done')
 	# Getting the initial evaluation of the model
 	_, orig_test_ppl = eval_ppl(model, tokenizer, model.device, dataset=args.dataset)
-
+    print('eval done original_test_ppl: orig_test_ppl)
 	original_param_count = get_param_count(model)
 	model.original_param_count = original_param_count
 	cur_sparsity = 1.0 - (get_param_count(model) / original_param_count)
 	epoch_ = 1
+    
 	while True:
+ 		print('current sparsity', cur_sparsity)
 		# If the sparsity is within a reasonable tolerance of the target, we can break
 		if (abs(cur_sparsity - args.sparsity_ratio) < args.tol) or (cur_sparsity > args.sparsity_ratio):
 			break
 
 		# Need to check if we have to clip the sparsity ratio (if the current ratio causes us to overshoot)
 		if (cur_sparsity + args.prune_frac) > args.sparsity_ratio:
-			# We would overshoot in this case which is not idea.
+			# We would overshoot in this case which is not ideal.
 			old_prune_frac = args.prune_frac
 			args.prune_frac = abs(args.sparsity_ratio - cur_sparsity)
 			print('We have updated the prune fraction {:.3f} -> {:.3f} to avoid overshooting'.format(old_prune_frac, args.prune_frac))
