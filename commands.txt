@@ -26,6 +26,11 @@ CUDA_VISIBLE_DEVICES=0 python main.py --model princeton-nlp/Sheared-LLaMA-2.7B -
 ## Prune LLaMA 2 7B
 CUDA_VISIBLE_DEVICES=0 python main.py --model meta-llama/Llama-2-7b-hf --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-llama2-wikitext --masks_per_iter 200 --nsamples 8 --save outdir --prune_frac 0.2 --bsz 1 --prune_method wanda
 
+# Prune Sheared Llama-1 3B
+CUDA_VISIBLE_DEVICES=0 python main.py --model princeton-nlp/Sheared-LLaMA-1.3B --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-sheared-llama2-wikitext --masks_per_iter 200 --nsamples 8 --save outdir --prune_frac 0.2 --bsz 1 --prune_method wanda
+
+
+
 
 ## Tiny Llama (older)
 <!---
