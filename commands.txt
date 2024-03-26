@@ -1,18 +1,23 @@
 # Setup
 
-conda create -n prune_llm
-source /home/ec2-user/anaconda3/bin/activate prune_llm
+conda create -n prune_llm mamba -c conda-forge
+source activate prune_llm
 
-conda install -c anaconda ipykernel # to add to aws kernel
+mamba install  -c pytorch -c conda-forge -c defaults ipykernel torchaudio torchvision scipy matplotlib
+
+pip install numpy wandb accelerate chardet==5.2.0 datasets huggingface-hub transformers pandas plotly torch tqdm urllib3
+
 python -m ipykernel install --user --name=prune_llm
-
-conda install mamba -c conda-forge  # similar to conda but in my experirence better with installations and debugging
-
-mamba env update -f test.yaml
-
 
 
 # Running the commands
 ## this is for phi-1.5
 
+CUDA_VISIBLE_DEVICES=0  python main.py --model TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-llama2-wikitext --masks_per_iter 200 --nsamples 32 --save outdir  --prune_frac 0.2 --bsz 1 --prune_method wanda
+
+
+
+
+<!---
 CUDA_VISIBLE_DEVICES=0  python main.py --model TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-phi-wikitext --masks_per_iter 200 --nsamples 32 --save outdir  --prune_frac 0.05 --bsz 1 --prune_method wanda
+-->
