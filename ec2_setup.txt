@@ -13,3 +13,10 @@
 !pip install numpy wandb accelerate chardet==5.2.0 datasets huggingface-hub transformers pandas plotly torch tqdm urllib3 sentencepiece 
 
 !pip install -U "huggingface_hub[cli]"
+
+
+# How to set up SSH on VSCode
+# https://medium.com/@christyjacob4/using-vscode-remotely-on-an-ec2-instance-7822c4032cff
+
+# Install Python, pip on EC2 instance
+# https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install-linux.html
