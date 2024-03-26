@@ -36,4 +36,6 @@ Device: ml.g4dn.2xlarge
 ValueError: Trying to set a tensor of shape torch.Size([256, 2048]) in "weight" (which has shape torch.Size([2048, 2048])), this look incorrect.
     '''
     
-  
+## Running with phi 1.5
+
+'''You are using a model of type phi to instantiate a model of type llama. This is not supported for all configurations of models and can yield errors.'''
