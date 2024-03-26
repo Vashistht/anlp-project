@@ -560,7 +560,7 @@ def main():
 	epoch_ = 1
     
 	while True:
- 		print('current sparsity', cur_sparsity)
+		print('current sparsity', cur_sparsity)
 		# If the sparsity is within a reasonable tolerance of the target, we can break
 		if (abs(cur_sparsity - args.sparsity_ratio) < args.tol) or (cur_sparsity > args.sparsity_ratio):
 			break
