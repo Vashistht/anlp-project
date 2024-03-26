@@ -1,0 +1,15 @@
+!sudo yum install python3
+
+!curl -O https://bootstrap.pypa.io/get-pip.py
+
+!python3 get-pip.py --user
+
+!export PATH=~/:$PATH
+
+!source ~/.bash_profile
+
+!pip install pytorch defaults ipykernel torchaudio torchvision scipy matplotlib
+
+!pip install numpy wandb accelerate chardet==5.2.0 datasets huggingface-hub transformers pandas plotly torch tqdm urllib3 sentencepiece 
+
+!pip install -U "huggingface_hub[cli]"
