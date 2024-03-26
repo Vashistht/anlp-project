@@ -1,4 +1,5 @@
 # Setup
+## Please verify with python, import torch, torch.cuda.is_available(), torch.cuda.device_count() to see if it is the right version
 
 conda create -n prune_llm mamba -c conda-forge
 source activate prune_llm
