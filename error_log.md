@@ -39,3 +39,34 @@ ValueError: Trying to set a tensor of shape torch.Size([256, 2048]) in "weight" 
 ## Running with phi 1.5
 
 '''You are using a model of type phi to instantiate a model of type llama. This is not supported for all configurations of models and can yield errors.'''
+
+
+## Sheared LLama
+
+'''
+eval done original_test_ppl: 6.4152679443359375
+current sparsity 0.0
+Gathering statistics for pruning
+evaluating on wikitext2
+nsamples 8
+sample 0
+Traceback (most recent call last):
+  File "/home/ec2-user/SageMaker/anlp-project/main.py", line 605, in <module>
+    main()
+  File "/home/ec2-user/SageMaker/anlp-project/main.py", line 583, in main
+    mask_info = investigate_score_based_mask(args, model, wandb_run, epoch_=epoch_)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ec2-user/SageMaker/anlp-project/main.py", line 302, in investigate_score_based_mask
+    score_info = get_random_mask_scores(
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ec2-user/SageMaker/anlp-project/main.py", line 65, in get_random_mask_scores
+    seed_ = random.randint(0, 1e4)
+            ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ec2-user/anaconda3/envs/prune_llm/lib/python3.12/random.py", line 336, in randint
+    return self.randrange(a, b+1)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ec2-user/anaconda3/envs/prune_llm/lib/python3.12/random.py", line 312, in randrange
+    istop = _index(stop)
+            ^^^^^^^^^^^^
+TypeError: 'float' object cannot be interpreted as an integer
+'''
