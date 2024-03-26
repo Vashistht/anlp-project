@@ -553,7 +553,7 @@ def main():
 	print('tokenizer done')
 	# Getting the initial evaluation of the model
 	_, orig_test_ppl = eval_ppl(model, tokenizer, model.device, dataset=args.dataset)
-    print('eval done original_test_ppl: orig_test_ppl)
+	print('eval done original_test_ppl:', orig_test_ppl)
 	original_param_count = get_param_count(model)
 	model.original_param_count = original_param_count
 	cur_sparsity = 1.0 - (get_param_count(model) / original_param_count)
