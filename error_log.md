@@ -39,13 +39,13 @@ Device: ml.g4dn.2xlarge
     
 ## Running with phi 1.5
 
-'''
+    '''
     You are using a model of type phi to instantiate a model of type llama. This is not supported for all configurations of models and can yield errors.'''
 
 
 ## Sheared LLama
 
-'''
+    '''
     eval done original_test_ppl: 6.4152679443359375
     current sparsity 0.0
     Gathering statistics for pruning
@@ -71,4 +71,4 @@ Device: ml.g4dn.2xlarge
         istop = _index(stop)
                 ^^^^^^^^^^^^
     TypeError: 'float' object cannot be interpreted as an integer
-'''
+    '''
