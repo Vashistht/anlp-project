@@ -62,7 +62,7 @@ def get_random_mask_scores(model, tokenizer, module_map, all_sampling_proba, bsz
 		module.is_using_main = False
 
 	all_masks, all_perfs = defaultdict(list), defaultdict(list)
-	seed_ = random.randint(0, 1e4)
+	seed_ = random.randint(0, int(1e4))
 	for iter_ in range(mpi // 2):
 		this_bsz = bsz
 
