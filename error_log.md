@@ -14,7 +14,8 @@ Device: ml.g4dn.xlarge
 ## Run: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
 Device: ml.g4dn.2xlarge
 
-    '''Traceback (most recent call last):
+    '''
+    Traceback (most recent call last):
   File "/home/ec2-user/SageMaker/anlp-project/main.py", line 603, in <module>
     main()
   File "/home/ec2-user/SageMaker/anlp-project/main.py", line 550, in main
