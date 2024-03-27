@@ -10,6 +10,9 @@ pip3 install numpy wandb accelerate chardet==5.2.0 datasets huggingface-hub tran
 
 pip3 install -U "huggingface_hub[cli]"
 
+# for finetuning
+pip3 install evaluate==0.4.1 peft==0.6.2
+
 python -m ipykernel install --user --name=prune_llm
 
 
