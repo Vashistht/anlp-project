@@ -97,3 +97,6 @@ CUDA_VISIBLE_DEVICES=0 python3 Run_evals.py \
 	--hidden_mse_weight 0.0 \
 	--kl_weight 0.01 \
 	--dataset_name "wikitext"
+
+# run on eval kinda hacky
+CUDA_VISIBLE_DEVICES=0 python3 run-eval-2.py

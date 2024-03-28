@@ -70,9 +70,33 @@ def get_c4(nsamples, seed, seqlen, tokenizer):
 	valenc = TokenizerWrapper(valenc)
 	return trainloader, valenc
 
+# Load and process wikitext2 dataset
+def get_gsm8k(nsamples, seed, seqlen, tokenizer):
+    # Load train and test datasets
+    traindata = load_dataset("gsm8k", "main", split='train')
+    testdata = load_dataset("gsm8k", "main", split='test')
+
+    # Encode datasets
+    trainenc = tokenizer(" ".join(traindata['question']), return_tensors='pt')
+    testenc = tokenizer("\n\n".join(testdata['question']), return_tensors='pt')
+
+    # Generate samples from training set
+    random.seed(seed)
+    trainloader = []
+    for _ in range(nsamples):
+        i = random.randint(0, trainenc.input_ids.shape[1] - seqlen - 1)
+        j = i + seqlen
+        inp = trainenc.input_ids[:, i:j]
+        tar = inp.clone()
+        tar[:, :-1] = -100
+        trainloader.append((inp, tar))
+    return trainloader, testenc
+
 # Function to select the appropriate loader based on dataset name
 def get_loaders(name, nsamples=128, seed=0, seqlen=2048, tokenizer=None):
     if 'wikitext2' in name:
         return get_wikitext2(nsamples, seed, seqlen, tokenizer)
     if "c4" in name:
         return get_c4(nsamples, seed, seqlen, tokenizer)
+    if 'gsm8k' in name:
+        return get_gsm8k(nsamples,seed,seqlen,tokenizer)
