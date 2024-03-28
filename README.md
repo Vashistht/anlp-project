@@ -58,11 +58,11 @@ CUDA_VISIBLE_DEVICES=0 python finetune_lm.py \
 
 
 
-location="/home/ec2-user/SageMaker/anlp-project/outdir_llama_2_7b/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=100_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-llama2-wikitext_Adaptive=Yes"
+location="/home/vashistt/anlp-project/outdir_llama_2_7b/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=100_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-llama2-wikitext_Adaptive=Yes_"
 
-output_dir = "/home/ec2-user/SageMaker/anlp-project/finetuned_model"
+output_dir = "/home/vashistt/anlp-project/finetuned_model"
 
-CUDA_VISIBLE_DEVICES=0 python finetune_lm.py \
+CUDA_VISIBLE_DEVICES=8 python3 finetune_lm.py \
 	--model_name_or_path "meta-llama/Llama-2-7b-hf" \
 	--config_name "meta-llama/Llama-2-7b-hf" \
 	--num_train_epochs 1 \
@@ -71,7 +71,7 @@ CUDA_VISIBLE_DEVICES=0 python finetune_lm.py \
 	--learning_rate 1e-4 \
 	--lora_alpha_ratio 4 \
 	--per_device_train_batch_size 1 \
-	--per_device_eval_batch_size 2 \
+	--per_device_eval_batch_size 8 \
 	--do_train \
 	--do_eval \
 	--max_train_samples 15000 \
@@ -81,5 +81,4 @@ CUDA_VISIBLE_DEVICES=0 python finetune_lm.py \
 	--prune_info_path "${location}/pruned_model.pkl" \
 	--hidden_mse_weight 0.0 \
 	--kl_weight 0.01 \
-	--dataset_name "wikitext" \
-	--dataset_config_name "en" \
+	--dataset_name "wikitext"

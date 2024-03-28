@@ -336,8 +336,7 @@ def prune_model(model, tokenizer, prune_info_path):
 		return sum([p.numel() for n, p in model.named_parameters() if not any(x in n for x in exclude)])
 
 	epoch_ = 1
-	mask_info_loc = os.path.join(prune_info_path,'mask_info_{}.pkl'.format(epoch_))
-	print(f'mask_info_loc: {mask_info_loc}')
+	mask_info_loc = os.path.join(prune_info_path, 'mask_info_{}.pkl'.format(epoch_))
 	original_param_count = get_param_count(model)
 	while os.path.exists(mask_info_loc):
 		with open(mask_info_loc, 'rb') as handle:
