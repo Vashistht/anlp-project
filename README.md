@@ -58,12 +58,13 @@ CUDA_VISIBLE_DEVICES=0 python finetune_lm.py \
 
 
 
-location="/home/vashistt/anlp-project/outdir_llama_2_7b/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=100_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-llama2-wikitext_Adaptive=Yes_"
+location="/home/vashistt/anlp-project/outdir_llama_2_7b/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=100_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-llama2-wikitext_Adaptive=Yes"
 
 output_dir = "/home/vashistt/anlp-project/finetuned_model"
 
 
 ## ON AWS-- change the location and output_dir
+
 
 CUDA_VISIBLE_DEVICES=8 python3 finetune_lm.py \
 	--model_name_or_path "meta-llama/Llama-2-7b-hf" \
@@ -75,8 +76,9 @@ CUDA_VISIBLE_DEVICES=8 python3 finetune_lm.py \
 	--lora_alpha_ratio 4 \
 	--per_device_train_batch_size 1 \
 	--per_device_eval_batch_size 8 \
-	--do_train \
-	--do_eval \
+	--do_train False \
+	--do_eval False \
+	--do_eleuther_eval True
 	--max_train_samples 15000 \
 	--max_eval_samples 128 \
 	--overwrite_output_dir \
