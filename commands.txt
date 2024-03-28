@@ -9,7 +9,7 @@ pip3 install ipykernel scipy matplotlib
 mamba install -c pytorch -c conda-forge -c defaults ipykernel torchaudio torchvision scipy matplotlib
 
 # Install additional Python packages
-pip3 install numpy wandb accelerate chardet==5.2.0 datasets huggingface-hub transformers pandas plotly torch tqdm urllib3 sentencepiece
+pip3 install torch numpy wandb accelerate chardet==5.2.0 datasets huggingface-hub transformers pandas plotly tqdm urllib3 sentencepiece
 
 # Upgrade huggingface_hub for CLI support
 pip3 install -U "huggingface_hub[cli]"
