@@ -64,6 +64,7 @@ output_dir = "/home/vashistt/anlp-project/finetuned_model"
 
 
 ## ON AWS-- change the location and output_dir
+#### Location: masks dir, Output: finetuned-model dir (wont be used for eval but add it for consistency)
 location="/home/ec2-user/SageMaker/anlp-project/outdir_llama_2_7b/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=100_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-llama2-wikitext_Adaptive=Yes"
 
 outdir="/home/ec2-user/SageMaker/anlp-project/finetuned_model"
