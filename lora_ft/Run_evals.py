@@ -37,7 +37,8 @@ import gc
 import time
 
 # Uncomment this out if running the Eleuther evaluation harness
-# from lm_eval import evaluator
+import lm_eval
+from lm_eval import evaluator
 
 import datasets
 import evaluate
@@ -580,22 +581,22 @@ def main():
 			)
 		return output
 
-	with training_args.main_process_first(desc="dataset map tokenization"):
-		if not data_args.streaming:
-			tokenized_datasets = raw_datasets.map(
-				tokenize_function,
-				batched=True,
-				num_proc=data_args.preprocessing_num_workers,
-				remove_columns=column_names,
-				load_from_cache_file=not data_args.overwrite_cache,
-				desc="Running tokenizer on dataset",
-			)
-		else:
-			tokenized_datasets = raw_datasets.map(
-				tokenize_function,
-				batched=True,
-				remove_columns=column_names,
-			)
+	# with training_args.main_process_first(desc="dataset map tokenization"):
+	# 	if not data_args.streaming:
+	# 		tokenized_datasets = raw_datasets.map(
+	# 			tokenize_function,
+	# 			batched=True,
+	# 			num_proc=data_args.preprocessing_num_workers,
+	# 			remove_columns=column_names,
+	# 			load_from_cache_file=not data_args.overwrite_cache,
+	# 			desc="Running tokenizer on dataset",
+	# 		)
+	# 	else:
+	# 		tokenized_datasets = raw_datasets.map(
+	# 			tokenize_function,
+	# 			batched=True,
+	# 			remove_columns=column_names,
+	# 		)
 
 	if data_args.block_size is None:
 		block_size = tokenizer.model_max_length
@@ -639,26 +640,27 @@ def main():
 	# To speed up this part, we use multiprocessing. See the documentation of the map method for more information:
 	# https://huggingface.co/docs/datasets/package_reference/main_classes.html#datasets.Dataset.map
 
-	with training_args.main_process_first(desc="grouping texts together"):
-		if not data_args.streaming:
-			lm_datasets = tokenized_datasets.map(
-				group_texts,
-				batched=True,
-				num_proc=data_args.preprocessing_num_workers,
-				load_from_cache_file=not data_args.overwrite_cache,
-				desc=f"Grouping texts in chunks of {block_size}",
-			)
-		else:
-			lm_datasets = tokenized_datasets.map(
-				group_texts,
-				batched=True,
-			)
+	# with training_args.main_process_first(desc="grouping texts together"):
+	# 	if not data_args.streaming:
+	# 		lm_datasets = tokenized_datasets.map(
+	# 			group_texts,
+	# 			batched=True,
+	# 			num_proc=data_args.preprocessing_num_workers,
+	# 			load_from_cache_file=not data_args.overwrite_cache,
+	# 			desc=f"Grouping texts in chunks of {block_size}",
+	# 		)
+	# 	else:
+	# 		lm_datasets = tokenized_datasets.map(
+	# 			group_texts,
+	# 			batched=True,
+			# )
 
-
+	should_i_do_eleuther_eval = True
 	print("Num params = : ", get_param_count(model) )
-	if training_args.do_eleuther_eval:
+	# if training_args.do_eleuther_eval:
+	if should_i_do_eleuther_eval:
 		print('eleuther eval for original model')
-		#transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
+		# transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
 		results = evaluator.simple_evaluate(
 			model="hf-causal-experimental",
 			model_args="pretrained={}".format(model_args.model_name_or_path),
@@ -667,6 +669,13 @@ def main():
 			no_cache=True,
 			pretrained_model=model,
 		)
+		# results = lm_eval.simple_evaluate(
+		# 	model=model,
+		# 	# model_args="pretrained={}".format(model_args.model_name_or_path),
+		# 	tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
+		# 	num_fewshot=0,
+		# 	use_cache=None,
+		# )
 	
 	updated_results = {'results': results['results']}
 	print(updated_results)
@@ -821,7 +830,9 @@ def main():
 # 		trainer.save_metrics("train", metrics)
 # 		# trainer.save_state()
 
-	if training_args.do_eleuther_eval:
+	# if training_args.do_eleuther_eval:
+	
+	if should_i_do_eleuther_eval:
 		#transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
 		results = evaluator.simple_evaluate(
 			model="hf-causal-experimental",
@@ -831,7 +842,12 @@ def main():
 			no_cache=True,
 			pretrained_model=model,
 		)
-
+  		# results = lm_eval.simple_evaluate(
+		# 	model=model,
+		# 	# model_args="pretrained={}".format(model_args.model_name_or_path),
+		# 	tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
+		# 	num_fewshot=0,
+		# 	use_cache=None)
 	updated_results = {'results': results['results']}
 	print(updated_results)
 	results_str = "prune_model\n" + str(updated_results)
