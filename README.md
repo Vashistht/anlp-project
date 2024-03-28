@@ -85,7 +85,7 @@ CUDA_VISIBLE_DEVICES=0 python3 Run_evals.py \
 	--per_device_eval_batch_size 8 \
 	--do_train  \
 	--do_eval  \
-<!-- 	--do_eleuther_eval True -->
+ 	--do_eleuther_eval True
 	--max_train_samples 15000 \
 	--max_eval_samples 128 \
 	--overwrite_output_dir \
