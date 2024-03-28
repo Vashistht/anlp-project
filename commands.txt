@@ -17,6 +17,11 @@ pip3 install -U "huggingface_hub[cli]"
 # For finetuning
 pip3 install evaluate==0.4.1 peft==0.6.2
 
+# for lm-eval
+git clone https://github.com/EleutherAI/lm-evaluation-harness
+cd lm-evaluation-harness
+pip install -e .
+
 # Register environment with Jupyter
 python -m ipykernel install --user --name=prune_llm
 
