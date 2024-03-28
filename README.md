@@ -62,6 +62,9 @@ location="/home/vashistt/anlp-project/outdir_llama_2_7b/nsamp=8_sp=0.5_pfrac=0.2
 
 output_dir = "/home/vashistt/anlp-project/finetuned_model"
 
+
+## ON AWS-- change the location and output_dir
+
 CUDA_VISIBLE_DEVICES=8 python3 finetune_lm.py \
 	--model_name_or_path "meta-llama/Llama-2-7b-hf" \
 	--config_name "meta-llama/Llama-2-7b-hf" \
