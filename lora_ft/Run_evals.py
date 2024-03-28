@@ -847,7 +847,7 @@ def main():
 		# 	# model_args="pretrained={}".format(model_args.model_name_or_path),
 		# 	tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
 		# 	num_fewshot=0,
-		# 	use_cache=None)
+		# 	use_cache=None)c
 	updated_results = {'results': results['results']}
 	print(updated_results)
 	results_str = "prune_model\n" + str(updated_results)
