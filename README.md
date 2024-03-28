@@ -65,8 +65,7 @@ output_dir = "/home/vashistt/anlp-project/finetuned_model"
 
 ## ON AWS-- change the location and output_dir
 
-
-CUDA_VISIBLE_DEVICES=8 python3 finetune_lm.py \
+CUDA_VISIBLE_DEVICES=0 python3 Run_evals.py \
 	--model_name_or_path "meta-llama/Llama-2-7b-hf" \
 	--config_name "meta-llama/Llama-2-7b-hf" \
 	--num_train_epochs 1 \
