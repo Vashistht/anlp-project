@@ -58,25 +58,28 @@ CUDA_VISIBLE_DEVICES=0 python finetune_lm.py \
 
 
 
+location="/home/ec2-user/SageMaker/anlp-project/outdir_llama_2_7b/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=100_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-llama2-wikitext_Adaptive=Yes"
+
+output_dir = "/home/ec2-user/SageMaker/anlp-project/finetuned_model"
+
 CUDA_VISIBLE_DEVICES=0 python finetune_lm.py \
-	--model_name_or_path "princeton-nlp/Sheared-LLaMA-2.7B" \
-	--config_name "princeton-nlp/Sheared-LLaMA-2.7B" \
+	--model_name_or_path "meta-llama/Llama-2-7b-hf" \
+	--config_name "meta-llama/Llama-2-7b-hf" \
 	--num_train_epochs 1 \
-	--block_size 512 \ 
-	--lora_r 128 \ 
+	--block_size 512 \
+	--lora_r 128 \
 	--learning_rate 1e-4 \
 	--lora_alpha_ratio 4 \
 	--per_device_train_batch_size 1 \
-	--per_device_eval_batch_size 8 \
+	--per_device_eval_batch_size 2 \
 	--do_train \
 	--do_eval \
 	--max_train_samples 15000 \
 	--max_eval_samples 128 \
 	--overwrite_output_dir \
-	--output_dir  {{PATH TO SAVE FINAL MODEL }}  \
-	--prune_info_path {/home/ec2-user/SageMaker/anlp-project/outdir_sheared_llama/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=200_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-sheared-llama2-wikitext_Adaptive=Yes} \
+	--output_dir "${output_dir}" \
+	--prune_info_path "${location}/pruned_model.pkl" \
 	--hidden_mse_weight 0.0 \
 	--kl_weight 0.01 \
 	--dataset_name "wikitext" \
 	--dataset_config_name "en" \
-
