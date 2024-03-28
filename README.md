@@ -68,6 +68,11 @@ location="/home/ec2-user/SageMaker/anlp-project/outdir_llama_2_7b/nsamp=8_sp=0.5
 
 outdir="/home/ec2-user/SageMaker/anlp-project/finetuned_model"
 
+CUDA_VISIBLE_DEVICES=0 python3 Run_evals.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512        --lora_r 128    --learning_rate 1e-4            --lora_alpha_ratio 4    --per_device_train_batch_size 1         --per_device_eval_batch_size 8       --do_train      --do_eval       --max_train_samples 15000       --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"     --hidden_mse_weight 0.0         --kl_weight 0.01        --dataset_name "wikitext"
+
+
+
+---
 CUDA_VISIBLE_DEVICES=0 python3 Run_evals.py \
 	--model_name_or_path "meta-llama/Llama-2-7b-hf" \
 	--config_name "meta-llama/Llama-2-7b-hf" \
@@ -89,6 +94,3 @@ CUDA_VISIBLE_DEVICES=0 python3 Run_evals.py \
 	--hidden_mse_weight 0.0 \
 	--kl_weight 0.01 \
 	--dataset_name "wikitext"
-
-
-CUDA_VISIBLE_DEVICES=0 python3 Run_evals.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512        --lora_r 128    --learning_rate 1e-4            --lora_alpha_ratio 4    --per_device_train_batch_size 1         --per_device_eval_batch_size 8       --do_train      --do_eval       --max_train_samples 15000       --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"     --hidden_mse_weight 0.0         --kl_weight 0.01        --dataset_name "wikitext"
