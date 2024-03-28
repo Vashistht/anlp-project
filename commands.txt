@@ -3,6 +3,9 @@ conda create -n prune_llm mamba -c conda-forge
 source activate prune_llm
 
 # Install PyTorch, torchvision, torchaudio, and other libraries
+pip3 install ipykernel scipy matplotlib
+
+### Torch audio and vision are not needed so you can skip this 
 mamba install -c pytorch -c conda-forge -c defaults ipykernel torchaudio torchvision scipy matplotlib
 
 # Install additional Python packages
