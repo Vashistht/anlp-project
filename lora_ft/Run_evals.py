@@ -555,9 +555,9 @@ def main():
 	if training_args.do_eval:
 		logger.info("*** Evaluate ***")
 		model.eval()
-		og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-		out_str = "Original perplexity on wikitext = {:.3f}".format(og_ppl)
-		print(out_str)
+		# og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+		# out_str = "Original perplexity on wikitext = {:.3f}".format(og_ppl)
+		# print(out_str)
 
 	# Preprocessing the datasets.
 	# First we tokenize all the texts.
@@ -650,9 +650,11 @@ def main():
 			model="hf-causal-experimental",
 			model_args="pretrained={}".format(model_args.model_name_or_path),
 			# tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
-   			# num_fewshot=0,
-   			tasks=["boolq"],
-			num_fewshot=0,
+   			tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"],
+   			num_fewshot=0,
+			limit = .5,
+   			# tasks=["hellaswag"],
+			# num_fewshot={"hellaswag": 0, "arc_challenge":0}
 			no_cache=True,
 			pretrained_model=model,
 		)
