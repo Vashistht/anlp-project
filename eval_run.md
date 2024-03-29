@@ -2,6 +2,7 @@
 
 
 ## 1.1 - wikitext ppl
+
 ```
     (prune_llm_2) [vashistt@lovelace lora_ft]$ CUDA_VISIBLE_DEVICES=0 python3 Run_evals.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512        --lora_r 128    --learning_rate 1e-4            --lora_alpha_ratio 4    --per_device_train_batch_size 1         --per_device_eval_batch_size 8       --do_train      --do_eval       --max_train_samples 15000       --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"     --hidden_mse_weight 0.0         --kl_weight 0.01        --dataset_name "wikitext"
     03/28/2024 22:16:56 - WARNING - __main__ - Process rank: -1, device: cuda:0, n_gpu: 1distributed training: False, 16-bits training: False
@@ -323,9 +324,10 @@
       "pad_token_id": 0,
       "transformers_version": "4.28.0"
     }
-'''
+```
 
 ## 1.2 - boolq
+
 
 ```
   [IN████████████████████████████████████████████████████| 3.85M/3.85M [00:00<00:00, 11.7MB/s]
@@ -445,7 +447,7 @@
       Running loglikelihood requests
       100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 6540/6540 [03:58<00:00, 27.46it/s]
       {'results': {'boolq': {'acc': 0.5174311926605505, 'acc_stderr': 0.008739739052380803}}}
-'''
+```
 
 ## 1.3  All datasets - wiki for llama 2 50%
 
@@ -866,7 +868,7 @@
   Running loglikelihood requests
   100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████| 10127/10127 [06:13<00:00, 27.13it/s]
   {'results': {'winogrande': {'acc': 0.5213270142180095, 'acc_stderr': 0.019870831242787552}, 'boolq': {'acc': 0.5165876777251185, 'acc_stderr': 0.019877984170032503}, 'arc_challenge': {'acc': 0.19747235387045814, 'acc_stderr': 0.01583523867031247, 'acc_norm': 0.2559241706161137, 'acc_norm_stderr': 0.017358240916250527}, 'arc_easy': {'acc': 0.26540284360189575, 'acc_stderr': 0.01756381557124669, 'acc_norm': 0.2859399684044234, 'acc_norm_stderr': 0.017974062838604622}, 'hellaswag': {'acc': 0.29067930489731436, 'acc_stderr': 0.018062166146085863, 'acc_norm': 0.31121642969984203, 'acc_norm_stderr': 0.018416797316405352}}}
-'''
+```
 
 
 
@@ -1135,6 +1137,5 @@
   03/28/2024 22:42:21 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
   99%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▋ | 83/84 [00:32<00:00,  2.55it/s]
   [SpeedUp=3.668] Original perplexity on wikitext = 6.414 | Before Training perplexity on wikitext = 94.688
-'''
-
+```
 

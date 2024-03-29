@@ -650,8 +650,9 @@ def main():
 			model="hf-causal-experimental",
 			model_args="pretrained={}".format(model_args.model_name_or_path),
 			# tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
-   			tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"],
-   			num_fewshot=0,
+   			# tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"],
+			tasks = ['gsm8k'],
+   			num_fewshot=5,
 			limit = .5,
    			# tasks=["hellaswag"],
 			# num_fewshot={"hellaswag": 0, "arc_challenge":0}
