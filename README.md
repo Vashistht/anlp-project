@@ -24,7 +24,9 @@ CUDA_VISIBLE_DEVICES=0 python main.py \
   --dataset {{DATASET TO PRUNE WITH RESPECT TO}} # Default to wikitetxt  \
 
 ### Run to produce LLama-2 7B WikiText Model from Paper
-```python my_main.py --model meta-llama/Llama-2-7b-hf --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name ReprodLLama-2-Wikitext --masks_per_iter 200 --nsamples 32 --save outdir  --prune_frac 0.05 --bsz 1 --prune_method wanda
+
+```
+python my_main.py --model meta-llama/Llama-2-7b-hf --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name ReprodLLama-2-Wikitext --masks_per_iter 200 --nsamples 32 --save outdir  --prune_frac 0.05 --bsz 1 --prune_method wanda
 ```
 
 ### Run output
