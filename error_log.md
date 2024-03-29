@@ -4,17 +4,17 @@
 Device: ml.g4dn.xlarge
 
 
-    ```OSError: [Errno 28] No space left on device
+  ```OSError: [Errno 28] No space left on device
     We hit a nan or inf. Stopping
     We hit a nan or inf. Resettinig 
     We hit a nan or inf. Stopping
     wandb: ERROR Internal wandb error: file data was not synced
-    '''
+  ```
 
 ## Run: TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T
 Device: ml.g4dn.2xlarge
 
-    '''
+```
     Traceback (most recent call last):
       File "/home/ec2-user/SageMaker/anlp-project/main.py", line 603, in <module>
     main()
@@ -35,12 +35,12 @@ Device: ml.g4dn.2xlarge
       File "/home/ec2-user/anaconda3/envs/prune_llm/lib/python3.11/site-packages/accelerate/utils/modeling.py", line 348, in set_module_tensor_to_device
         raise ValueError(
     ValueError: Trying to set a tensor of shape torch.Size([256, 2048]) in "weight" (which has shape torch.Size([2048, 2048])), this look incorrect.
-    '''
+    ```
     
 ## Running with phi 1.5
 
-    '''
-    You are using a model of type phi to instantiate a model of type llama. This is not supported for all configurations of models and can yield errors.'''
+    ```
+    You are using a model of type phi to instantiate a model of type llama. This is not supported for all configurations of models and can yield errors.```
 
 
 ## Sheared LLama 
@@ -48,7 +48,7 @@ Device: ml.g4dn.2xlarge
 (changed seed_ = random.randint(0, 1e4) to 
 seed_ = random.randint(0, int(1e4) )
 
-    '''
+    ```
     eval done original_test_ppl: 6.4152679443359375
     current sparsity 0.0
     Gathering statistics for pruning
@@ -74,12 +74,12 @@ seed_ = random.randint(0, int(1e4) )
         istop = _index(stop)
                 ^^^^^^^^^^^^
     TypeError: 'float' object cannot be interpreted as an integer
-    '''
+  ```
 
 
 ## Sheared LLama
 
-'''
+```
 eval done original_test_ppl: 6.4152679443359375
 current sparsity 0.0
 Gathering statistics for pruning
@@ -105,11 +105,11 @@ Traceback (most recent call last):
     istop = _index(stop)
             ^^^^^^^^^^^^
 TypeError: 'float' object cannot be interpreted as an integer
-'''
+```
 
 ## Run: Sheared LLama Finetuning
 
-    '''
+    ```
     Traceback (most recent call last):
       File "/home/ec2-user/SageMaker/anlp-project/lora_ft/finetune_lm.py", line 853, in <module>
         main()
@@ -156,7 +156,7 @@ TypeError: 'float' object cannot be interpreted as an integer
         key_states = key_states.view(bsz, q_len, self.num_key_value_heads, self.head_dim).transpose(1, 2)
                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     RuntimeError: shape '[1, 4096, 20, 128]' is invalid for input of size 5242880 
-    '''
+```
 
 # Finetuning LLama 
 
@@ -537,8 +537,7 @@ TypeError: 'float' object cannot be interpreted as an integer
       Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
   RuntimeError: Found dtype Half but expected Float
   wandb: 🚀 View run misty-oath-5 at: https://wandb.ai/cmu-anlp-project/huggingface/runs/akw9sye5/workspace
-  '''
-
+```
 
 
 # Eval run (ran till the pruned model)
@@ -1009,4 +1008,4 @@ Traceback (most recent call last):
                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 RuntimeError: shape '[1, 4096, 32, 128]' is invalid for input of size 7864320
 
-'''
+```
