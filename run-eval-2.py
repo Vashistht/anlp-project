@@ -80,7 +80,7 @@ INF = 1e8
 # 	module.intermediate_size = len(index)
 
 # 	gc.collect()
-# 	torch.cuda.empty_cache()
+torch.cuda.empty_cache()
 
 # def prune_attn(mask_, module):
 # 	index = (mask_.squeeze() == 0).nonzero().squeeze()
@@ -247,6 +247,7 @@ def get_llm(model_name, cache_dir="llm_weights"):
 
 model_name_or_path = 'princeton-nlp/Sheared-LLaMA-2.7B'
 config_name = "princeton-nlp/Sheared-LLaMA-2.7B"
+mask_dir = "/home/vashistt/anlp-project/outdir_sheared_llama/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=200_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-sheared-llama2-wikitext_Adaptive=Yes"
 # %%
 # torch.cuda.empty_cache()
 
@@ -258,17 +259,17 @@ print('tokenizer done')
 
 # %%
 # Getting the initial evaluation of the model
-# print('gsm8k')
-# _, orig_test_ppl = eval_ppl(model, tokenizer, model.device, dataset='gsm8k')
-# print('eval done original_test_ppl:', orig_test_ppl)
+print('gsm8k')
+_, orig_test_ppl = eval_ppl(model, tokenizer, model.device, dataset='gsm8k')
+print('eval done original_test_ppl:', orig_test_ppl)
 
-# print('wikitext2')
-# _, orig_test_ppl = eval_ppl(model, tokenizer, model.device, dataset='wikitext2')
-# print('eval done original_test_ppl:', orig_test_ppl)
+print('wikitext2')
+_, orig_test_ppl = eval_ppl(model, tokenizer, model.device, dataset='wikitext2')
+print('eval done original_test_ppl:', orig_test_ppl)
 
-# print('c4')
-# _, orig_test_ppl = eval_ppl(model, tokenizer, model.device, dataset='c4')
-# print('eval done original_test_ppl:', orig_test_ppl)
+print('c4')
+_, orig_test_ppl = eval_ppl(model, tokenizer, model.device, dataset='c4')
+print('eval done original_test_ppl:', orig_test_ppl)
 
 # %%
 original_param_count = get_param_count(model)
@@ -277,51 +278,56 @@ print('original param count', original_param_count )
 # %%
 model.original_param_count = original_param_count
 cur_sparsity = 1.0 - (get_param_count(model) / original_param_count)
-epoch_ = 3
+epoch_ = 1
 
 # %%
 # save_loc =f"/home/vashistt/anlp-project/outdir/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=100_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-llama2-wikitext_Adaptive=Yes/mask_info_{epoch_}.pkl"
-save_loc =f"/home/vashistt/anlp-project/outdir_sheared_llama/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=200_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-sheared-llama2-wikitext_Adaptive=Yes/mask_info_{epoch_}.pkl"
 
-# %%
-# save_loc = os.path.join(args.save, 'mask_info_{}.pkl'.format(epoch_))
-if os.path.exists(save_loc):
-    print('Successfully loaded past pruning info')
-    with open(save_loc, 'rb') as handle:
-        mask_info = pkl.load(handle)
-else:
-    # mask_info = investigate_score_based_mask(args, model, wandb_run, epoch_=epoch_)
-    # # Save the mask info for the epoch
-    # with open(save_loc, 'wb') as handle:
-    #     pkl.dump(mask_info, handle)
-    print('not valid path')
+while True:
+	save_loc =f"{mask_dir}/mask_info_{epoch_}.pkl"
 
-print('Prune model')
-prune_model(model, mask_info, tokenizer) # Do some stuffs here :)
-cur_sparsity = 1.0 - (get_param_count(model) / original_param_count)
-print(model)
+	# %%
+	# save_loc = os.path.join(args.save, 'mask_info_{}.pkl'.format(epoch_))
+	if os.path.exists(save_loc):
+		print('Successfully loaded past pruning info')
+		with open(save_loc, 'rb') as handle:
+			mask_info = pkl.load(handle)
+	else:
+		# mask_info = investigate_score_based_mask(args, model, wandb_run, epoch_=epoch_)
+		# # Save the mask info for the epoch
+		# with open(save_loc, 'wb') as handle:
+		#     pkl.dump(mask_info, handle)
+		print('not valid path')
 
-
-# %%
-# Evaluate the performance of the pruned model
-# ppl_train, ppl_test = eval_ppl(model, tokenizer, model.device, dataset='gsm8k')
-
-# ppl_train = 0
-# print('Sparsity = {:.3f}| Train PPL = {:.3f} | Test PPL = {:.3f}'.format(cur_sparsity, ppl_train, ppl_test))
-
-print('Sparsity = {:.3f}'.format(cur_sparsity))
+	print('Prune model')
+	prune_model(model, mask_info, tokenizer) # Do some stuffs here :)
+	cur_sparsity = 1.0 - (get_param_count(model) / original_param_count)
+	print(model)
 
 
+	# %%
+	# Evaluate the performance of the pruned model
+	# ppl_train, ppl_test = eval_ppl(model, tokenizer, model.device, dataset='gsm8k')
 
-print('wikitext2')
-_, ppl_test = eval_ppl(model, tokenizer, model.device, dataset='wikitext2')
-print('eval done test_ppl:', ppl_test)
+	# ppl_train = 0
+	# print('Sparsity = {:.3f}| Train PPL = {:.3f} | Test PPL = {:.3f}'.format(cur_sparsity, ppl_train, ppl_test))
 
-# print('gsm8k')
-# _, ppl_test = eval_ppl(model, tokenizer, model.device, dataset='gsm8k')
-# print('eval done test_ppl:', ppl_test)
+	print('Sparsity = {:.3f}'.format(cur_sparsity))
 
 
-# print('c4')
-# _, ppl_test = eval_ppl(model, tokenizer, model.device, dataset='c4')
-# print('eval done test_ppl:', ppl_test)
+
+	print('wikitext2')
+	_, ppl_test = eval_ppl(model, tokenizer, model.device, dataset='wikitext2')
+	print('eval done test_ppl:', ppl_test)
+
+	print('gsm8k')
+	_, ppl_test = eval_ppl(model, tokenizer, model.device, dataset='gsm8k')
+	print('eval done test_ppl:', ppl_test)
+
+
+	print('c4')
+	_, ppl_test = eval_ppl(model, tokenizer, model.device, dataset='c4')
+	print('eval done test_ppl:', ppl_test)
+ 
+	epoch_ +=1
+wandb_run.log({'sparsity': cur_sparsity})
