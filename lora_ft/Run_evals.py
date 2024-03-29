@@ -37,7 +37,7 @@ import gc
 import time
 
 # Uncomment this out if running the Eleuther evaluation harness
-import lm_eval
+# import lm_eval
 from lm_eval import evaluator
 
 import datasets
@@ -570,16 +570,16 @@ def main():
 	# since this will be pickled to avoid _LazyModule error in Hasher force logger loading before tokenize_function
 	tok_logger = transformers.utils.logging.get_logger("transformers.tokenization_utils_base")
 
-	def tokenize_function(examples):
-		with CaptureLogger(tok_logger) as cl:
-			output = tokenizer(examples[text_column_name])
-		# clm input could be much much longer than block_size
-		if "Token indices sequence length is longer than the" in cl.out:
-			tok_logger.warning(
-				"^^^^^^^^^^^^^^^^ Please ignore the warning above - this long input will be chunked into smaller bits"
-				" before being passed to the model."
-			)
-		return output
+	# def tokenize_function(examples):
+	# 	with CaptureLogger(tok_logger) as cl:
+	# 		output = tokenizer(examples[text_column_name])
+	# 	# clm input could be much much longer than block_size
+	# 	if "Token indices sequence length is longer than the" in cl.out:
+	# 		tok_logger.warning(
+	# 			"^^^^^^^^^^^^^^^^ Please ignore the warning above - this long input will be chunked into smaller bits"
+	# 			" before being passed to the model."
+	# 		)
+	# 	return output
 
 	# with training_args.main_process_first(desc="dataset map tokenization"):
 	# 	if not data_args.streaming:
@@ -660,15 +660,16 @@ def main():
 	# if training_args.do_eleuther_eval:
 	if should_i_do_eleuther_eval:
 		print('eleuther eval for original model')
-		# transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
-		results = evaluator.simple_evaluate(
-			model="hf-causal-experimental",
-			model_args="pretrained={}".format(model_args.model_name_or_path),
-			tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
-			num_fewshot=0,
-			no_cache=True,
-			pretrained_model=model,
-		)
+	# 	# transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
+	# 	results = evaluator.simple_evaluate(
+	# 		model="hf-causal-experimental",
+	# 		model_args="pretrained={}".format(model_args.model_name_or_path),
+	# 		# tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
+   	# 		tasks=["gsm8k"],
+	# 		num_fewshot=5,
+	# 		no_cache=True,
+	# 		pretrained_model=model,
+	# 	)
 		# results = lm_eval.simple_evaluate(
 		# 	model=model,
 		# 	# model_args="pretrained={}".format(model_args.model_name_or_path),
@@ -677,10 +678,10 @@ def main():
 		# 	use_cache=None,
 		# )
 	
-	updated_results = {'results': results['results']}
-	print(updated_results)
-	results_str = 'orginal-model \n' + str(updated_results)
-	out_file.write(results_str + "\n")
+	# updated_results = {'results': results['results']}
+	# print(updated_results)
+	# results_str = 'orginal-model \n' + str(updated_results)
+	# out_file.write(results_str + "\n")
 
 	if model_args.prune_info_path is not None:
 		prune_model(model, tokenizer, model_args.prune_info_path)
@@ -690,6 +691,8 @@ def main():
 		logger.info("*** Evaluate ***")
 		model.eval()
 		start_time = time.time()
+		# import pdb
+		# pdb.set_trace()
 		before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
 		speedup = og_runtime / final_runtime
 		out_str = "[SpeedUp={:.3f}] Original perplexity on wikitext = {:.3f} | Before Training perplexity on wikitext = {:.3f}".format(speedup, og_ppl, before_train_ppl, speedup)
@@ -837,8 +840,10 @@ def main():
 		results = evaluator.simple_evaluate(
 			model="hf-causal-experimental",
 			model_args="pretrained={}".format(model_args.model_name_or_path),
-			tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
-			num_fewshot=0,
+			# tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
+   			# num_fewshot=0,
+   			tasks=["gsm8k"],
+			num_fewshot=5,
 			no_cache=True,
 			pretrained_model=model,
 		)

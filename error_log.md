@@ -538,3 +538,475 @@ TypeError: 'float' object cannot be interpreted as an integer
   RuntimeError: Found dtype Half but expected Float
   wandb: 🚀 View run misty-oath-5 at: https://wandb.ai/cmu-anlp-project/huggingface/runs/akw9sye5/workspace
   '''
+
+
+
+# Eval run (ran till the pruned model)
+
+(prune_llm) [vashistt@lovelace lora_ft]$ CUDA_VISIBLE_DEVICES=8 python3 Run_evals.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512        --lora_r 128    --learning_rate 1e-4            --lora_alpha_ratio 4    --per_device_train_batch_size 1         --per_device_eval_batch_size 8       --do_train      --do_eval       --max_train_samples 15000       --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"     --hidden_mse_weight 0.0         --kl_weight 0.01        --dataset_name "wikitext"
+03/28/2024 17:16:37 - WARNING - __main__ - Process rank: 0, device: cuda:0, n_gpu: 1distributed training: True, 16-bits training: False
+03/28/2024 17:16:37 - INFO - __main__ - Training/evaluation parameters TrainingArguments(
+_n_gpu=1,
+accelerator_config={'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True},
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+dispatch_batches=None,
+do_eval=True,
+do_predict=False,
+do_train=True,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_steps=None,
+evaluation_strategy=IntervalStrategy.NO,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+gradient_checkpointing_kwargs=None,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=HubStrategy.EVERY_SAVE,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=False,
+include_num_input_tokens_seen=False,
+include_tokens_per_second=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=0.0001,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=0,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=/home/vashistt/anlp-project/finetuned_model/runs/Mar28_17-16-37_lovelace.ece.local.cmu.edu,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=IntervalStrategy.STEPS,
+lr_scheduler_kwargs={},
+lr_scheduler_type=SchedulerType.LINEAR,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+neftune_noise_alpha=None,
+no_cuda=False,
+num_train_epochs=1.0,
+optim=OptimizerNames.ADAMW_TORCH,
+optim_args=None,
+optim_target_modules=None,
+output_dir=/home/vashistt/anlp-project/finetuned_model,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=1,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['wandb'],
+resume_from_checkpoint=None,
+run_name=/home/vashistt/anlp-project/finetuned_model,
+save_on_each_node=False,
+save_only_model=False,
+save_safetensors=True,
+save_steps=500,
+save_strategy=IntervalStrategy.STEPS,
+save_total_limit=None,
+seed=42,
+skip_memory_metrics=True,
+split_batches=None,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_cpu=False,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+)
+Using custom data configuration default-a3e66ef7800043cd
+03/28/2024 17:16:42 - INFO - datasets.builder - Using custom data configuration default-a3e66ef7800043cd
+Loading Dataset Infos from /home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/datasets/packaged_modules/json
+03/28/2024 17:16:42 - INFO - datasets.info - Loading Dataset Infos from /home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/datasets/packaged_modules/json
+Overwrite dataset info from restored data version if exists.
+03/28/2024 17:16:42 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/allenai___c4/default-a3e66ef7800043cd/0.0.0/1588ec454efa1a09f29cd18ddd04fe05fc8653a2
+03/28/2024 17:16:42 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/allenai___c4/default-a3e66ef7800043cd/0.0.0/1588ec454efa1a09f29cd18ddd04fe05fc8653a2
+Found cached dataset c4 (/home/vashistt/.cache/huggingface/datasets/allenai___c4/default-a3e66ef7800043cd/0.0.0/1588ec454efa1a09f29cd18ddd04fe05fc8653a2)
+03/28/2024 17:16:42 - INFO - datasets.builder - Found cached dataset c4 (/home/vashistt/.cache/huggingface/datasets/allenai___c4/default-a3e66ef7800043cd/0.0.0/1588ec454efa1a09f29cd18ddd04fe05fc8653a2)
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/allenai___c4/default-a3e66ef7800043cd/0.0.0/1588ec454efa1a09f29cd18ddd04fe05fc8653a2
+03/28/2024 17:16:42 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/allenai___c4/default-a3e66ef7800043cd/0.0.0/1588ec454efa1a09f29cd18ddd04fe05fc8653a2
+/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/datasets/load.py:2516: FutureWarning: 'use_auth_token' was deprecated in favor of 'token' in version 2.14.0 and will be removed in 3.0.0.
+You can remove this warning by passing 'token=<use_auth_token>' instead.
+  warnings.warn(
+Overwrite dataset info from restored data version if exists.
+03/28/2024 17:16:44 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+03/28/2024 17:16:44 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+Found cached dataset wikitext (/home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3)
+03/28/2024 17:16:44 - INFO - datasets.builder - Found cached dataset wikitext (/home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3)
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+03/28/2024 17:16:44 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+Overwrite dataset info from restored data version if exists.
+03/28/2024 17:16:45 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+03/28/2024 17:16:45 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+Found cached dataset wikitext (/home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3)
+03/28/2024 17:16:45 - INFO - datasets.builder - Found cached dataset wikitext (/home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3)
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+03/28/2024 17:16:45 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+[INFO|configuration_utils.py:726] 2024-03-28 17:16:46,002 >> loading configuration file config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/config.json
+[INFO|configuration_utils.py:789] 2024-03-28 17:16:46,003 >> Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-2-7b-hf",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 11008,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 32,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "rope_theta": 10000.0,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.39.1",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|tokenization_utils_base.py:2084] 2024-03-28 17:16:46,040 >> loading file tokenizer.model from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/tokenizer.model
+[INFO|tokenization_utils_base.py:2084] 2024-03-28 17:16:46,040 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2084] 2024-03-28 17:16:46,040 >> loading file special_tokens_map.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/special_tokens_map.json
+[INFO|tokenization_utils_base.py:2084] 2024-03-28 17:16:46,040 >> loading file tokenizer_config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2084] 2024-03-28 17:16:46,040 >> loading file tokenizer.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/tokenizer.json
+[INFO|configuration_utils.py:726] 2024-03-28 17:16:46,169 >> loading configuration file config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/config.json
+[INFO|configuration_utils.py:789] 2024-03-28 17:16:46,170 >> Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-2-7b-hf",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 11008,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 32,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "rope_theta": 10000.0,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.39.1",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|modeling_utils.py:3283] 2024-03-28 17:16:46,173 >> loading weights file model.safetensors from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/model.safetensors.index.json
+[INFO|modeling_utils.py:1417] 2024-03-28 17:16:46,174 >> Instantiating LlamaForCausalLM model under default dtype torch.float16.
+[INFO|configuration_utils.py:928] 2024-03-28 17:16:46,175 >> Generate config GenerationConfig {
+  "bos_token_id": 1,
+  "eos_token_id": 2
+}
+
+Loading checkpoint shards: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:05<00:00,  2.80s/it]
+[INFO|modeling_utils.py:4024] 2024-03-28 17:16:52,586 >> All model checkpoint weights were used when initializing LlamaForCausalLM.
+
+[INFO|modeling_utils.py:4032] 2024-03-28 17:16:52,586 >> All the weights of LlamaForCausalLM were initialized from the model checkpoint at meta-llama/Llama-2-7b-hf.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use LlamaForCausalLM for predictions without further training.
+[INFO|configuration_utils.py:883] 2024-03-28 17:16:52,626 >> loading configuration file generation_config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/generation_config.json
+[INFO|configuration_utils.py:928] 2024-03-28 17:16:52,626 >> Generate config GenerationConfig {
+  "bos_token_id": 1,
+  "do_sample": true,
+  "eos_token_id": 2,
+  "max_length": 4096,
+  "pad_token_id": 0,
+  "temperature": 0.6,
+  "top_p": 0.9
+}
+
+Num params = :  6476271616
+03/28/2024 17:16:52 - INFO - __main__ - *** Evaluate ***
+Overwrite dataset info from restored data version if exists.
+03/28/2024 17:16:54 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+03/28/2024 17:16:54 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+Found cached dataset wikitext (/home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3)
+03/28/2024 17:16:54 - INFO - datasets.builder - Found cached dataset wikitext (/home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3)
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+03/28/2024 17:16:54 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+ 99%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌ | 83/84 [00:47<00:00,  1.76it/s]
+Original perplexity on wikitext = 5.110
+Num params = :  6476271616
+eleuther eval for original model
+[INFO|configuration_utils.py:726] 2024-03-28 17:17:45,122 >> loading configuration file config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/config.json
+[INFO|configuration_utils.py:789] 2024-03-28 17:17:45,123 >> Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-2-7b-hf",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 11008,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 32,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "rope_theta": 10000.0,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.39.1",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|tokenization_utils_base.py:2084] 2024-03-28 17:17:45,165 >> loading file tokenizer.model from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/tokenizer.model
+[INFO|tokenization_utils_base.py:2084] 2024-03-28 17:17:45,165 >> loading file tokenizer.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/tokenizer.json
+[INFO|tokenization_utils_base.py:2084] 2024-03-28 17:17:45,165 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2084] 2024-03-28 17:17:45,165 >> loading file special_tokens_map.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/special_tokens_map.json
+[INFO|tokenization_utils_base.py:2084] 2024-03-28 17:17:45,165 >> loading file tokenizer_config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/tokenizer_config.json
+[INFO|configuration_utils.py:726] 2024-03-28 17:17:45,282 >> loading configuration file config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/config.json
+[INFO|configuration_utils.py:789] 2024-03-28 17:17:45,282 >> Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-2-7b-hf",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 11008,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 32,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "rope_theta": 10000.0,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.39.1",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|modeling_utils.py:3283] 2024-03-28 17:17:45,283 >> loading weights file model.safetensors from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/model.safetensors.index.json
+[INFO|modeling_utils.py:1417] 2024-03-28 17:17:45,284 >> Instantiating LlamaForCausalLM model under default dtype torch.float16.
+[INFO|configuration_utils.py:928] 2024-03-28 17:17:45,284 >> Generate config GenerationConfig {
+  "bos_token_id": 1,
+  "eos_token_id": 2
+}
+
+Loading checkpoint shards: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:01<00:00,  1.35it/s]
+[INFO|modeling_utils.py:4024] 2024-03-28 17:17:46,894 >> All model checkpoint weights were used when initializing LlamaForCausalLM.
+
+[INFO|modeling_utils.py:4032] 2024-03-28 17:17:46,894 >> All the weights of LlamaForCausalLM were initialized from the model checkpoint at meta-llama/Llama-2-7b-hf.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use LlamaForCausalLM for predictions without further training.
+[INFO|configuration_utils.py:883] 2024-03-28 17:17:46,932 >> loading configuration file generation_config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/8a0442e81540efaeb1a0fe3e95477b5e0edfd423/generation_config.json
+[INFO|configuration_utils.py:928] 2024-03-28 17:17:46,933 >> Generate config GenerationConfig {
+  "bos_token_id": 1,
+  "do_sample": true,
+  "eos_token_id": 2,
+  "max_length": 4096,
+  "pad_token_id": 0,
+  "temperature": 0.6,
+  "top_p": 0.9
+}
+
+We have loaded the new model !
+Overwrite dataset info from restored data version if exists.
+03/28/2024 17:17:50 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/gsm8k/main/0.0.0/e53f048856ff4f594e959d75785d2c2d37b678ee
+03/28/2024 17:17:50 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/gsm8k/main/0.0.0/e53f048856ff4f594e959d75785d2c2d37b678ee
+Found cached dataset gsm8k (/home/vashistt/.cache/huggingface/datasets/gsm8k/main/0.0.0/e53f048856ff4f594e959d75785d2c2d37b678ee)
+03/28/2024 17:17:50 - INFO - datasets.builder - Found cached dataset gsm8k (/home/vashistt/.cache/huggingface/datasets/gsm8k/main/0.0.0/e53f048856ff4f594e959d75785d2c2d37b678ee)
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/gsm8k/main/0.0.0/e53f048856ff4f594e959d75785d2c2d37b678ee
+03/28/2024 17:17:50 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/gsm8k/main/0.0.0/e53f048856ff4f594e959d75785d2c2d37b678ee
+Task: gsm8k; number of docs: 1319
+Task: gsm8k; document 0; context prompt (starting on next line):
+Question: Mr. Bodhi is transporting some animals using a yacht across a river. He has 20 cows, 15 foxes and three times as many zebras as foxes. To balance the yacht to ensure a smooth sail across the river, the total number of animals in the yacht needs to be 100. If he decides to add sheep to the yacht to make the yacht sail-worthy, how many sheep did he add to the yacht?
+Answer: The number of cows and foxes in the yacht is 20+15 = <<20+15=35>>35
+Mr. Bodhi also has three times as many zebras as foxes in the yacht, equal to 3*15 = <<3*15=45>>45 zebras.
+The number of animals in the yacht so far is 35+45 = <<35+45=80>>80
+To balance the yacht, Mr. Bodhi needs to add 100-80= <<100-80=20>>20 sheep
+#### 20
+
+Question: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn't like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into?
+Answer: Manny will eat 1 piece.
+Aaron will eat 0 pieces.
+Kai will eat twice as much as Manny, so he will eat 2 * 1 = <<2*1=2>>2 pieces.
+Raphael will eat half as much as Manny, so he will eat 1 * 1/2 = 1/2 piece.
+Lisa will eat 2 pieces plus the remainder of Raphael’s piece, so she will eat 2 + 1/2 = 2 1/2 pieces.
+Together, they will eat 1 + 0 + 2 + 1/2 + 2 1/2 = 1 + 2 + 3 = 6 pieces.
+Thus, Manny should cut his lasagna into 6 pieces.
+#### 6
+
+Question: Barbara asked the butcher for 4 1/2 pound steaks that cost $15.00/pound.  She also asked for a pound and half of chicken breasts that were $8.00 a pound.  How much did she spend at the butchers?
+Answer: She ordered 4 1/2 pound steaks so that's 4*.5 = <<4*.5=2>>2 pounds of steak.
+The steak cost $15.00 a pound and she bought 2 pounds so that's 15*2 = $<<15*2=30.00>>30.00 for 4 steaks.
+She also needed 1.5 pounds of chicken breasts at $8.00 a pound so that's 1.5*8 = $<<1.5*8=12.00>>12.00 for chicken.
+The steaks cost $30.00 and the chicken cost $12.00 for a total of 30+12 = $<<30+12=42.00>>42.00 spent at the butchers.
+#### 42
+
+Question: There are 400 students. 120 students take dance as their elective. 200 students take art as their elective. The rest take music. What percentage of students take music?
+Answer: There are 400-120-200=<<400-120-200=80>>80 students in music.
+Thus, students in music make up (80/400)*100=<<80/400*100=20>>20% of the students.
+#### 20
+
+Question: John starts at an elevation of 400 feet.  He travels downward at a rate of 10 feet down per minute for 5 minutes.  What is his elevation now?
+Answer: He traveled down 10*5=<<10*5=50>>50 feet.
+So he is at an elevation of 400-50=<<400-50=350>>350 feet.
+#### 350
+
+Question: Jared is trying to increase his typing speed. He starts with 47 words per minute (WPM). After some lessons the next time he tests his typing speed it has increased to 52 WPM. If he continues to increase his typing speed once more by 5 words, what will be the average of the three measurements?
+Answer:
+(end of prompt on previous line)
+Requests: Req_greedy_until("Question: Mr. Bodhi is transporting some animals using a yacht across a river. He has 20 cows, 15 foxes and three times as many zebras as foxes. To balance the yacht to ensure a smooth sail across the river, the total number of animals in the yacht needs to be 100. If he decides to add sheep to the yacht to make the yacht sail-worthy, how many sheep did he add to the yacht?\nAnswer: The number of cows and foxes in the yacht is 20+15 = <<20+15=35>>35\nMr. Bodhi also has three times as many zebras as foxes in the yacht, equal to 3*15 = <<3*15=45>>45 zebras.\nThe number of animals in the yacht so far is 35+45 = <<35+45=80>>80\nTo balance the yacht, Mr. Bodhi needs to add 100-80= <<100-80=20>>20 sheep\n#### 20\n\nQuestion: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn't like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into?\nAnswer: Manny will eat 1 piece.\nAaron will eat 0 pieces.\nKai will eat twice as much as Manny, so he will eat 2 * 1 = <<2*1=2>>2 pieces.\nRaphael will eat half as much as Manny, so he will eat 1 * 1/2 = 1/2 piece.\nLisa will eat 2 pieces plus the remainder of Raphael’s piece, so she will eat 2 + 1/2 = 2 1/2 pieces.\nTogether, they will eat 1 + 0 + 2 + 1/2 + 2 1/2 = 1 + 2 + 3 = 6 pieces.\nThus, Manny should cut his lasagna into 6 pieces.\n#### 6\n\nQuestion: Barbara asked the butcher for 4 1/2 pound steaks that cost $15.00/pound.  She also asked for a pound and half of chicken breasts that were $8.00 a pound.  How much did she spend at the butchers?\nAnswer: She ordered 4 1/2 pound steaks so that's 4*.5 = <<4*.5=2>>2 pounds of steak.\nThe steak cost $15.00 a pound and she bought 2 pounds so that's 15*2 = $<<15*2=30.00>>30.00 for 4 steaks.\nShe also needed 1.5 pounds of chicken breasts at $8.00 a pound so that's 1.5*8 = $<<1.5*8=12.00>>12.00 for chicken.\nThe steaks cost $30.00 and the chicken cost $12.00 for a total of 30+12 = $<<30+12=42.00>>42.00 spent at the butchers.\n#### 42\n\nQuestion: There are 400 students. 120 students take dance as their elective. 200 students take art as their elective. The rest take music. What percentage of students take music?\nAnswer: There are 400-120-200=<<400-120-200=80>>80 students in music.\nThus, students in music make up (80/400)*100=<<80/400*100=20>>20% of the students.\n#### 20\n\nQuestion: John starts at an elevation of 400 feet.  He travels downward at a rate of 10 feet down per minute for 5 minutes.  What is his elevation now?\nAnswer: He traveled down 10*5=<<10*5=50>>50 feet.\nSo he is at an elevation of 400-50=<<400-50=350>>350 feet.\n#### 350\n\nQuestion: Jared is trying to increase his typing speed. He starts with 47 words per minute (WPM). After some lessons the next time he tests his typing speed it has increased to 52 WPM. If he continues to increase his typing speed once more by 5 words, what will be the average of the three measurements?\nAnswer:", {'until': [':', 'Question:', 'Question']})[None]
+
+Running greedy_until requests
+  0%|                                                                                                                                   | 0/1319 [00:00<?, ?it/s]/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/transformers/generation/configuration_utils.py:492: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.6` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+  warnings.warn(
+/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/transformers/generation/configuration_utils.py:497: UserWarning: `do_sample` is set to `False`. However, `top_p` is set to `0.9` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `top_p`.
+  warnings.warn(
+100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1319/1319 [1:28:06<00:00,  4.01s/it]
+{'results': {'gsm8k': {'acc': 0.14859742228961334, 'acc_stderr': 0.009797503180527934}}}
+original model param count : 6476271616
+epoch 1, param count is 5182283776
+epoch 2, param count is 3887034368
+epoch 3, param count is 3239133184
+Final model sparsity is : 0.500 
+Final model param count : 3239133184
+Num params = :  3239133184
+03/28/2024 18:47:40 - INFO - __main__ - *** Evaluate ***
+Overwrite dataset info from restored data version if exists.
+03/28/2024 18:47:41 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+03/28/2024 18:47:41 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+Found cached dataset wikitext (/home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3)
+03/28/2024 18:47:41 - INFO - datasets.builder - Found cached dataset wikitext (/home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3)
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+03/28/2024 18:47:41 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+  0%|                                                                                                                                     | 0/84 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/home/vashistt/anlp-project/lora_ft/Run_evals.py", line 893, in <module>
+    main()
+  File "/home/vashistt/anlp-project/lora_ft/Run_evals.py", line 694, in main
+    before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vashistt/anlp-project/lora_ft/evaluate_ppl.py", line 62, in evaluate_ppl
+    outputs = model(input_ids, labels=target_ids)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/transformers/models/llama/modeling_llama.py", line 1196, in forward
+    outputs = self.model(
+              ^^^^^^^^^^^
+  File "/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/transformers/models/llama/modeling_llama.py", line 1016, in forward
+    layer_outputs = decoder_layer(
+                    ^^^^^^^^^^^^^^
+  File "/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/transformers/models/llama/modeling_llama.py", line 739, in forward
+    hidden_states, self_attn_weights, present_key_value = self.self_attn(
+                                                          ^^^^^^^^^^^^^^^
+  File "/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/vashistt/ENTER/envs/prune_llm/lib/python3.12/site-packages/transformers/models/llama/modeling_llama.py", line 641, in forward
+    key_states = key_states.view(bsz, q_len, self.num_key_value_heads, self.head_dim).transpose(1, 2)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: shape '[1, 4096, 32, 128]' is invalid for input of size 7864320
+
+'''
