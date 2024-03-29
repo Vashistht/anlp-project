@@ -19,11 +19,115 @@ def set_seed(seed):
 class TokenizerWrapper:
     def __init__(self, input_ids):
         self.input_ids = input_ids
+
+# Load and process wikitext2 dataset
+def get_wikitext2(nsamples, seed, seqlen, tokenizer):
+    # Load train and test datasets
+    traindata = load_dataset('wikitext', 'wikitext-2-raw-v1', split='train')
+    testdata = load_dataset('wikitext', 'wikitext-2-raw-v1', split='test')
+
+    # Encode datasets
+    trainenc = tokenizer(" ".join(traindata['text']), return_tensors='pt')
+    testenc = tokenizer("\n\n".join(testdata['text']), return_tensors='pt')
+
+    # Generate samples from training set
+    random.seed(seed)
+    trainloader = []
+    for _ in range(nsamples):
+        i = random.randint(0, trainenc.input_ids.shape[1] - seqlen - 1)
+        j = i + seqlen
+        inp = trainenc.input_ids[:, i:j]
+        tar = inp.clone()
+        tar[:, :-1] = -100
+        trainloader.append((inp, tar))
+    return trainloader, testenc
+
+# Load and process c4 dataset
+def get_c4(nsamples, seed, seqlen, tokenizer):
+	# Load train and validation datasets
+	traindata = load_dataset('allenai/c4', data_files={'train': 'en/c4-train.00000-of-01024.json.gz'}, split='train')
+	valdata = load_dataset('allenai/c4', data_files={'validation': 'en/c4-validation.00000-of-00008.json.gz'}, split='validation')
+	
+	# Generate samples from training set
+	random.seed(seed)
+	trainloader = []
+	for _ in range(nsamples):
+		while True:
+			i = random.randint(0, len(traindata) - 1)
+			trainenc = tokenizer(traindata[i]['text'], return_tensors='pt')
+			if trainenc.input_ids.shape[1] > seqlen:
+				break
+		i = random.randint(0, trainenc.input_ids.shape[1] - seqlen - 1)
+		j = i + seqlen
+		inp = trainenc.input_ids[:, i:j]
+		tar = inp.clone()
+		tar[:, :-1] = -100
+		trainloader.append((inp, tar))
+
+	# Prepare validation dataset
+	valenc = tokenizer(' '.join(valdata[:1100]['text']), return_tensors='pt')
+	valenc = valenc.input_ids[:, :(256 * seqlen)]
+	valenc = TokenizerWrapper(valenc)
+	return trainloader, valenc
+
+# Load and process wikitext2 dataset
+def get_gsm8k(nsamples, seed, seqlen, tokenizer):
+    # Load train and test datasets
+    traindata = load_dataset("gsm8k", "main", split='train')
+    testdata = load_dataset("gsm8k", "main", split='test')
+
+    # Encode datasets
+    trainenc = tokenizer(" ".join(traindata['question']), return_tensors='pt')
+    testenc = tokenizer("\n\n".join(testdata['question']), return_tensors='pt')
+
+    # Generate samples from training set
+    random.seed(seed)
+    trainloader = []
+    for _ in range(nsamples):
+        i = random.randint(0, trainenc.input_ids.shape[1] - seqlen - 1)
+        j = i + seqlen
+        inp = trainenc.input_ids[:, i:j]
+        tar = inp.clone()
+        tar[:, :-1] = -100
+        trainloader.append((inp, tar))
+    return trainloader, testenc
+
+
+
+# Load and process c4 dataset
+def get_c4(nsamples, seed, seqlen, tokenizer):
+	# Load train and validation datasets
+	traindata = load_dataset('allenai/c4', data_files={'train': 'en/c4-train.00000-of-01024.json.gz'}, split='train')
+	valdata = load_dataset('allenai/c4', data_files={'validation': 'en/c4-validation.00000-of-00008.json.gz'}, split='validation')
+	
+	# Generate samples from training set
+	random.seed(seed)
+	trainloader = []
+	for _ in range(nsamples):
+		while True:
+			i = random.randint(0, len(traindata) - 1)
+			trainenc = tokenizer(traindata[i]['text'], return_tensors='pt')
+			if trainenc.input_ids.shape[1] > seqlen:
+				break
+		i = random.randint(0, trainenc.input_ids.shape[1] - seqlen - 1)
+		j = i + seqlen
+		inp = trainenc.input_ids[:, i:j]
+		tar = inp.clone()
+		tar[:, :-1] = -100
+		trainloader.append((inp, tar))
+
+	# Prepare validation dataset
+	valenc = tokenizer(' '.join(valdata[:1100]['text']), return_tensors='pt')
+	valenc = valenc.input_ids[:, :(256 * seqlen)]
+	valenc = TokenizerWrapper(valenc)
+	return trainloader, valenc
+
+
 # Load and process BoolQ dataset
 def get_boolq(nsamples, seed, seqlen, tokenizer):
     # Load train and test datasets
     traindata = load_dataset("boolq", split='train')
-    testdata = load_dataset("boolq", split='test')
+    testdata = load_dataset("boolq", split='validation')
 
     # Encode datasets
     trainenc = tokenizer(" ".join(traindata['question'] + traindata['passage']), return_tensors='pt')
@@ -88,8 +192,8 @@ def get_winogrande(nsamples, seed, seqlen, tokenizer):
 # Load and process ARC-e dataset
 def get_arc_e(nsamples, seed, seqlen, tokenizer):
     # Load train and test datasets
-    traindata = load_dataset("ai2_arc", "ARC-E", split='train')
-    testdata = load_dataset("ai2_arc", "ARC-E", split='test')
+    traindata = load_dataset("ai2_arc", "ARC-Easy", split='train')
+    testdata = load_dataset("ai2_arc", "ARC-Easy", split='test')
 
     # Encode datasets
     trainenc = tokenizer(" ".join(traindata['question'] + traindata['choices']['text']), return_tensors='pt')
@@ -110,8 +214,8 @@ def get_arc_e(nsamples, seed, seqlen, tokenizer):
 # Load and process ARC-c dataset
 def get_arc_c(nsamples, seed, seqlen, tokenizer):
     # Load train and test datasets
-    traindata = load_dataset("ai2_arc", "ARC-C", split='train')
-    testdata = load_dataset("ai2_arc", "ARC-C", split='test')
+    traindata = load_dataset("ai2_arc", "ARC-Challenge", split='train')
+    testdata = load_dataset("ai2_arc", "ARC-Challenge", split='test')
 
     # Encode datasets
     trainenc = tokenizer(" ".join(traindata['question'] + traindata['choices']['text']), return_tensors='pt')

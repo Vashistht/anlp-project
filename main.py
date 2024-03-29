@@ -603,4 +603,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-mask_dir = "/home/vashistt/anlp-project/outdir_sheared_llama/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=200_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-sheared-llama2-wikitext_Adaptive=Yes"

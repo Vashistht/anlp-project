@@ -570,33 +570,6 @@ def main():
 	# since this will be pickled to avoid _LazyModule error in Hasher force logger loading before tokenize_function
 	tok_logger = transformers.utils.logging.get_logger("transformers.tokenization_utils_base")
 
-	# def tokenize_function(examples):
-	# 	with CaptureLogger(tok_logger) as cl:
-	# 		output = tokenizer(examples[text_column_name])
-	# 	# clm input could be much much longer than block_size
-	# 	if "Token indices sequence length is longer than the" in cl.out:
-	# 		tok_logger.warning(
-	# 			"^^^^^^^^^^^^^^^^ Please ignore the warning above - this long input will be chunked into smaller bits"
-	# 			" before being passed to the model."
-	# 		)
-	# 	return output
-
-	# with training_args.main_process_first(desc="dataset map tokenization"):
-	# 	if not data_args.streaming:
-	# 		tokenized_datasets = raw_datasets.map(
-	# 			tokenize_function,
-	# 			batched=True,
-	# 			num_proc=data_args.preprocessing_num_workers,
-	# 			remove_columns=column_names,
-	# 			load_from_cache_file=not data_args.overwrite_cache,
-	# 			desc="Running tokenizer on dataset",
-	# 		)
-	# 	else:
-	# 		tokenized_datasets = raw_datasets.map(
-	# 			tokenize_function,
-	# 			batched=True,
-	# 			remove_columns=column_names,
-	# 		)
 
 	if data_args.block_size is None:
 		block_size = tokenizer.model_max_length
@@ -633,27 +606,6 @@ def main():
 		result["labels"] = result["input_ids"].copy()
 		return result
 
-	# Note that with `batched=True`, this map processes 1,000 texts together, so group_texts throws away a remainder
-	# for each of those groups of 1,000 texts. You can adjust that batch_size here but a higher value might be slower
-	# to preprocess. 
-	#
-	# To speed up this part, we use multiprocessing. See the documentation of the map method for more information:
-	# https://huggingface.co/docs/datasets/package_reference/main_classes.html#datasets.Dataset.map
-
-	# with training_args.main_process_first(desc="grouping texts together"):
-	# 	if not data_args.streaming:
-	# 		lm_datasets = tokenized_datasets.map(
-	# 			group_texts,
-	# 			batched=True,
-	# 			num_proc=data_args.preprocessing_num_workers,
-	# 			load_from_cache_file=not data_args.overwrite_cache,
-	# 			desc=f"Grouping texts in chunks of {block_size}",
-	# 		)
-	# 	else:
-	# 		lm_datasets = tokenized_datasets.map(
-	# 			group_texts,
-	# 			batched=True,
-			# )
 
 	should_i_do_eleuther_eval = True
 	print("Num params = : ", get_param_count(model) )
@@ -661,23 +613,16 @@ def main():
 	if should_i_do_eleuther_eval:
 		print('eleuther eval for original model')
 	# 	# transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
-	# 	results = evaluator.simple_evaluate(
-	# 		model="hf-causal-experimental",
-	# 		model_args="pretrained={}".format(model_args.model_name_or_path),
-	# 		# tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
-   	# 		tasks=["gsm8k"],
-	# 		num_fewshot=5,
-	# 		no_cache=True,
-	# 		pretrained_model=model,
-	# 	)
-		# results = lm_eval.simple_evaluate(
-		# 	model=model,
-		# 	# model_args="pretrained={}".format(model_args.model_name_or_path),
-		# 	tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
-		# 	num_fewshot=0,
-		# 	use_cache=None,
+		# results = evaluator.simple_evaluate(
+		# 	model="hf-causal-experimental",
+		# 	model_args="pretrained={}".format(model_args.model_name_or_path),
+		# 	# tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
+   		# 	tasks=["gsm8k"],
+		# 	num_fewshot=5,
+		# 	no_cache=True,
+		# 	pretrained_model=model,
 		# )
-	
+
 	# updated_results = {'results': results['results']}
 	# print(updated_results)
 	# results_str = 'orginal-model \n' + str(updated_results)
@@ -693,147 +638,11 @@ def main():
 		start_time = time.time()
 		# import pdb
 		# pdb.set_trace()
-		before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-		speedup = og_runtime / final_runtime
-		out_str = "[SpeedUp={:.3f}] Original perplexity on wikitext = {:.3f} | Before Training perplexity on wikitext = {:.3f}".format(speedup, og_ppl, before_train_ppl, speedup)
-		out_file.write(out_str + "\n")
-		print(out_str)
-
-	############################################################################################
-# 	model = prepare_model_for_int8_training(model)
-
-# 	if model_args.full_ft:
-# 		for k, v in model.named_parameters():
-# 			v.requires_grad = False if 'embed' in k  else True
-# 	else:
-# 		# TODO [Steven] -- modify the loRA target modules to match the names of the modules in the mistral model
-# 		target_modules = ["q_proj","v_proj", "k_proj", "o_proj", "up_proj", "gate_proj", "down_proj"] \
-# 			if 'phi' not in model_args.model_name_or_path else ["Wqkv", "fc2"]
-# 		config = LoraConfig(
-# 			r=model_args.lora_r,
-# 			lora_alpha=int(model_args.lora_r*model_args.lora_alpha_ratio),
-# 			target_modules=target_modules,
-# 			lora_dropout=model_args.lora_dropout,
-# 			bias="none",
-# 			task_type="CAUSAL_LM",
-# 		)
-# 		model = get_peft_model(model, config)
-# 	############################################################################################
-
-# 	# We resize the embeddings only when necessary to avoid index errors. If you are creating a model from scratch
-# 	# on a small vocab and want a smaller embedding size, remove this test.
-# 	embedding_size = model.get_input_embeddings().weight.shape[0]
-# 	if len(tokenizer) > embedding_size:
-# 		model.resize_token_embeddings(len(tokenizer))
-
-# 	if training_args.do_train:
-# 		if "train" not in tokenized_datasets:
-# 			raise ValueError("--do_train requires a train dataset")
-# 		train_dataset = lm_datasets["train"]
-# 		if data_args.max_train_samples is not None:
-# 			max_train_samples = min(len(train_dataset), data_args.max_train_samples)
-# 			train_dataset = train_dataset.select(range(max_train_samples))
-
-# 	if training_args.do_eval:
-# 		if "validation" not in tokenized_datasets:
-# 			raise ValueError("--do_eval requires a validation dataset")
-# 		eval_dataset = lm_datasets["validation"]
-# 		if data_args.max_eval_samples is not None:
-# 			max_eval_samples = min(len(eval_dataset), data_args.max_eval_samples)
-# 			eval_dataset = eval_dataset.select(range(max_eval_samples))
-
-# 		def preprocess_logits_for_metrics(logits, labels):
-# 			if isinstance(logits, tuple):
-# 				# Depending on the model and config, logits may contain extra tensors,
-# 				# like past_key_values, but logits always come first
-# 				logits = logits[0]
-# 			return logits.argmax(dim=-1)
-
-# ################################################################################################################
-# 	batch_size = 128
-# 	training_args.gradient_accumulation_steps = batch_size // training_args.per_device_train_batch_size
-# 	training_args.warmup_steps = 5
-# 	training_args.fp16 = True
-# 	training_args.logging_steps = 10
-# 	training_args.optim = "adamw_torch"
-# 	training_args.save_strategy = "steps"
-# 	training_args.eval_steps = 10
-# 	training_args.save_steps = 50
-# 	training_args.save_total_limit = 15
-# 	training_args.group_by_length = False
-
-# 	for k, v in model.named_parameters():
-# 		if 'lm_head' in k:
-# 			v.requires_grad = True
-# ################################################################################################################
-
-# 	# Initialize our Trainer
-# 	trainer = CustomTrainer(
-# 		model=model,
-# 		args=training_args,
-# 		train_dataset=train_dataset if training_args.do_train else None,
-# 		eval_dataset=eval_dataset if training_args.do_eval else None,
-# 		tokenizer=tokenizer,
-# 		# Data collator will default to DataCollatorWithPadding, so we change it.
-# 		data_collator=default_data_collator,
-# 		compute_metrics=None,
-# 		preprocess_logits_for_metrics=preprocess_logits_for_metrics
-# 		if training_args.do_eval and not is_torch_tpu_available()
-# 		else None,
-# 	)
-	
-# 	teacher_model = AutoModelForCausalLM.from_pretrained(
-# 		model_args.model_name_or_path, torch_dtype=torch.float16, cache_dir=model_args.cache_dir,
-# 		low_cpu_mem_usage=True, device_map="auto", trust_remote_code=True
-# 	)
-# 	teacher_model.seqlen = teacher_model.config.max_position_embeddings
-# 	trainer.set_distill_info(
-# 		teacher_model, kl_weight=model_args.kl_weight, hidden_mse_weight=model_args.hidden_mse_weight
-# 	)
-# 	############## code imported from alpaca-lora ###################
-# 	model.config.use_cache = False
-
-# 	if not model_args.full_ft:
-# 		old_state_dict = model.state_dict
-# 		model.state_dict = (
-# 			lambda self, *_, **__: get_peft_model_state_dict(
-# 				self, old_state_dict()
-# 			)
-# 		).__get__(model, type(model))
-
-# # 	if torch.__version__ >= "2" and sys.platform != "win32":
-# # 		model = torch.compile(model)
-# 	############## code imported from alpaca-lora ###################
-
-
-# 	# Training
-# 	if training_args.do_train:
-# 		checkpoint = None
-# 		if training_args.resume_from_checkpoint is not None:
-# 			checkpoint = training_args.resume_from_checkpoint
-# 		elif last_checkpoint is not None:
-# 			checkpoint = last_checkpoint
-# 		train_result = trainer.train(resume_from_checkpoint=checkpoint)
-# 		# trainer.save_model()  # Saves the tokenizer too for easy upload
-
-# 		# Don't save because we'ld have too many models
-# # 		#############################################################
-# 		model.save_pretrained(training_args.output_dir)
-# 		torch.save(trainer.model.state_dict(), f"{training_args.output_dir}/adapter_model.bin")
-# # 		#############################################################
-
-# 		metrics = train_result.metrics
-
-# 		max_train_samples = (
-# 			data_args.max_train_samples if data_args.max_train_samples is not None else len(train_dataset)
-# 		)
-# 		metrics["train_samples"] = min(max_train_samples, len(train_dataset))
-
-# 		trainer.log_metrics("train", metrics)
-# 		trainer.save_metrics("train", metrics)
-# 		# trainer.save_state()
-
-	# if training_args.do_eleuther_eval:
+		# before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+		# speedup = og_runtime / final_runtime
+		# out_str = "[SpeedUp={:.3f}] Original perplexity on wikitext = {:.3f} | Before Training perplexity on wikitext = {:.3f}".format(speedup, og_ppl, before_train_ppl, speedup)
+		# out_file.write(out_str + "\n")
+		# print(out_str)
 	
 	if should_i_do_eleuther_eval:
 		#transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
@@ -842,48 +651,17 @@ def main():
 			model_args="pretrained={}".format(model_args.model_name_or_path),
 			# tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
    			# num_fewshot=0,
-   			tasks=["gsm8k"],
-			num_fewshot=5,
+   			tasks=["boolq"],
+			num_fewshot=0,
 			no_cache=True,
 			pretrained_model=model,
 		)
-  		# results = lm_eval.simple_evaluate(
-		# 	model=model,
-		# 	# model_args="pretrained={}".format(model_args.model_name_or_path),
-		# 	tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
-		# 	num_fewshot=0,
-		# 	use_cache=None)c
 	updated_results = {'results': results['results']}
 	print(updated_results)
 	results_str = "prune_model\n" + str(updated_results)
 	out_file.write(results_str + "\n")
 
 
-# 	# Evaluation
-# 	if training_args.do_eval:
-# 		gc.collect()
-# 		torch.cuda.empty_cache()
-# 		logger.info("*** Evaluate ***")
-# 		model.eval()
-# 		before_train_ppl = -1.0
-# 		final_ppl, _ = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-# 		out_str = "Before Training = {:.3f} | Final perplexity = {:.3f}".format(before_train_ppl, final_ppl)
-# 		out_file.write(out_str + "\n")
-# 		print(out_str)
-
-# 	kwargs = {"finetuned_from": model_args.model_name_or_path, "tasks": "text-generation"}
-# 	if data_args.dataset_name is not None:
-# 		kwargs["dataset_tags"] = data_args.dataset_name
-# 		if data_args.dataset_config_name is not None:
-# 			kwargs["dataset_args"] = data_args.dataset_config_name
-# 			kwargs["dataset"] = f"{data_args.dataset_name} {data_args.dataset_config_name}"
-# 		else:
-# 			kwargs["dataset"] = data_args.dataset_name
-
-# 	if training_args.push_to_hub:
-# 		trainer.push_to_hub(**kwargs)
-# 	else:
-# 		trainer.create_model_card(**kwargs)
 
 
 def _mp_fn(index):
