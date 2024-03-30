@@ -1,4 +1,6 @@
 # This is an attempt to recreate and improve Bonsai [Still Under Construction]
+The original source code can be found at [https://github.com/ldery/bonsai]
+
 Code for ["Everybody Prune Now: Structured Pruning of LLMs with only Forward Passes"]
 (https://arxiv.org/abs/2402.05406)
 
