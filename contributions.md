@@ -10,7 +10,7 @@
   - Ran evals to recreate the metrics given in the dataset
   - Identified errors in the code + added git issues to the source code
 -  Report:
-  - Implementation & Deviations, Results, Proposal sections
+   - Implementation & Deviations, Results, Proposal sections
 
 ## Amanda (xal)
 - Conducted initial literature survey on our topic of interest: multilingual, small model reasoning, pruning, etc
