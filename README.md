@@ -1,5 +1,6 @@
-# Bonsai [Still Under Construction]
-Code for ["Everybody Prune Now: Structured Pruning of LLMs with only Forward Passes"](https://arxiv.org/abs/2402.05406)
+# This is an attempt to recreate and improve Bonsai [Still Under Construction]
+Code for ["Everybody Prune Now: Structured Pruning of LLMs with only Forward Passes"]
+(https://arxiv.org/abs/2402.05406)
 
 ## Installation
 See INSTALLATION.MD for instructions on installing the appropriate libraries
