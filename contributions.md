@@ -21,3 +21,7 @@
 - Light work on implementation specifics, including initial setup and runthrough of smaller LlaMa models with Bonsai
 
 ## Emily
+- Wrote sections of the report: Introduction, Lottery Ticket, SparseGPT, Wanda
+- Contributed to sections of the report: Implementation, Limitations, Proposal
+- Ran pruning code for Llama 2 7B
+- Dissected codebase/config files to attempt compatibility for smaller Llama models
