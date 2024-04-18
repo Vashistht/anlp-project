@@ -40,30 +40,43 @@ pip3 install torch numpy wandb accelerate chardet==5.2.0 datasets huggingface-hu
 ```
 
 ### Upgrade huggingface_hub for CLI support
+```
 pip3 install -U "huggingface_hub[cli]"
+```
 
 # For finetuning
+```
 pip3 install evaluate==0.4.1 peft==0.6.2
+```
 
 # for lm-eval
+
+```
 git clone https://github.com/EleutherAI/lm-evaluation-harness
 cd lm-evaluation-harness
 pip install -e .
+```
 
 ### Register environment with Jupyter
+```
 python -m ipykernel install --user --name=prune_llm
-
+```
 ### Login to Hugging Face CLI
+```
 huggingface-cli login --token YOUR_HF_API_TOKEN
+```
 
 # Running the commands
 
 ## Prune Sheared LLaMA 2-7B
+```
 CUDA_VISIBLE_DEVICES=0 python3 main.py --model princeton-nlp/Sheared-LLaMA-2.7B --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-sheared-llama2-wikitext --masks_per_iter 100 --nsamples 8 --save outdir --prune_frac 0.2 --bsz 1 --prune_method wanda
+```
 
 ## Prune LLaMA 2 7B
+```
 CUDA_VISIBLE_DEVICES=0 python3 main.py --model meta-llama/Llama-2-7b-hf --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-llama2-wikitext --masks_per_iter 100 --nsamples 8 --save outdir --prune_frac 0.2 --bsz 1 --prune_method wanda
-
+```
 
 
 # Evaluations
