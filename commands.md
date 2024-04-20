@@ -6,6 +6,8 @@
 conda create -n prune_llm mamba python=3.9 -c conda-forge
 source activate prune_llm
 
+conda install -c pytorch -c conda-forge -c defaults wheel=0.41.2 # from the env yaml
+
 conda install -c pytorch -c conda-forge -c defaults transformers==4.28.0 tokenizers==0.13.3 
 
 conda install -c pytorch -c conda-forge -c defaults lxml==5.1.0
@@ -21,7 +23,8 @@ conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
 pip3 install torch==2.1.1 
 
 ```
-
+from yaml file
+--- torchvision=0.11.2, torchaudio=0.10.1
 
 ### Install PyTorch, torchvision, torchaudio, and other libraries
 ```
