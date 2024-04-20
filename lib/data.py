@@ -98,11 +98,12 @@ def get_gsm8k(trainenc, testenc, nsamples, seed, seqlen):
 # Function to select the appropriate loader based on dataset name
 def get_loaders(name, trainenc, testenc, nsamples=128, seed=0, seqlen=2048, tokenizer=None):
     if 'wikitext2' in name:
-        # trainenc, testenc = load_wikitext2(tokenizer)
         return get_wikitext2(trainenc, testenc, nsamples, seed, seqlen)
     if "c4" in name:
-        # traindata, valdata = load_c4(tokenizer)
         return get_c4(trainenc, testenc, nsamples, seed, seqlen, tokenizer)
     if 'gsm8k' in name:
-        # trainenc, testenc = load_gsm8k(tokenizer)
         return get_gsm8k(trainenc, testenc, nsamples, seed, seqlen)
+    
+def get_traintestloader(name, tokenizer, nsamples=128, seed=0, seqlen=2048):
+    trainenc, testenc = get_raw_dataset(name, tokenizer)
+    return get_loaders(name, trainenc, testenc, nsamples, seed, seqlen, tokenizer)

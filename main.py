@@ -17,7 +17,7 @@ import wandb
 from transformers.pytorch_utils import  find_pruneable_heads_and_indices, prune_linear_layer
 import gc
 import random
-from lib.data import get_raw_dataset
+from lib.data import get_traintestloader
 
 print('torch', version('torch'))
 print('transformers', version('transformers'))
@@ -570,9 +570,14 @@ def main():
 	model.eval()
 	tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=False)
 	print('tokenizer done')
-	trainenc, testenc = get_raw_dataset(args.dataset)
+
+	print('Loading dataset')
+	trainloader, testloader = get_traintestloader(args.dataset, tokenizer,
+											      args.nsamples, args.seed, model.seqlen)
+
 	# Getting the initial evaluation of the model
-	_, orig_test_ppl = eval_ppl(model, trainenc, testenc, tokenizer, model.device, dataset=args.dataset)
+	_, orig_test_ppl = eval_ppl(model, trainloader, testloader, model.device, 
+							    dataset=args.dataset, bsz=args.bsz)
 	print('eval done original_test_ppl:', orig_test_ppl)
 	original_param_count = get_param_count(model)
 	model.original_param_count = original_param_count
