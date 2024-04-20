@@ -572,7 +572,7 @@ def main():
 	print('tokenizer done')
 	trainenc, testenc = get_raw_dataset(args.dataset)
 	# Getting the initial evaluation of the model
-	_, orig_test_ppl = eval_ppl(model, trainenc, testenc, tokenizer, model.device, dataset=args.dataset)
+	_, orig_test_ppl = eval_ppl(model, trainenc, testenc, tokenizer, model.device, dataset=args.dataset, bsz= args.bsz)
 	print('eval done original_test_ppl:', orig_test_ppl)
 	original_param_count = get_param_count(model)
 	model.original_param_count = original_param_count
@@ -611,7 +611,7 @@ def main():
 		print(model)
 
 		# Evaluate the performance of the pruned model
-		ppl_train, ppl_test = eval_ppl(model, tokenizer, trainenc, testenc, model.device, dataset=args.dataset)
+		ppl_train, ppl_test = eval_ppl(model, tokenizer, trainenc, testenc, model.device, dataset=args.dataset, bsz=args.bsz)
 		# acc_train, acc_test = eval_acc(model, tokenizer, model.device, dataset=args.dataset)
 
 		wandb_run.log({'Sparsity': cur_sparsity, 'TrainPPL': ppl_train, 'TestPPL': ppl_test})
