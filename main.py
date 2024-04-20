@@ -73,16 +73,23 @@ def get_random_mask_scores(model, tokenizer, module_map, all_sampling_proba, bsz
 		# Revert to a forward pass with batch size of 1
 		try:
 			this_ppl = eval_ppl_trainonly(model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
+   			# this_acc = eval_acc_trainonly (model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
+			# this_metric = this_ppl - weight_acc * this_acc
+   
 		except Exception as e:
 			print(e)
 			gc.collect()
 			torch.cuda.empty_cache()
 			this_bsz = 1
 			this_ppl = eval_ppl_trainonly(model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
+			# this_acc = eval_acc_trainonly (model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
+			# this_metric = this_ppl - weight_acc * this_acc
 
 		print('[v1]Iter : ', iter_, ' PPL = ', this_ppl)
+		# print('[v1]Iter : ', iter_, ' ACC = ', this_acc)
 		this_ppl = this_ppl if this_ppl < INF else INF
-
+		# this_metric = this_metric if this_metric < INF else INF
+  
 		for k, (name, module) in module_map.items():
 			# NB : since we want the co-efficient to be more positive for more useful modules, we input -ppl
 			all_perfs[k].append(-this_ppl)
@@ -90,10 +97,14 @@ def get_random_mask_scores(model, tokenizer, module_map, all_sampling_proba, bsz
 		# set the complement mask here
 		set_masks(module_map, all_masks, all_sampling_proba, pfrac=pfrac, mlp_attn_ratio=mlp_attn_ratio, use_complement=True)
 		this_ppl = eval_ppl_trainonly(model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
-
+		# this_acc = eval_acc_trainonly (model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
+		# this_metric = this_ppl - weight_acc * this_acc
+  
 		print('[v2]Iter : ', iter_, ' PPL = ', this_ppl)
+  		# print('[v1]Iter : ', iter_, ' ACC = ', this_acc)
 		this_ppl = this_ppl if this_ppl < INF else INF
-
+		# this_metric = this_metric if this_metric < INF else INF
+  
 		for k, (name, module) in module_map.items():
 			# NB : since we want the co-efficient to be more positive for more useful modules, we input -ppl
 			all_perfs[k].append(-this_ppl)
