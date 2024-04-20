@@ -665,8 +665,6 @@ def main():
 	out_file.write(results_str + "\n")
 
 
-
-
 def _mp_fn(index):
 	# For xla_spawn (TPUs)
 	main()

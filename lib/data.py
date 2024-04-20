@@ -29,6 +29,7 @@ def load_wikitext2(tokenizer):
 def load_c4(tokenizer):
     traindata = load_dataset('allenai/c4', data_files={'train': 'en/c4-train.00000-of-01024.json.gz'}, split='train')
     valdata = load_dataset('allenai/c4', data_files={'validation': 'en/c4-validation.00000-of-00008.json.gz'}, split='validation')
+    
     return traindata, valdata
 
 def load_gsm8k(tokenizer):
