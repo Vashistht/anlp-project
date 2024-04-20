@@ -38,6 +38,17 @@ def load_gsm8k(tokenizer):
     testenc = tokenizer("\n\n".join(testdata['question']), return_tensors='pt')
     return trainenc, testenc
 
+def get_raw_dataset(name, tokenizer):
+    if 'wikitext2' in name:
+        # trainenc, testenc = load_wikitext2(tokenizer)
+        return load_wikitext2(tokenizer)
+    if "c4" in name:
+        # traindata, valdata = load_c4(tokenizer)
+        return load_c4(tokenizer)
+    if 'gsm8k' in name:
+        # trainenc, testenc = load_gsm8k(tokenizer)
+        return load_gsm8k(tokenizer)
+
 # Generate random subsets from datasets
 def get_wikitext2(trainenc, testenc, nsamples, seed, seqlen):
     random.seed(seed)
