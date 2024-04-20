@@ -8,15 +8,16 @@ import pdb
 from .data import get_loaders 
 
 # Function to evaluate perplexity (ppl) on a specified model and tokenizer
-def eval_ppl(model, tokenizer, trainenc, testenc, device=torch.device("cuda:0"), dataset="wikitext2", bsz=1):
+def eval_ppl(model, trainloader, testloader, device=torch.device("cuda:0"), 
+			 dataset="wikitext2", bsz=1):
 
 	# Print status
 	print(f"evaluating on {dataset}")
 
-	# Get the test loader
-	trainloader, testloader = get_loaders(
-		dataset, trainenc, testenc, seed=0, seqlen=model.seqlen, tokenizer=tokenizer 
-	)
+	# # Get the test loader
+	# trainloader, testloader = get_loaders(
+	# 	dataset, trainenc, testenc, seed=0, seqlen=model.seqlen, tokenizer=tokenizer 
+	# )
 
 	# Evaluate ppl in no grad context to avoid updating the model
 	with torch.no_grad():
@@ -25,13 +26,13 @@ def eval_ppl(model, tokenizer, trainenc, testenc, device=torch.device("cuda:0"),
 	return ppl_train, ppl_test 
 
 # Function to evaluate perplexity (ppl) on a specified model and tokenizer
-def eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=1, nsamples=128, device=torch.device("cuda:0"), seed=0, dataset="wikitext2"):
+def eval_ppl_trainonly(model, trainloader, bsz=1, device=torch.device("cuda:0"), dataset="wikitext2"):
 
 	print(f"evaluating on {dataset}")
 	# Get the test loader
-	trainloader, _ = get_loaders(
-		dataset, trainenc, testenc, nsamples=nsamples, seed=seed, seqlen=model.seqlen, tokenizer=tokenizer 
-	)
+	# trainloader, _ = get_loaders(
+	# 	dataset, trainenc, testenc, nsamples=nsamples, seed=seed, seqlen=model.seqlen, tokenizer=tokenizer 
+	# )
 
 	# Evaluate ppl in no grad context to avoid updating the model
 	with torch.no_grad():
