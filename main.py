@@ -128,9 +128,11 @@ def get_llm(model_name, cache_dir="llm_weights"):
 		torch_dtype=torch.float16, 
 		cache_dir=cache_dir, 
 		low_cpu_mem_usage=True, 
-		device_map="auto"
+		device_map="auto",
+		prune_seqlen = 512
 	)
-	model.seqlen = model.config.max_position_embeddings 
+	model.seqlen = prune_seqlen
+	# model.seqlen = model.config.max_position_embeddings
 	if ('13b' in model_name) or ('65b' in model_name):
 		model.seqlen = 2048 #Based on the values from the Lora-prune paper
 	return model
