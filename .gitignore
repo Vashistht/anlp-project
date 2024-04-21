@@ -3,3 +3,4 @@
 wandb/
 output/
 llm_weights/
+**/.DS_Store

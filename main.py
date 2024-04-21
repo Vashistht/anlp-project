@@ -566,6 +566,7 @@ def main():
 		config=args_to_dict(args),
 	)
 
+	wandb.log({'dataset': args.dataset})
 	model_name = args.model.split("/")[-1]
 	print(f"loading llm model {args.model}")
 	model = get_llm(args.model, args.cache_dir)
@@ -624,7 +625,6 @@ def main():
 		epoch_ += 1
 
 	wandb_run.log({'sparsity': cur_sparsity})
-
 
 if __name__ == '__main__':
     main()
