@@ -71,14 +71,10 @@ huggingface-cli login --token YOUR_HF_API_TOKEN
 
 # Running the commands
 
-## Prune Sheared LLaMA 2-7B
-```
-CUDA_VISIBLE_DEVICES=0 python3 main.py --model princeton-nlp/Sheared-LLaMA-2.7B --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-sheared-llama2-wikitext --masks_per_iter 100 --nsamples 8 --save outdir --prune_frac 0.2 --bsz 1 --prune_method wanda
-```
 
 ## Prune LLaMA 2 7B
 ```
-CUDA_VISIBLE_DEVICES=0 python3 main.py --model meta-llama/Llama-2-7b-hf --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-llama2-wikitext --masks_per_iter 100 --nsamples 8 --save outdir --prune_frac 0.2 --bsz 1 --prune_method wanda
+CUDA_VISIBLE_DEVICES=0 python3 main.py --model meta-llama/Llama-2-7b-hf --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-llama2 --masks_per_iter 100 --nsamples 8 --save outdir --prune_frac 0.2 --bsz 1 --prune_method wanda
 ```
 
 
@@ -130,4 +126,12 @@ CUDA_VISIBLE_DEVICES=0 python3 Run_evals.py \
 	--hidden_mse_weight 0.0 \
 	--kl_weight 0.01 \
 	--dataset_name "wikitext"
+```
+
+
+
+---
+## Prune Sheared LLaMA 2-7B
+```
+CUDA_VISIBLE_DEVICES=0 python3 main.py --model princeton-nlp/Sheared-LLaMA-2.7B --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-sheared-llama2-wikitext --masks_per_iter 100 --nsamples 8 --save outdir --prune_frac 0.2 --bsz 1 --prune_method wanda
 ```
