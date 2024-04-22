@@ -70,7 +70,7 @@ from peft import (
 	LoraConfig,
 	get_peft_model,
 	get_peft_model_state_dict,
-	prepare_model_for_int8_training,
+	# prepare_model_for_int8_training,
 	set_peft_model_state_dict,
 )
 from evaluate_ppl import evaluate_ppl
@@ -548,6 +548,7 @@ def main():
 	model.seqlen = model.config.max_position_embeddings
 
 	os.makedirs(training_args.output_dir, exist_ok=True)
+	print('path', training_args.output_dir)
 	out_file = open(os.path.join(training_args.output_dir, "output.log"), 'w')
 	print("Num params = : ", get_param_count(model))
 	# Do the pre-training evaluation
