@@ -74,7 +74,7 @@ def get_gsm8k(traindata, testdata, nsamples, seed, seqlen, tokenizer):
                 break
             answer_enc = tokenizer(str(answer), return_tensors='pt') 
         # i = random.randint(0, question_rationale_enc.input_ids.shape[1] - seqlen - 1)
-        i = question_rationale_enc.input_ids[1]-rationale_enc.input_ids.shape[1]+2
+        i = question_rationale_enc.input_ids[1]-rationale_enc.input_ids.shape[1]+3
         total_len = question_rationale_enc.input_ids.shape[1]
         j = min(i + seqlen, total_len)
         inp = question_rationale_enc.input_ids[:, i:j]
@@ -88,35 +88,17 @@ def get_gsm8k(traindata, testdata, nsamples, seed, seqlen, tokenizer):
         question = sample['question']
         rationale, answer = extract_answer(sample['answer'])
         
-        question_rationale = question + '\nRationale: ' + rationale
-        question_rationale_enc = tokenizer(question_rationale, return_tensors='pt')
-        padded_question_rationale = tokenizer.pad(question_rationale_enc, max_length=seqlen, padding='max_length', truncation=True)
+        # question_rationale = question + '\nRationale: ' + rationale
+        # question_rationale_enc = tokenizer(question_rationale, return_tensors='pt')
+        # padded_question_rationale = tokenizer.pad(question_rationale_enc, max_length=seqlen, padding='max_length', truncation=True)
         
-        answer_enc = tokenizer(str(answer), return_tensors='pt')
+        # answer_enc = tokenizer(str(answer), return_tensors='pt')
         
-        testloader.append((padded_question_rationale.input_ids, answer_enc))
-
-    
-def get_c4(traindata, valdata, nsamples, seed, seqlen, tokenizer):
-    random.seed(seed)
-    trainloader = []
-    for _ in range(nsamples):
-        while True:
-            i = random.randint(0, len(traindata) - 1)
-            trainenc = tokenizer(traindata[i]['text'], return_tensors='pt')
-            if trainenc.input_ids.shape[1] > seqlen:
-                break
-        i = random.randint(0, trainenc.input_ids.shape[1] - seqlen - 1)
-        j = i + seqlen
-        inp = trainenc.input_ids[:, i:j]
-        tar = inp.clone()
-        tar[:, :-1] = -100
-        trainloader.append((inp, tar))
-
-    valenc = tokenizer(' '.join(valdata[:1100]['text']), return_tensors='pt')
-    valenc = valenc.input_ids[:, :(256 * seqlen)]
-    valenc = TokenizerWrapper(valenc)
-    return trainloader, valenc
+        question_en = tokenizer(question, return_tensors='pt')
+        rationale_en = tokenizer(rationale, return_tensors='pt')
+        
+        testloader.append((question_en, rationale_en))
+    return trainloader, testloader
 
 
 # (question_enc, rationale_enc, answer_enc, question_tar, rationale_tar, answer_tar) = trainloader

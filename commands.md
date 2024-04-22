@@ -78,8 +78,9 @@ CUDA_VISIBLE_DEVICES=0 python3 main.py --model meta-llama/Llama-2-7b-hf --datase
 ```
 prune_info='c4_masks-100'
 location="/home/vashistt/Desktop/anlp-project/outdir_c4/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=100_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-llama2_Adaptive=Yes"
-outdir="/home/vashistt/anlp-project/finetuned_model/${prune_info}"
+outdir="/home/vashistt/Desktop/anlp-project/finetuned_model/${prune_info}"
 ```
+
 - ON AWS-- change the location and output_dir
     - Location: masks dir, Output: finetuned-model dir (wont be used for eval but add it for consistency)
 

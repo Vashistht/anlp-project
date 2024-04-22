@@ -170,6 +170,8 @@ from datasets import load_dataset
 from datasets.utils import disable_progress_bar
 disable_progress_bar()
 
+from gsm8k import extract_answer, get_gsm8k
+
 # Set seed for reproducibility
 def set_seed(seed):
     np.random.seed(seed)
@@ -246,17 +248,17 @@ def get_c4(traindata, valdata, nsamples, seed, seqlen, tokenizer):
     valenc = TokenizerWrapper(valenc)
     return trainloader, valenc
 
-def get_gsm8k(trainenc, testenc, nsamples, seed, seqlen):
-    random.seed(seed)
-    trainloader = []
-    for _ in range(nsamples):
-        i = random.randint(0, trainenc.input_ids.shape[1] - seqlen - 1)
-        j = i + seqlen
-        inp = trainenc.input_ids[:, i:j]
-        tar = inp.clone()
-        tar[:, :-1] = -100
-        trainloader.append((inp, tar))
-    return trainloader, testenc
+# def get_gsm8k(trainenc, testenc, nsamples, seed, seqlen):
+#     random.seed(seed)
+#     trainloader = []
+#     for _ in range(nsamples):
+#         i = random.randint(0, trainenc.input_ids.shape[1] - seqlen - 1)
+#         j = i + seqlen
+#         inp = trainenc.input_ids[:, i:j]
+#         tar = inp.clone()
+#         tar[:, :-1] = -100
+#         trainloader.append((inp, tar))
+#     return trainloader, testenc
 
 # Function to select the appropriate loader based on dataset name
 def get_loaders(name, trainenc, testenc, nsamples=128, seed=0, seqlen=2048, tokenizer=None):
