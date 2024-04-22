@@ -129,9 +129,8 @@ def get_llm(model_name, cache_dir="llm_weights"):
 		cache_dir=cache_dir, 
 		low_cpu_mem_usage=True, 
 		device_map="auto",
-		prune_seqlen = 512
 	)
-	model.seqlen = prune_seqlen
+	model.seqlen = 1028
 	# model.seqlen = model.config.max_position_embeddings
 	if ('13b' in model_name) or ('65b' in model_name):
 		model.seqlen = 2048 #Based on the values from the Lora-prune paper
@@ -562,7 +561,7 @@ def main():
 
 	wandb_run = wandb.init(
 		project=args.wandb_project_name,
-		name=str_of_args,
+		name= str(args.dataset) + "_masks-" + str(args.masks_per_iter)+ "_" + args.model str_of_args,
 		config=args_to_dict(args),
 	)
 
