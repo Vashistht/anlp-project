@@ -69,12 +69,15 @@ def eval_ppl_train(model, trainloader, bs=1, device=None):
 		# Forward pass through the model
 		lm_logits = model(inputs).logits
 
+		# TODO: Add a way to make sure we ensure the length make sense
 		# Shift logits and labels for next token prediction
 		shift_logits = lm_logits[:, :-1, :].contiguous()
 		shift_labels = inputs[:, 1:]
 
 		# Compute loss
 		loss_fct = nn.CrossEntropyLoss()
+		import pbd 
+		pdb.set_trace()
 		loss = loss_fct(shift_logits.reshape(-1, shift_logits.size(-1)), shift_labels.reshape(-1))
 
 		# Calculate negative log likelihood

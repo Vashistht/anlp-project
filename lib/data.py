@@ -170,7 +170,7 @@ from datasets import load_dataset
 from datasets.utils import disable_progress_bar
 disable_progress_bar()
 
-from gsm8k import extract_answer, get_gsm8k
+from lib.data_gsm8k import extract_answer, get_gsm8k
 
 # Set seed for reproducibility
 def set_seed(seed):
