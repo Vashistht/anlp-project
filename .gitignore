@@ -4,3 +4,4 @@ wandb/
 output/
 llm_weights/
 **/.DS_Store
+**/finetuned_model_prune_c4_ft_wiki

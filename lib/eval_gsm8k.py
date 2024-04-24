@@ -181,6 +181,7 @@ def eval_ppl_train_gsm8k(model, trainloader, bs=1, device=None):
 
 		# Compute loss
 		loss_fct = nn.CrossEntropyLoss()
+		import pdb; pdb.set_trace()
 		loss = loss_fct(shift_logits.reshape(-1, shift_logits.size(-1)), shift_labels.reshape(-1))
 
 		# Calculate negative log likelihood

@@ -518,7 +518,7 @@ def prune_model(args, model, mask_info, tokenizer):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', type=str, default='meta-llama/Llama-2-7b-hf', help='LLaMA model') # huggyllama/llama-7b
-    parser.add_argument('--dataset', type=str, default="wikitext2", choices=["wikitext2", "c4"])
+    parser.add_argument('--dataset', type=str, default="wikitext2", choices=["wikitext2", "c4", "gsm8k"])
     parser.add_argument('--seed', type=int, default=0, help='Seed for sampling the calibration data.')
     parser.add_argument('--nsamples', type=int, default=32, help='Number of calibration samples.')
     parser.add_argument('--sparsity_ratio', type=float, default=0.5, help='Sparsity level')
