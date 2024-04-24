@@ -82,19 +82,11 @@ outdir="/home/vashistt/Desktop/anlp-project/finetuned_model/${prune_info}"
 ```
 
 - ON AWS-- change the location and output_dir
-    - Location: masks dir, Output: finetuned-model dir (wont be used for eval but add it for consistency)
-
-```
-location="/home/ec2-user/SageMaker/anlp-project/outdir_llama_2_7b/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=100_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-llama2-wikitext_Adaptive=Yes"
-
-outdir="/home/ec2-user/SageMaker/anlp-project/finetuned_model"
-```
-
 
 ### Evaluation Command after specifying location and outdir 
 
 ```
-CUDA_VISIBLE_DEVICES=0 python3 lora_ft/Run_evals.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512        --lora_r 128    --learning_rate 1e-4            --lora_alpha_ratio 4    --per_device_train_batch_size 1         --per_device_eval_batch_size 8       --do_train      --do_eval       --max_train_samples 15000       --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"     --hidden_mse_weight 0.0         --kl_weight 0.01        --dataset_name "wikitext"
+CUDA_VISIBLE_DEVICES=0 python3 lora_ft/Run_evals.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512    --learning_rate 1e-4               --per_device_train_batch_size 1         --per_device_eval_batch_size 8       --do_eval       --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"
 ```
 
 
@@ -131,3 +123,8 @@ CUDA_VISIBLE_DEVICES=0 python3 Run_evals.py \
 ```
 CUDA_VISIBLE_DEVICES=0 python3 main.py --model princeton-nlp/Sheared-LLaMA-2.7B --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-sheared-llama2-wikitext --masks_per_iter 100 --nsamples 8 --save outdir --prune_frac 0.2 --bsz 1 --prune_method wanda
 ```
+
+
+
+## Finetuning worked
+CUDA_VISIBLE_DEVICES=0 python finetune_lm.py      --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"       --num_train_epochs 1    --block_size 512 --block_size 512 --per_device_train_batch_size 1 --per_device_eval_batch_size 8  --do_train  --max_train_samples 15000  --max_eval_samples 128  --output_dir "${outdir}" --prune_info_path "${location}"  --hidden_mse_weight 0.0 --kl_weight 0.01 --dataset_name "wikitext" --overwrite_output_dir --do_eval
