@@ -35,7 +35,7 @@ import pdb
 import pickle as pkl
 import gc
 import time
-
+from peft import PeftModel
 # Uncomment this out if running the Eleuther evaluation harness
 # import lm_eval
 from lm_eval import evaluator
@@ -546,7 +546,7 @@ def main():
 
     model = AutoModelForCausalLM.from_pretrained(model_args.model_name_or_path, torch_dtype=torch.float16, cache_dir=model_args.cache_dir, low_cpu_mem_usage=True, device_map="auto", trust_remote_code=True)
     model.seqlen = model.config.max_position_embeddings
-    # print('path', training_args.output_dir)
+
     output_dir = training_args.output_dir
     os.makedirs(output_dir, exist_ok=True)
     file_path = os.path.join(output_dir, "output_gsm8k_5shot.txt")
@@ -560,7 +560,6 @@ def main():
         print("File created successfully.")
     except IOError as e:
         print("Error creating the file:", e)
-
     # Do the pre-training evaluation
     # Evaluation
     if training_args.do_eval:
@@ -638,16 +637,15 @@ def main():
     # print(updated_results)
     # results_str = 'orginal-model \n' + str(updated_results)
     # out_file.write(results_str + "\n")
- 
 
     if model_args.prune_info_path is not None:
         prune_model(model, tokenizer, model_args.prune_info_path)
         print("Num params = : ", get_param_count(model))
         gc.collect()
         torch.cuda.empty_cache()
-        logger.info("*** Evaluate ***")
+        # logger.info("*** Evaluate ***")
         model.eval()
-        start_time = time.time()
+        # start_time = time.time()
         # import pdb
         # pdb.set_trace()
         # before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
@@ -655,21 +653,29 @@ def main():
         # out_str = "[SpeedUp={:.3f}] Original perplexity on wikitext = {:.3f} | Before Training perplexity on wikitext = {:.3f}".format(speedup, og_ppl, before_train_ppl, speedup)
         # out_file.write(out_str + "\n")
         # print(out_str)
-    
+    adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_c4_ft_wiki/'
+    # model.load_adapter(adapter_name)
+    # model.set_active_adapters('prune-c4_ft_wiki_adapter')
+
+    model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_c4_ft_wiki_adapter")
+
+
     if should_i_do_eleuther_eval:
         #transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
         results = evaluator.simple_evaluate(
             model="hf-causal-experimental",
             model_args="pretrained={}".format(model_args.model_name_or_path),
             # tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
-               # tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"],
+            #    tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
             tasks = ['gsm8k'],
-               num_fewshot=5,
-            limit = .3,
+            num_fewshot=1,
+            limit = .005, # how much of the original dataset to test on 
                # tasks=["hellaswag"],
             # num_fewshot={"hellaswag": 0, "arc_challenge":0}
             no_cache=True,
             pretrained_model=model,
+            write_out=True, 
+	        output_base_path=None, # writes to the current dir
         )
     updated_results = {'results': results['results']}
     print(updated_results)
@@ -678,8 +684,6 @@ def main():
         out_file.write("\n")
         out_file.write(results_str + "\n")
         out_file.flush()
-    
-
 
 def _mp_fn(index):
     # For xla_spawn (TPUs)
