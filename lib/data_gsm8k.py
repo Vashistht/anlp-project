@@ -93,7 +93,7 @@ def get_gsm8k(traindata, testdata, nsamples, seed, seqlen, tokenizer):
         # padded_question_rationale = tokenizer.pad(question_rationale_enc, max_length=seqlen, padding='max_length', truncation=True)
         
         # answer_enc = tokenizer(str(answer), return_tensors='pt')
-        
+        question = question + 'Answer this question:\n'
         question_en = tokenizer(question, return_tensors='pt')
         rationale_en = tokenizer(rationale, return_tensors='pt')
         

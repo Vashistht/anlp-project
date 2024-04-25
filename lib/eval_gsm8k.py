@@ -76,8 +76,6 @@ def eval_ppl_train(model, trainloader, bs=1, device=None):
 
 		# Compute loss
 		loss_fct = nn.CrossEntropyLoss()
-		import pbd 
-		pdb.set_trace()
 		loss = loss_fct(shift_logits.reshape(-1, shift_logits.size(-1)), shift_labels.reshape(-1))
 
 		# Calculate negative log likelihood
@@ -113,6 +111,8 @@ def eval_ppl_test(model, testenc, bs=1, device=None):
 
 		# Calculate end index
 		j = min(i+bs, nsamples)
+		
+  		# TODO: Need to make sure the inputs are of the right shape
 
 		# Prepare inputs and move to device
 		inputs = testenc[:,(i * model.seqlen):(j * model.seqlen)].to(device)
@@ -124,7 +124,7 @@ def eval_ppl_test(model, testenc, bs=1, device=None):
 		# Shift logits and labels for next token prediction
 		shift_logits = lm_logits[:, :-1, :].contiguous()
 		shift_labels = inputs[:, 1:]
-
+		
 		# Compute loss
 		loss_fct = nn.CrossEntropyLoss()
 		loss = loss_fct(shift_logits.reshape(-1, shift_logits.size(-1)), shift_labels.reshape(-1))
