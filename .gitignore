@@ -5,4 +5,7 @@ output/
 llm_weights/
 **/.DS_Store
 **/finetuned_model_prune_c4_ft_wiki
+<<<<<<< HEAD
 .env
+=======
+>>>>>>> 893f5f0 (jsons)

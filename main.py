@@ -74,7 +74,7 @@ def get_random_mask_scores(model, tokenizer, trainenc, testenc, module_map, all_
         # Revert to a forward pass with batch size of 1
         try:
             this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
-               # this_acc = eval_acc_trainonly (model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
+            # this_acc = eval_acc_trainonly (model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
             # this_metric = this_ppl - weight_acc * this_acc
    
         except Exception as e:
@@ -88,7 +88,7 @@ def get_random_mask_scores(model, tokenizer, trainenc, testenc, module_map, all_
 
         print('[v1]Iter : ', iter_, ' PPL = ', this_ppl)
         # print('[v1]Iter : ', iter_, ' ACC = ', this_acc)
-          # print('[v1]Iter : ', iter_, ' Metric = ', this_metric)
+        # print('[v1]Iter : ', iter_, ' Metric = ', this_metric)
 
         this_ppl = this_ppl if this_ppl < INF else INF
         # this_metric = this_metric if this_metric < INF else INF

@@ -653,11 +653,15 @@ def main():
         # out_str = "[SpeedUp={:.3f}] Original perplexity on wikitext = {:.3f} | Before Training perplexity on wikitext = {:.3f}".format(speedup, og_ppl, before_train_ppl, speedup)
         # out_file.write(out_str + "\n")
         # print(out_str)
-    adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_c4_ft_wiki/'
-    # model.load_adapter(adapter_name)
-    # model.set_active_adapters('prune-c4_ft_wiki_adapter')
+    
+    finetuned_model = False
+    if finetuned_model:
+        
+        adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_c4_ft_wiki/'
+        # model.load_adapter(adapter_name)
+        # model.set_active_adapters('prune-c4_ft_wiki_adapter')
 
-    model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_c4_ft_wiki_adapter")
+        model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_c4_ft_wiki_adapter")
 
 
     if should_i_do_eleuther_eval:
@@ -668,7 +672,7 @@ def main():
             # tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
             #    tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
             tasks = ['gsm8k'],
-            num_fewshot=1,
+            num_fewshot=3,
             limit = .005, # how much of the original dataset to test on 
                # tasks=["hellaswag"],
             # num_fewshot={"hellaswag": 0, "arc_challenge":0}
