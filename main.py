@@ -561,7 +561,7 @@ def main():
 
     wandb_run = wandb.init(
         project=args.wandb_project_name,
-        name= str(args.dataset) + "_masks-" + str(args.masks_per_iter)+ "_" + args.model str_of_args,
+        name= str(args.dataset) + "_masks-" + str(args.masks_per_iter)+ "_" + args.model + str_of_args,
         config=args_to_dict(args),
     )
 
