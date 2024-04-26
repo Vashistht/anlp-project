@@ -35,13 +35,14 @@ def get_examples(split):
 #     else:
 #         return INVALID_ANS
 # Adjusted regex to capture both the rationale and the answer after '####'
-ANS_RE = re.compile(r"(.*?)####\s*(\-?[0-9\.\,]+)")
-
+# Updated regex to capture text before and after '####'
+ANS_RE = re.compile(r"(.*?)####\s*(-?[0-9.,]+)", re.DOTALL)  # Ensure re.DOTALL is used if multiline handling is necessary
 INVALID_ANS = "[invalid]"
 
 def extract_answer(completion):
-    # Search for the pattern capturing text before and after '####'
+    # Remove placeholder text enclosed in <<...>>
     completion = re.sub(r"<<.*?>>", "", completion)
+    
     # Search for the pattern capturing text before and after '####'
     match = ANS_RE.search(completion)
     if match:
@@ -60,27 +61,32 @@ def get_gsm8k(traindata, testdata, nsamples, seed, seqlen, tokenizer):
     rationale, answer = extract_answer(example['answer'])
     example = question + '\nRationale:' + rationale + '\nAnswer:' + answer
 
-    for _ in range(nsamples):
-        while True:
-            i = random.randint(1, len(traindata) - 1)
-            sample = traindata[i]  # Get the complete sample
-            question_rationale = sample['question']
-            rationale, answer = extract_answer(sample['answer'])
-            question_rationale += '\nRationale:' + rationale
-            rationale_enc = tokenizer(rationale, return_tensors='pt')
-            question_rationale_enc = tokenizer(question_rationale, return_tensors='pt')
-            if question_rationale_enc.input_ids.shape[1] > seqlen:
-                print('skipping sample, too long to encode')
-                break
-            answer_enc = tokenizer(str(answer), return_tensors='pt') 
+    for _ in range(nsamples): # no need of while true here 
+        i = random.randint(1, len(traindata) - 1)
+        sample = traindata[i]  # Get the complete sample
+        question_rationale = sample['question']
+        rationale, answer = extract_answer(sample['answer'])
+        question_rationale += '\nlets think step by step to get the rationale and the answer:' + rationale
+        rationale_enc = tokenizer(rationale, return_tensors='pt')
+        question_rationale_enc = tokenizer(question_rationale, return_tensors='pt')
+        # if question_rationale_enc.input_ids.shape[1] > seqlen:
+        #     print('skipping sample, too long to encode')
+        #     break
+        answer_enc = tokenizer(str(answer), return_tensors='pt') 
         # i = random.randint(0, question_rationale_enc.input_ids.shape[1] - seqlen - 1)
-        i = question_rationale_enc.input_ids[1]-rationale_enc.input_ids.shape[1]+3
+        no_of_rationale_hints = 3 # (rationale + 2 tokens)
+        i = question_rationale_enc.input_ids.shape[1]-rationale_enc.input_ids.shape[1] + no_of_rationale_hints
         total_len = question_rationale_enc.input_ids.shape[1]
         j = min(i + seqlen, total_len)
-        inp = question_rationale_enc.input_ids[:, i:j]
-        tar = inp.clone()
+        inp = question_rationale_enc.input_ids[:, 0:i]
+        # TODO: Ask Lucio what the tar is doing
+        # tar = inp.clone()
         # tar[:, :-1] = -100
-        tar[:, :-1] = -(rationale_enc.input_ids.shape[1] +3)
+        # tar[:, :-1] = -(rationale_enc.input_ids.shape[1] +3)
+        # tar = question_rationale_enc [:, i:]
+        tar = inp.clone()
+        tar[:, :-1] = -100
+        # trainloader.append((inp, tar,str(answer)))
         trainloader.append((inp, tar))
 
     testloader = []
@@ -96,8 +102,11 @@ def get_gsm8k(traindata, testdata, nsamples, seed, seqlen, tokenizer):
         question = question + 'Answer this question:\n'
         question_en = tokenizer(question, return_tensors='pt')
         rationale_en = tokenizer(rationale, return_tensors='pt')
-        
+        answer_en = tokenizer(answer, return_tensors='pt')
+
+        # testloader.append((question_en, rationale_en, str(answer)))
         testloader.append((question_en, rationale_en))
+
     return trainloader, testloader
 
 
