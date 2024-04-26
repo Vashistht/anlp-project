@@ -22,8 +22,8 @@ def eval_ppl(model, tokenizer, trainenc, testenc, device=torch.device("cuda:0"),
 	# Evaluate ppl in no grad context to avoid updating the model
 	with torch.no_grad():
 		if dataset == 'gsm8k':
+			ppl_test = eval_ppl_test_gsm8k(model, testloader, bsz, device)
 			ppl_train = eval_ppl_train_gsm8k(model, trainloader, bsz, device)
-   			ppl_test = eval_ppl_test_gsm8k(model, testloader, tokenizer, bsz, device)
 		else:
 			ppl_test = eval_ppl_test(model, testloader, bsz, device)
 			ppl_train = eval_ppl_train(model, trainloader, bsz, device)
@@ -57,7 +57,7 @@ def eval_ppl_train(model, trainloader, bs=1, device=None):
 
 	# List to store negative log likelihoods
 	nlls = []
-	print(f"nsamples {nsamples}")
+	print(f"train: nsamples {nsamples}")
 
 	# Loop through each batch
 	for i in range(0,nsamples,bs):
@@ -109,7 +109,7 @@ def eval_ppl_test(model, testenc, bs=1, device=None):
 
 	# List to store negative log likelihoods
 	nlls = []
-	print(f"nsamples {nsamples}")
+	print(f"test: nsamples {nsamples}")
 
 	# Loop through each batch
 	for i in range(0,nsamples,bs):
