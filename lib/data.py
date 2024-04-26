@@ -264,7 +264,7 @@ def get_c4(traindata, valdata, nsamples, seed, seqlen, tokenizer):
 #     return trainloader, testenc
 
 # Function to select the appropriate loader based on dataset name
-def get_loaders(name, trainenc, testenc, nsamples=128, seed=0, seqlen=2048, tokenizer=None):
+def get_loaders(name, trainenc, testenc, nsamples=128, seed=0, seqlen=1024, tokenizer=None):
     if 'wikitext2' in name:
         # trainenc, testenc = load_wikitext2(tokenizer)
         return get_wikitext2(trainenc, testenc, nsamples, seed, seqlen)
