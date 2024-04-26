@@ -83,11 +83,11 @@ def get_gsm8k(traindata, testdata, nsamples, seed, seqlen, tokenizer):
         # tar = inp.clone()
         # tar[:, :-1] = -100
         # tar[:, :-1] = -(rationale_enc.input_ids.shape[1] +3)
-        # tar = question_rationale_enc [:, i:]
-        tar = inp.clone()
-        tar[:, :-1] = -100
+        tar = question_rationale_enc.input_ids [:, i:]
+        # tar = inp.clone()
+        # tar[:, :-1] = -100
         # trainloader.append((inp, tar,str(answer)))
-        trainloader.append((inp, tar))
+        trainloader.append((inp, tar, str(answer)))
 
     testloader = []
     for sample in testdata:
@@ -101,11 +101,12 @@ def get_gsm8k(traindata, testdata, nsamples, seed, seqlen, tokenizer):
         # answer_enc = tokenizer(str(answer), return_tensors='pt')
         question = question + 'Answer this question:\n'
         question_en = tokenizer(question, return_tensors='pt')
+        question_en = question_en.input_ids
         rationale_en = tokenizer(rationale, return_tensors='pt')
-        answer_en = tokenizer(answer, return_tensors='pt')
-
+        rationale_en = rationale_en.input_ids
+        # answer_en = tokenizer(answer, return_tensors='pt')
         # testloader.append((question_en, rationale_en, str(answer)))
-        testloader.append((question_en, rationale_en))
+        testloader.append((question_en, rationale_en, str(answer)))
 
     return trainloader, testloader
 
