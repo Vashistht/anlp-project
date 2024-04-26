@@ -46,7 +46,7 @@ def eval_ppl_train(model, trainloader, bs=1, device=None):
 	# Calculate number of samples
 	# nsamples = testenc.numel() // model.seqlen
 	nsamples = len(trainloader)
-
+	
 	# List to store negative log likelihoods
 	nlls = []
 	print(f"nsamples {nsamples}")
@@ -169,7 +169,7 @@ def eval_ppl_train_gsm8k(model, trainloader, bs=1, device=None):
 		# inputs = testenc[:,(i * model.seqlen):(j * model.seqlen)].to(device)
 		this_bs = min(bs, nsamples - i)
 		inputs = torch.concat([trainloader[i + k][0].to(device) for k in range(this_bs)])
-
+		import pdb; pdb.set_trace()
 		inputs = inputs.reshape(j-i, model.seqlen)
 
 		# Forward pass through the model
@@ -181,7 +181,7 @@ def eval_ppl_train_gsm8k(model, trainloader, bs=1, device=None):
 
 		# Compute loss
 		loss_fct = nn.CrossEntropyLoss()
-		import pdb; pdb.set_trace()
+		# import pdb; pdb.set_trace()
 		loss = loss_fct(shift_logits.reshape(-1, shift_logits.size(-1)), shift_labels.reshape(-1))
 
 		# Calculate negative log likelihood
@@ -199,13 +199,13 @@ def eval_ppl_train_gsm8k(model, trainloader, bs=1, device=None):
 	return ppl.item()
 
 # Function to evaluate perplexity (ppl) specifically on the wikitext dataset
-def eval_ppl_test_gsm8k(model, testenc, bs=1, device=None):
+## borrowing from the lora_ft/evaluate_ppl.py file
+def eval_ppl_test_gsm8k(model, testenc, tokenizer, bs=1, device=None):
 	# Get input IDs
-	testenc = testenc.input_ids
-
+	# testenc = testenc.input_ids
 	# Calculate number of samples
-	nsamples = testenc.numel() // model.seqlen
-
+	# nsamples = testenc.numel() // model.seqlen #@vashistht: this is not true for gsm8k sort of dataset which depends on each question
+	nsamples = len(testenc)
 	# List to store negative log likelihoods
 	nlls = []
 	print(f"nsamples {nsamples}")
@@ -219,7 +219,8 @@ def eval_ppl_test_gsm8k(model, testenc, bs=1, device=None):
 		j = min(i+bs, nsamples)
 
 		# Prepare inputs and move to device
-		inputs = testenc[:,(i * model.seqlen):(j * model.seqlen)].to(device)
+		# inputs = testenc[:,(i * model.seqlen):(j * model.seqlen)].to(device)
+
 		inputs = inputs.reshape(j-i, model.seqlen)
 
 		# Forward pass through the model

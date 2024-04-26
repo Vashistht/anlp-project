@@ -196,12 +196,14 @@ def load_c4(tokenizer):
     
     return traindata, valdata
 
-def load_gsm8k(tokenizer):
+def load_gsm8k(tokenizer): # make sim to load_c4 @vashistht
     traindata = load_dataset("gsm8k", "main", split='train')
     testdata = load_dataset("gsm8k", "main", split='test')
-    trainenc = tokenizer(" ".join(traindata['question']), return_tensors='pt')
-    testenc = tokenizer("\n\n".join(testdata['question']), return_tensors='pt')
-    return trainenc, testenc
+    
+    # trainenc = tokenizer(" ".join(traindata['question']), return_tensors='pt')
+    # testenc = tokenizer("\n\n".join(testdata['question']), return_tensors='pt')
+    # return trainenc, testenc
+    return traindata, testdata
 
 def get_raw_dataset(name, tokenizer):
     if 'wikitext2' in name:
@@ -236,6 +238,7 @@ def get_c4(traindata, valdata, nsamples, seed, seqlen, tokenizer):
             trainenc = tokenizer(traindata[i]['text'], return_tensors='pt')
             if trainenc.input_ids.shape[1] > seqlen:
                 break
+        # import pdb; pdb.set_trace()
         i = random.randint(0, trainenc.input_ids.shape[1] - seqlen - 1)
         j = i + seqlen
         inp = trainenc.input_ids[:, i:j]
@@ -270,4 +273,4 @@ def get_loaders(name, trainenc, testenc, nsamples=128, seed=0, seqlen=2048, toke
         return get_c4(trainenc, testenc, nsamples, seed, seqlen, tokenizer)
     if 'gsm8k' in name:
         # trainenc, testenc = load_gsm8k(tokenizer)
-        return get_gsm8k(trainenc, testenc, nsamples, seed, seqlen)
+        return get_gsm8k(trainenc, testenc, nsamples, seed, seqlen, tokenizer)

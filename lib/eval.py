@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import pdb
 from .data import get_loaders 
-from eval_gsm8k import eval_ppl_test_gsm8k, eval_ppl_train_gsm8k
+from .eval_gsm8k import eval_ppl_test_gsm8k, eval_ppl_train_gsm8k
 
 # Function to evaluate perplexity (ppl) on a specified model and tokenizer
 def eval_ppl(model, tokenizer, trainenc, testenc, device=torch.device("cuda:0"), dataset="wikitext2", bsz=1):
@@ -22,8 +22,8 @@ def eval_ppl(model, tokenizer, trainenc, testenc, device=torch.device("cuda:0"),
 	# Evaluate ppl in no grad context to avoid updating the model
 	with torch.no_grad():
 		if dataset == 'gsm8k':
-			ppl_test = eval_ppl_test_gsm8k(model, testloader, bsz, device)
 			ppl_train = eval_ppl_train_gsm8k(model, trainloader, bsz, device)
+   			ppl_test = eval_ppl_test_gsm8k(model, testloader, tokenizer, bsz, device)
 		else:
 			ppl_test = eval_ppl_test(model, testloader, bsz, device)
 			ppl_train = eval_ppl_train(model, trainloader, bsz, device)
