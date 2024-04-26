@@ -1,3 +1,4 @@
+# this one works for me for everything 
 name: bonsai_pruning
 channels:
   - pytorch
