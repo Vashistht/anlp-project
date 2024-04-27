@@ -1,4 +1,4 @@
-# Contributions
+# Contributions 
 
 ## Vashisth (vashistt)
 - Initial survey on small model reasoning, pruning methods that perform well on complex tasks
