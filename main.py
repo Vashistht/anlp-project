@@ -8,7 +8,7 @@ import pdb
 from time import time
 import datetime
 from lib.modelling_llama_mod import LlamaForCausalLM
-from lib.eval import eval_ppl, eval_ppl_trainonly
+from lib.eval_combined import eval_ppl, eval_ppl_trainonly
 from collections import defaultdict
 import pickle as pkl
 import random
@@ -56,7 +56,7 @@ def get_random_mask(intermediate_sz, main_mask, sampling_proba, pfrac):
     return init_set
 
 # Instantiate a virtual sub-model and run forward passes through it to get the performance of the sub-model
-def get_random_mask_scores(model, tokenizer, trainenc, testenc, module_map, all_sampling_proba, bsz=12, nsamples=32, mpi=100, pfrac=0.1, mlp_attn_ratio=1.0, dataset_="wikitext2"):
+def get_random_mask_scores(model, tokenizer, trainenc, testenc, module_map, all_sampling_proba, metric_weights, bsz=12, nsamples=32, mpi=100, pfrac=0.1, mlp_attn_ratio=1.0, dataset_="wikitext2"):
 
     # set to use main
     for k, (name, module) in module_map.items():
@@ -73,7 +73,7 @@ def get_random_mask_scores(model, tokenizer, trainenc, testenc, module_map, all_
         # Doing this in case the batch_size we have specified is too large for a forward pass
         # Revert to a forward pass with batch size of 1
         try:
-            this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
+            this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, metric_weights, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
             # this_acc = eval_acc_trainonly (model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
             # this_metric = this_ppl - weight_acc * this_acc
    
@@ -82,7 +82,7 @@ def get_random_mask_scores(model, tokenizer, trainenc, testenc, module_map, all_
             gc.collect()
             torch.cuda.empty_cache()
             this_bsz = 1
-            this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
+            this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, metric_weights, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
             # this_acc = eval_acc_trainonly (model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
             # this_metric = this_ppl - weight_acc * this_acc
 
@@ -99,7 +99,7 @@ def get_random_mask_scores(model, tokenizer, trainenc, testenc, module_map, all_
 
         # set the complement mask here
         set_masks(module_map, all_masks, all_sampling_proba, pfrac=pfrac, mlp_attn_ratio=mlp_attn_ratio, use_complement=True)
-        this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
+        this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, metric_weights, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
         # this_acc = eval_acc_trainonly (model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
         # this_metric = this_ppl - weight_acc * this_acc
   
@@ -215,7 +215,7 @@ def run_data_to_sampling_proba(info, module, pfrac):
     return sampling_proba, fixed_indices, use_indices
 
 # Main Code for algorithm
-def investigate_score_based_mask(args, model, trainenc, testenc, wandb_run, epoch_=1):
+def investigate_score_based_mask(args, model, trainenc, testenc, wandb_run, metric_weights, epoch_=1):
 
     def update_mask_one_layer(module, info, score_info, prune_frac, regression_weights, fixed_indices, use_indices, preset_qt=None):
         score_model_weights = torch.zeros_like(info['in'][1]).squeeze()
@@ -292,13 +292,13 @@ def investigate_score_based_mask(args, model, trainenc, testenc, wandb_run, epoc
     # Doing this in case the batch_size we have specified is too large for a forwar pass
     # Revert to a forward pass with batch size of 1
     try:
-        eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=args.bsz, nsamples=args.nsamples, dataset=args.dataset)
+        eval_ppl_trainonly(model, tokenizer, trainenc, testenc, metric_weights, bsz=args.bsz, nsamples=args.nsamples, dataset=args.dataset)
         # eval_acc_trainonly(model, tokenizer, bsz=args.bsz, nsamples=args.nsamples, dataset=args.dataset)
     except Exception as e:
         print(e)
         gc.collect()
         torch.cuda.empty_cache()
-        eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=1, nsamples=args.nsamples, dataset=args.dataset)
+        eval_ppl_trainonly(model, tokenizer, trainenc, testenc, metric_weights, bsz=1, nsamples=args.nsamples, dataset=args.dataset)
         # eval_acc_trainonly(model, tokenizer, bsz=args.bsz, nsamples=args.nsamples, dataset=args.dataset)
 
     # Get the initial prior distribution by running the un-modified model
@@ -548,12 +548,26 @@ def main():
     # Wandb HP
     parser.add_argument('--wandb_project_name', type=str, default='Prune-No-Backward', help='Wandb project name')
 
+    # Hyperparams for pruning evaluation metric weights
+    # NOTE that the order of weights is ppl
+    parser.add_argument('--weights', nargs=1, help="array of weights in order of ppl, ")
+
     args = parser.parse_args()
     print(args)
     str_of_args = args_to_str(args)
     args.save = os.path.join(args.save, str_of_args)
     os.makedirs(args.save, exist_ok=True)
 
+    # process weights from command line arguments
+    metric_weights = args.weights
+    if not metric_weights:
+        print('WARNING: weights for pruning eval should be specified. Using weight_ppl = 1...')
+        metric_weights = [1]
+
+    EXPECTED_METRIC_WEIGHTS_LENGTH = 1
+    metric_weights = np.pad(metric_weights, (0, EXPECTED_METRIC_WEIGHTS_LENGTH), 'constant')
+    print(f"metric weights: {metric_weights}")
+    assert(sum(metric_weights) == 1.0)
 
     # Setting seeds for reproducibility
     np.random.seed(args.seed)
@@ -574,7 +588,7 @@ def main():
     print('tokenizer done')
     trainenc, testenc = get_raw_dataset(args.dataset, tokenizer)
     # Getting the initial evaluation of the model
-    _, orig_test_ppl = eval_ppl(model, tokenizer, trainenc, testenc, model.device, dataset=args.dataset, bsz= args.bsz)
+    _, orig_test_ppl = eval_ppl(model, tokenizer, trainenc, testenc, model.device, metric_weights, dataset=args.dataset, bsz= args.bsz)
     print('eval done original_test_ppl:', orig_test_ppl)
     original_param_count = get_param_count(model)
     model.original_param_count = original_param_count
@@ -613,7 +627,7 @@ def main():
         print(model)
 
         # Evaluate the performance of the pruned model
-        ppl_train, ppl_test = eval_ppl(model, tokenizer, trainenc, testenc, model.device, dataset=args.dataset, bsz=args.bsz)
+        ppl_train, ppl_test = eval_ppl(model, tokenizer, trainenc, testenc, model.device, metric_weights, dataset=args.dataset, bsz=args.bsz)
         # acc_train, acc_test = eval_acc(model, tokenizer, model.device, dataset=args.dataset)
 
         wandb_run.log({'Sparsity': cur_sparsity, 'TrainPPL': ppl_train, 'TestPPL': ppl_test})
