@@ -54,9 +54,10 @@ def get_gsm8k(traindata, testdata, nsamples, seed, seqlen, tokenizer, example= T
         sample = traindata[i]  # Get the complete sample
         question_instruction = sample['question']
         if example is True:
+            print('entered if statement')
             prepend = f'Example: + {example}\n + Question:'
             question_instruction = prepend + question_instruction
-        
+
         rationale, answer = extract_answer(sample['answer'])
         # rationale_enc = tokenizer(rationale, return_tensors='pt')
         # answer_enc = tokenizer(str(answer), return_tensors='pt') 
