@@ -14,56 +14,8 @@ import fnmatch
 import re
 
 """
-	Code here heavily burrows from https://github.com/locuslab/wanda/tree/main
+	Code here heavily borrows from https://github.com/locuslab/wanda/tree/main
 """
-
-# taken from lib/eval_gsm8k.py code
-def eval_ppl_test_gsm8k(model, testenc, bs=1, device=None):
-	nsamples = len(testenc)
-	nlls = []
-	total_time, total_iters = 0, 0
-	for i in range(0,nsamples,bs):
-		if i % 50 == 0:
-			print(f"sample {i}")
-		
-		input_ids = testenc[i][0].to(device)
-		target_ids = input_ids.clone()
-		target_ids[:, :-1] = -100 #ignore_index token
-		# Calculate negative log likelihood
-		start_ = time()
-		outputs = model(input_ids, labels=target_ids)
-		total_time += (time() - start_)
-		total_iters += 1
-		loss = outputs.loss
-		neg_log_likelihood = loss.float()
-
-		# Append to list of negative log likelihoods
-		nlls.append(neg_log_likelihood)
-
-	# Compute perplexity
-	# ppl = torch.exp(torch.stack(nlls).sum() / (nsamples * model.seqlen))
-	ppl = torch.exp(torch.stack(nlls).mean() )
-
-	# Empty CUDA cache to save memory
-	torch.cuda.empty_cache()
-
-	return ppl.item(), total_time / total_iters
-
-ANS_RE = re.compile(r"(.*?)####\s*(-?[0-9.,]+)", re.DOTALL)  # Ensure re.DOTALL is used if multiline handling is necessary
-INVALID_ANS = "[invalid]"
-
-def extract_answer(completion):
-    # Remove placeholder text enclosed in <<...>>
-    completion = re.sub(r"<<.*?>>", "", completion)
-    
-    # Search for the pattern capturing text before and after '####'
-    match = ANS_RE.search(completion)
-    if match:
-        # Extract rationale and answer, removing unnecessary spaces and commas
-        rationale = match.group(1).strip()
-        answer = match.group(2).strip().replace(",", "")  # Remove commas from numbers, if any
-        return rationale, answer
-    return INVALID_ANS  # Return invalid if no pattern matches
 
 def evaluate_ppl(dataset_name, model, tokenizer, ctx_length, ignore_last=False):
 	# max_length = model.seqlen 
@@ -94,27 +46,7 @@ def evaluate_ppl(dataset_name, model, tokenizer, ctx_length, ignore_last=False):
 		seq_len = 256 * model_seqlen
 	elif dataset_name == "gsm8k":
 		testdata = load_dataset("gsm8k", "main", split='test')
-		# code from get_gsm8k from data_gsm8k.py
-		testenc = []
-		for sample in testdata:
-			question = sample['question']
-			rationale, answer = extract_answer(sample['answer'])
-			
-			# question_rationale = question + '\nRationale: ' + rationale
-			# question_rationale_enc = tokenizer(question_rationale, return_tensors='pt')
-			# padded_question_rationale = tokenizer.pad(question_rationale_enc, max_length=seqlen, padding='max_length', truncation=True)
-			
-			# answer_enc = tokenizer(str(answer), return_tensors='pt')
-			question = question + 'Answer this question:\n'
-			question_en = tokenizer(question, return_tensors='pt')
-			question_en = question_en.input_ids
-			rationale_en = tokenizer(rationale, return_tensors='pt')
-			rationale_en = rationale_en.input_ids
-			# answer_en = tokenizer(answer, return_tensors='pt')
-			# testloader.append((question_en, rationale_en, str(answer)))
-			testenc.append((question_en, rationale_en, str(answer)))
-		return eval_ppl_test_gsm8k(model, testenc)
-
+		
 
 	nlls = []
 	prev_end_loc = 0

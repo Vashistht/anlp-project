@@ -332,8 +332,7 @@ class CustomTrainer(Trainer):
 
 
 # Prune the model according to the saved information
-def prune_model(model, tokenizer, prune_info_path):
-
+def prune_model(model, tokenizer, prune_info_path, target_epoch=3):
     def get_param_count(model, exclude=['embed', 'head']):
         return sum([p.numel() for n, p in model.named_parameters() if not any(x in n for x in exclude)])
 
@@ -341,7 +340,7 @@ def prune_model(model, tokenizer, prune_info_path):
     mask_info_loc = os.path.join(prune_info_path, 'mask_info_{}.pkl'.format(epoch_))
     original_param_count = get_param_count(model)
     print('original model param count : {}'.format(original_param_count))
-    while os.path.exists(mask_info_loc):
+    while os.path.exists(mask_info_loc) and(epoch_<=target_epoch):
         with open(mask_info_loc, 'rb') as handle:
             mask_info = pkl.load(handle)
 
@@ -565,8 +564,10 @@ def main():
     if training_args.do_eval:
         logger.info("*** Evaluate ***")
         model.eval()
-        # og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-        # out_str = "Original perplexity on wikitext = {:.3f}".format(og_ppl)
+        og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+        out_str = "Original perplexity on wikitext = {:.3f}".format(og_ppl)
+        og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+
         # print(out_str)
 
     # Preprocessing the datasets.
@@ -638,19 +639,20 @@ def main():
     # results_str = 'orginal-model \n' + str(updated_results)
     # out_file.write(results_str + "\n")
 
+    current_epoch = 0
     if model_args.prune_info_path is not None:
-        prune_model(model, tokenizer, model_args.prune_info_path)
+        prune_model(model, tokenizer, model_args.prune_info_path, target_epoch=1)
         print("Num params = : ", get_param_count(model))
         gc.collect()
         torch.cuda.empty_cache()
-        # logger.info("*** Evaluate ***")
+        logger.info("*** Evaluate ***")
         model.eval()
-        # start_time = time.time()
+        start_time = time.time()
         # import pdb
         # pdb.set_trace()
-        # before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-        # speedup = og_runtime / final_runtime
-        # out_str = "[SpeedUp={:.3f}] Original perplexity on wikitext = {:.3f} | Before Training perplexity on wikitext = {:.3f}".format(speedup, og_ppl, before_train_ppl, speedup)
+        before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+        speedup = og_runtime / final_runtime
+        out_str = "[SpeedUp={:.3f}] Original perplexity on wikitext = {:.3f} | Before Training perplexity on wikitext = {:.3f}".format(speedup, og_ppl, before_train_ppl, speedup)
         # out_file.write(out_str + "\n")
         # print(out_str)
         finetuned_model = False

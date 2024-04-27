@@ -31,27 +31,6 @@ def eval_ppl_train_gsm8k(model, trainloader, bs=1, device=None):
 		if i % 50 == 0:
 			print(f"sample {i}")
 
-		# Prepare inputs and move to device
-		# inputs = testenc[:,(i * model.seqlen):(j * model.seqlen)].to(device)
-		# this_bs = min(bs, nsamples - i)
-		# inputs = torch.concat([trainloader[i + k][0].to(device) for k in range(this_bs)])
-		# inputs = inputs.reshape(j-i, model.seqlen)
-
-		# # Forward pass through the model
-		# lm_logits = model(inputs).logits
-
-		# # Shift logits and labels for next token prediction
-		# shift_logits = lm_logits[:, :-1, :].contiguous()
-		# shift_labels = inputs[:, 1:]
-
-		# # Compute loss
-		# loss_fct = nn.CrossEntropyLoss()
-		# # import pdb; pdb.set_trace()
-		# loss = loss_fct(shift_logits.reshape(-1, shift_logits.size(-1)), shift_labels.reshape(-1))
-
-		# # Calculate negative log likelihood
-		# neg_log_likelihood = loss.float() * model.seqlen * (j-i)
-
 		# # Append to list of negative log likelihoods
 		# nlls.append(neg_log_likelihood)
 		input_ids = trainloader[i][0].to(device)
@@ -86,21 +65,6 @@ def eval_ppl_test_gsm8k(model, testenc, bs=1, device=None):
 	for i in range(0,nsamples,bs):
 		if i % 50 == 0:
 			print(f"sample {i}")
-
-		# Calculate end index
-		# j = min(i+bs, nsamples)
-
-		# Prepare inputs and move to device
-		# inputs = testenc[:,(i * model.seqlen):(j * model.seqlen)].to(device)
-
-		# inputs = inputs.reshape(j-i, model.seqlen)
-
-		# # Forward pass through the model
-		# lm_logits = model(inputs).logits
-
-		# # Shift logits and labels for next token prediction
-		# shift_logits = lm_logits[:, :-1, :].contiguous()
-		# shift_labels = inputs[:, 1:]
 
 		# # Compute loss
 		# loss_fct = nn.CrossEntropyLoss()
@@ -215,5 +179,4 @@ def eval_semantic_sim_gsm8k(model, dataloader, tokenizer, bs=1, device=None):
 
 	# Empty CUDA cache to save memory
 	torch.cuda.empty_cache()
-	# Avg cosine similarity across all samples
-	return cos_sim / nsamples
+	return f1_sum / nsamples

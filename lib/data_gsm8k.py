@@ -84,8 +84,6 @@ def get_gsm8k(traindata, testdata, nsamples, seed, seqlen, tokenizer, example= T
         inp = question_instruction_enc.input_ids[:, 0:i]
         rationale_en = rationale_en.input_ids
         testloader.append((question_instruction_enc, str(rationale_en), str(answer)))
-
     return trainloader, testloader
-
 
 # (question_enc, rationale_enc, answer_enc, question_tar, rationale_tar, answer_tar) = trainloader
