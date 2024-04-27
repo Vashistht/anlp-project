@@ -11,9 +11,10 @@ import time
 import os 
 from time import time
 import fnmatch
+import re
 
 """
-	Code here heavily burrows from https://github.com/locuslab/wanda/tree/main
+	Code here heavily borrows from https://github.com/locuslab/wanda/tree/main
 """
 
 def evaluate_ppl(dataset_name, model, tokenizer, ctx_length, ignore_last=False):
@@ -43,6 +44,9 @@ def evaluate_ppl(dataset_name, model, tokenizer, ctx_length, ignore_last=False):
 		encodings = tokenizer(' '.join(valdata[:1100]['text']), return_tensors='pt')
 		# encodings = encodings.input_ids[:, :(256 * model.seqlen)]
 		seq_len = 256 * model_seqlen
+	elif dataset_name == "gsm8k":
+		testdata = load_dataset("gsm8k", "main", split='test')
+		
 
 	nlls = []
 	prev_end_loc = 0
