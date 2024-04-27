@@ -7,7 +7,7 @@ import torch.nn as nn
 import pdb
 from .data import get_loaders 
 import numpy as np
-from .eval_gsm8k import eval_ppl_test_gsm8k, eval_ppl_train_gsm8k, eval_lexsim_test_gsm8k, eval_lexsim_train_gsm8k
+from .eval_gsm8k import eval_ppl_test_gsm8k, eval_ppl_train_gsm8k, eval_lexsim_gsm8k, eval_semantic_sim_gsm8k
 
 EXPECTED_METRIC_WEIGHTS_LENGTH = 1
 
@@ -24,20 +24,23 @@ def eval_ppl(model, tokenizer, trainenc, testenc, metric_weights, device=torch.d
 
 	ppl_weight = metric_weights[0]
 	lexsim_weight = metric_weights[1]
+	cossim_weight = metric_weights[2]
 
 	# Evaluate ppl in no grad context to avoid updating the model
 	with torch.no_grad():
 		if dataset == 'gsm8k':
 			ppl_train = eval_ppl_train_gsm8k(model, trainloader, bsz, device)
 			ppl_test = eval_ppl_test_gsm8k(model, testloader, bsz, device)
-			lexsim_train = eval_lexsim_train_gsm8k(model, trainloader, tokenizer, bsz, device)
-			lexsim_test = eval_lexsim_test_gsm8k(model, testenc, tokenizer, bsz, device)
+			lexsim_train = eval_lexsim_gsm8k(model, trainloader, tokenizer, bsz, device)
+			lexsim_test = eval_lexsim_gsm8k(model, testenc, tokenizer, bsz, device)
+			cossim_train = eval_semantic_sim_gsm8k(model, trainloader, tokenizer, bsz, device)
+			cossim_test = eval_semantic_sim_gsm8k(model, testloader, tokenizer, bsz, device)
 		else:
 			ppl_test = eval_ppl_test(model, testloader, bsz, device)
 			ppl_train = eval_ppl_train(model, trainloader, bsz, device)
 
-	combined_train = ppl_weight * ppl_train + lexsim_weight * lexsim_train
-	combined_test = ppl_weight * ppl_test + lexsim_weight * lexsim_test
+	combined_train = ppl_weight * ppl_train + lexsim_weight * lexsim_train + cossim_weight * cossim_train
+	combined_test = ppl_weight * ppl_test + lexsim_weight * lexsim_test + cossim_weight * cossim_test
 	return combined_train, combined_test 
 
 # Function to evaluate perplexity (ppl) on a specified model and tokenizer
@@ -51,13 +54,15 @@ def eval_ppl_trainonly(model, tokenizer, trainenc, testenc, metric_weights, bsz=
 
 	ppl_weight = metric_weights[0]
 	lexsim_weight = metric_weights[1]
+	cossim_weight = metric_weights[2]
 
 	# Evaluate ppl in no grad context to avoid updating the model
 	with torch.no_grad():
 		ppl_train = eval_ppl_train(model, trainloader, bsz, device)
-		lexsim_train = eval_lexsim_train_gsm8k(model, trainloader, tokenizer, device)
+		lexsim_train = eval_lexsim_gsm8k(model, trainloader, tokenizer, device)
+		cossim_train = eval_semantic_sim_gsm8k(model, trainloader, tokenizer, device)
 
-	combined_train = ppl_weight * ppl_train + lexsim_weight * lexsim_train
+	combined_train = ppl_weight * ppl_train + lexsim_weight * lexsim_train + cossim_weight * cossim_train
 
 	return combined_train
 
