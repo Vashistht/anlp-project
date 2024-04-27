@@ -550,7 +550,7 @@ def main():
 
     # Hyperparams for pruning evaluation metric weights
     # NOTE that the order of weights is ppl
-    parser.add_argument('--weights', nargs=1, help="array of weights in order of ppl, ")
+    parser.add_argument('--weights', nargs=2, help="array of weights in order of ppl, lexical similarity")
 
     args = parser.parse_args()
     print(args)
@@ -560,14 +560,17 @@ def main():
 
     # process weights from command line arguments
     metric_weights = args.weights
+    EXPECTED_METRIC_WEIGHTS_LENGTH = 2
     if not metric_weights:
-        print('WARNING: weights for pruning eval should be specified. Using weight_ppl = 1...')
-        metric_weights = [1]
+        print('WARNING: weights for pruning eval should be specified. Using even split')
+        metric_weights = [1] * EXPECTED_METRIC_WEIGHTS_LENGTH
+        metric_weights = [float(i)/max(metric_weights) for i in metric_weights]
 
-    EXPECTED_METRIC_WEIGHTS_LENGTH = 1
+   
     metric_weights = np.pad(metric_weights, (0, EXPECTED_METRIC_WEIGHTS_LENGTH), 'constant')
+    metric_weights = metric_weights[:EXPECTED_METRIC_WEIGHTS_LENGTH]
     print(f"metric weights: {metric_weights}")
-    assert(sum(metric_weights) == 1.0)
+    assert sum(metric_weights) == 1.0, "given pruning metric weights don't sum to 1"
 
     # Setting seeds for reproducibility
     np.random.seed(args.seed)
