@@ -180,8 +180,8 @@ def f1(prediction, ground_truth, normalize_fn):
     f1 = (2 * precision * recall) / (precision + recall)
     return f1
 
-def eval_lexsim_train(model, trainloader, tokenizer, bs=1, device=None):
-	nsamples = len(trainloader)
+def eval_lexsim(model, dataloader, tokenizer, bs=1, device=None):
+	nsamples = len(dataloader)
 
 	# List to store negative log likelihoods
 	f1_sum = 0.0
@@ -192,13 +192,13 @@ def eval_lexsim_train(model, trainloader, tokenizer, bs=1, device=None):
 		if i % 50 == 0:
 			print(f"sample {i}")
 
-		input_ids = trainloader[i][0].to(device)
+		input_ids = dataloader[i][0].to(device)
 		target_ids = input_ids.clone()
 		target_ids[:, :-1] = -100 #ignore_index token
 		# Calculate negative log likelihood
 		outputs = model(input_ids, labels=target_ids)
 		outputs_decoded = tokenizer.decode(outputs)
-		rationale_decoded = tokenizer.decode(trainloader[i][1].to(device))
+		rationale_decoded = tokenizer.decode(dataloader[i][1].to(device))
 		f1 = f1(outputs_decoded, rationale_decoded, normalize_answer)
 		f1_sum += f1
 
@@ -207,29 +207,39 @@ def eval_lexsim_train(model, trainloader, tokenizer, bs=1, device=None):
 
 	return f1_sum / nsamples
 
-def eval_lexsim_test(model, testenc, tokenizer, bs=1, device=None):
-	nsamples = len(testenc)
 
-	# List to store negative log likelihoods
-	f1_sum = 0.0
-	print(f"test lexical similarity: nsamples {nsamples}")
+def cosine_sim(predictions, ground_truths, tokenizer):
+    # Assuming string inputs
+    cos = nn.CosineSimilarity(dim=1, eps=1e-6)
+    embeds = tokenizer.encode(predictions, ground_truths, return_tensors='pt', padding=True, truncation=True)
+    prediction_embeddings = embeds[0]
+    ground_truth_embeddings = embeds[1]
+    cos_sims = cos(prediction_embeddings, ground_truth_embeddings)
+	# Get avg of batch
+    cos_sim = cos_sims.mean()
+    return cos_sim.item()
 
-	# Loop through each batch
+
+def eval_semantic_sim(model, dataloader, tokenizer, bs=1, device=None):
+	nsamples = len(dataloader)
+
+	# Running avg
+	cos_sim = 0.0
+
 	for i in range(0,nsamples,bs):
 		if i % 50 == 0:
 			print(f"sample {i}")
-
-		input_ids = testenc[i][0].to(device)
+		input_ids = dataloader[i][0].to(device)
 		target_ids = input_ids.clone()
 		target_ids[:, :-1] = -100 #ignore_index token
 		# Calculate negative log likelihood
 		outputs = model(input_ids, labels=target_ids)
 		outputs_decoded = tokenizer.decode(outputs)
-		rationale_decoded = tokenizer.decode(testenc[i][1].to(device))
-		f1 = f1(outputs_decoded, rationale_decoded, normalize_answer)
-		f1_sum += f1
+		rationale_decoded = tokenizer.decode(dataloader[i][1].to(device))
+		# cosine_sim returns avg cos_sim of batch
+		cos_sim += cosine_sim(outputs_decoded, rationale_decoded, tokenizer)
 
 	# Empty CUDA cache to save memory
 	torch.cuda.empty_cache()
-
-	return f1_sum / nsamples
+	# Avg cosine similarity across all samples
+	return cos_sim / nsamples
