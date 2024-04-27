@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import pdb
 from .data import get_loaders 
-from .eval_gsm8k import eval_ppl_test_gsm8k, eval_ppl_train_gsm8k
+from .eval_combined import eval_ppl_test_gsm8k, eval_ppl_train_gsm8k
 from collections import Counter
 import re
 import string

@@ -8,7 +8,7 @@ import pdb
 from time import time
 import datetime
 from lib.modelling_llama_mod import LlamaForCausalLM
-from lib.eval import eval_ppl, eval_ppl_trainonly
+from lib.eval_combined import eval_ppl, eval_ppl_trainonly
 from collections import defaultdict
 import pickle as pkl
 import random
@@ -548,12 +548,29 @@ def main():
     # Wandb HP
     parser.add_argument('--wandb_project_name', type=str, default='Prune-No-Backward', help='Wandb project name')
 
+    # Hyperparams for pruning evaluation metric weights
+    # NOTE that the order of weights is ppl
+    parser.add_argument('--weights', nargs=3, help="array of weights in order of ppl, lexical similarity")
+
     args = parser.parse_args()
     print(args)
     str_of_args = args_to_str(args)
     args.save = os.path.join(args.save, str_of_args)
     os.makedirs(args.save, exist_ok=True)
 
+    # process weights from command line arguments
+    metric_weights = args.weights
+    EXPECTED_METRIC_WEIGHTS_LENGTH = 3
+    if not metric_weights:
+        print('WARNING: weights for pruning eval should be specified. Using even split')
+        metric_weights = [1] * EXPECTED_METRIC_WEIGHTS_LENGTH
+        metric_weights = [float(i)/sum(metric_weights) for i in metric_weights]
+
+   
+    metric_weights = np.pad(metric_weights, (0, EXPECTED_METRIC_WEIGHTS_LENGTH), 'constant')
+    metric_weights = metric_weights[:EXPECTED_METRIC_WEIGHTS_LENGTH]
+    print(f"metric weights: {metric_weights}")
+    assert sum(metric_weights) == 1.0, "given pruning metric weights don't sum to 1"
 
     # Setting seeds for reproducibility
     np.random.seed(args.seed)
@@ -574,7 +591,7 @@ def main():
     print('tokenizer done')
     trainenc, testenc = get_raw_dataset(args.dataset, tokenizer)
     # Getting the initial evaluation of the model
-    _, orig_test_ppl = eval_ppl(model, tokenizer, trainenc, testenc, model.device, dataset=args.dataset, bsz= args.bsz)
+    _, orig_test_ppl = eval_ppl(model, tokenizer, trainenc, testenc, metric_weights, model.device, dataset=args.dataset, bsz= args.bsz)
     print('eval done original_test_ppl:', orig_test_ppl)
     original_param_count = get_param_count(model)
     model.original_param_count = original_param_count
@@ -613,7 +630,7 @@ def main():
         print(model)
 
         # Evaluate the performance of the pruned model
-        ppl_train, ppl_test = eval_ppl(model, tokenizer, trainenc, testenc, model.device, dataset=args.dataset, bsz=args.bsz)
+        ppl_train, ppl_test = eval_ppl(model, tokenizer, trainenc, testenc, metric_weights, model.device, dataset=args.dataset, bsz=args.bsz)
         # acc_train, acc_test = eval_acc(model, tokenizer, model.device, dataset=args.dataset)
 
         wandb_run.log({'Sparsity': cur_sparsity, 'TrainPPL': ppl_train, 'TestPPL': ppl_test})

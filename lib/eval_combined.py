@@ -275,8 +275,8 @@ def f1(prediction, ground_truth, normalize_fn):
     f1 = (2 * precision * recall) / (precision + recall)
     return f1
 
-def eval_lexsim_gsm8k(model, dataloader, tokenizer, bs=1, device=None):
-	nsamples = len(dataloader)
+def eval_lexsim_gsm8k(model, loader, tokenizer, bs=1, device=None):
+	nsamples = len(loader)
 
 	# List to store negative log likelihoods
 	f1_sum = 0.0
@@ -284,18 +284,15 @@ def eval_lexsim_gsm8k(model, dataloader, tokenizer, bs=1, device=None):
 
 	# Loop through each batch
 	for i in range(0,nsamples,bs):
-		if i % 50 == 0:
-			print(f"sample {i}")
-
-		input_ids = dataloader[i][0].to(device)
-		target_ids = input_ids.clone()
-		target_ids[:, :-1] = -100 #ignore_index token
+		# if i % 50 == 0:
+		print(f"sample {i}")
+		input_ids = loader[i][0].to(device)
 		# Calculate negative log likelihood
-		outputs = model(input_ids, labels=target_ids)
-		outputs_decoded = tokenizer.decode(outputs)
-		rationale_decoded = tokenizer.decode(dataloader[i][1].to(device))
-		f1 = f1(outputs_decoded, rationale_decoded, normalize_answer)
-		f1_sum += f1
+		outputs = model.generate(input_ids, max_length=(input_ids.shape[1]+100))
+		outputs_decoded = tokenizer.decode(outputs[:,input_ids.size(1):][0])
+		rationale = loader[i][1]
+		f1_score = f1(outputs_decoded, rationale, normalize_answer)
+		f1_sum += f1_score
 
 	# Empty CUDA cache to save memory
 	torch.cuda.empty_cache()
