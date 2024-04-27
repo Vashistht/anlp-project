@@ -1,4 +1,0 @@
-prune_model
-{'results': {'winogrande': {'acc': 0.5213270142180095, 'acc_stderr': 0.019870831242787552}, 'boolq': {'acc': 0.5165876777251185, 'acc_stderr': 0.019877984170032503}, 'arc_challenge': {'acc': 0.19747235387045814, 'acc_stderr': 0.01583523867031247, 'acc_norm': 0.2559241706161137, 'acc_norm_stderr': 0.017358240916250527}, 'arc_easy': {'acc': 0.26540284360189575, 'acc_stderr': 0.01756381557124669, 'acc_norm': 0.2859399684044234, 'acc_norm_stderr': 0.017974062838604622}, 'hellaswag': {'acc': 0.29067930489731436, 'acc_stderr': 0.018062166146085863, 'acc_norm': 0.31121642969984203, 'acc_norm_stderr': 0.018416797316405352}}}
-{'results': {'gsm8k': {'acc': 0.0, 'acc_stderr': 0.0}}}
-[SpeedUp=2.159] Original perplexity on wikitext = 5.109 | Before Training perplexity on wikitext = 46.594
