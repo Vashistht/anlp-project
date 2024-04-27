@@ -242,4 +242,4 @@ def eval_semantic_sim(model, dataloader, tokenizer, bs=1, device=None):
 	# Empty CUDA cache to save memory
 	torch.cuda.empty_cache()
 	# Avg cosine similarity across all samples
-	return cos_sim / nsamples
+	return cos_sim / int(nsamples / bs)
