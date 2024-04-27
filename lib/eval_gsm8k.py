@@ -179,4 +179,4 @@ def eval_semantic_sim_gsm8k(model, dataloader, tokenizer, bs=1, device=None):
 
 	# Empty CUDA cache to save memory
 	torch.cuda.empty_cache()
-	return f1_sum / nsamples
+	return cos_sim / int(nsamples / bs)
