@@ -6,9 +6,12 @@ import torch
 import torch.nn as nn
 import pdb
 from .data import get_loaders 
+import numpy as np
+
+EXPECTED_METRIC_WEIGHTS_LENGTH = 1
 
 # Function to evaluate perplexity (ppl) on a specified model and tokenizer
-def eval_ppl(model, tokenizer, trainenc, testenc, device=torch.device("cuda:0"), dataset="wikitext2", bsz=1):
+def eval_ppl(model, tokenizer, trainenc, testenc, metric_weights, device=torch.device("cuda:0"), dataset="wikitext2", bsz=1):
 
 	# Print status
 	print(f"evaluating on {dataset}")
@@ -18,14 +21,19 @@ def eval_ppl(model, tokenizer, trainenc, testenc, device=torch.device("cuda:0"),
 		dataset, trainenc, testenc, seed=0, seqlen=model.seqlen, tokenizer=tokenizer 
 	)
 
+	ppl_weight = metric_weights[0]
+
 	# Evaluate ppl in no grad context to avoid updating the model
 	with torch.no_grad():
-		ppl_test = eval_ppl_test(model, testloader, bsz, device)
 		ppl_train = eval_ppl_train(model, trainloader, bsz, device)
-	return ppl_train, ppl_test 
+		ppl_test = eval_ppl_test(model, testloader, bsz, device)
+
+	combined_train = ppl_weight * ppl_train
+	combined_test = ppl_weight * ppl_test
+	return combined_train, combined_test 
 
 # Function to evaluate perplexity (ppl) on a specified model and tokenizer
-def eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=1, nsamples=128, device=torch.device("cuda:0"), seed=0, dataset="wikitext2"):
+def eval_ppl_trainonly(model, tokenizer, trainenc, testenc, metric_weights, bsz=1, nsamples=128, device=torch.device("cuda:0"), seed=0, dataset="wikitext2"):
 
 	print(f"evaluating on {dataset}")
 	# Get the test loader
@@ -33,10 +41,15 @@ def eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=1, nsamples=128,
 		dataset, trainenc, testenc, nsamples=nsamples, seed=seed, seqlen=model.seqlen, tokenizer=tokenizer 
 	)
 
+	ppl_weight = metric_weights[0]
+
 	# Evaluate ppl in no grad context to avoid updating the model
 	with torch.no_grad():
 		ppl_train = eval_ppl_train(model, trainloader, bsz, device)
-	return ppl_train
+
+	combined_train = ppl_weight * ppl_train
+
+	return combined_train
 
 # Function to evaluate perplexity (ppl) specifically on the wikitext dataset
 def eval_ppl_train(model, trainloader, bs=1, device=None):
