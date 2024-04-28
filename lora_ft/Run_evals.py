@@ -627,7 +627,7 @@ def main():
                 no_cache=True,
                 pretrained_model=model,
                 write_out=True, 
-                output_base_path='/Users/vashisth/Documents/GitHub/ANLP_projects/anlp-project/logs_errors_outputs/gsm8k-pruned', # writes to the current dir if commented out 
+                output_base_path='/Users/vashisth/Documents/GitHub/ANLP_projects/anlp-project/logs_errors_outputs/gsm8k-pruned/finetuned-all-ds.json', # writes to the current dir if commented out 
             )
         
         updated_results = {'results': results['results']}
