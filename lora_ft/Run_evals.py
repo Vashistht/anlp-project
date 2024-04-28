@@ -19,6 +19,7 @@ Here is the full list of checkpoints on the hub that can be fine-tuned by this s
 https://huggingface.co/models?filter=text-generation
 """
 
+
 """
     Code here heavily burrows from https://github.com/locuslab/wanda/tree/main
 """
@@ -332,7 +333,7 @@ class CustomTrainer(Trainer):
 
 
 # Prune the model according to the saved information
-def prune_model(model, tokenizer, prune_info_path, target_epoch=3):
+def prune_model(model, tokenizer, prune_info_path, evaluator=False):
     def get_param_count(model, exclude=['embed', 'head']):
         return sum([p.numel() for n, p in model.named_parameters() if not any(x in n for x in exclude)])
 
@@ -340,13 +341,14 @@ def prune_model(model, tokenizer, prune_info_path, target_epoch=3):
     mask_info_loc = os.path.join(prune_info_path, 'mask_info_{}.pkl'.format(epoch_))
     original_param_count = get_param_count(model)
     print('original model param count : {}'.format(original_param_count))
-    while os.path.exists(mask_info_loc) and(epoch_<=target_epoch):
+
+    while os.path.exists(mask_info_loc):
         with open(mask_info_loc, 'rb') as handle:
             mask_info = pkl.load(handle)
 
         for (name, module) in model.named_modules():
-            if name not in mask_info: continue # We are not pruning this
-
+            if name not in mask_info:
+                continue  # We are not pruning this
             mask_ = mask_info[name]
             if name.endswith('mlp'):
                 prune_mlp(mask_, module)
@@ -356,15 +358,35 @@ def prune_model(model, tokenizer, prune_info_path, target_epoch=3):
                 raise ValueError("Invalid type found in mask_info : {}".format(name))
 
         gc.collect()
-        torch.cuda.empty_cache() 
-        print(f'epoch {epoch_}, param count is {get_param_count(model)}')
+        torch.cuda.empty_cache()
+        current_param_count = get_param_count(model)
+        print(f'epoch {epoch_}, param count is {current_param_count}')
+        print('epoch {epoch_}, model sparsity is : {:.3f} '.format(1.0 - current_param_count/original_param_count))
+
+        # Evaluate the model after each epoch
+        if evaluator is not False:
+            results = evaluator.simple_evaluate(
+                model="hf-causal-experimental",
+                model_args="pretrained={}".format(model_args.model_name_or_path),
+                tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"],
+                no_cache=True,
+                pretrained_model=model,
+                write_out = True,
+                output_base_path='/Users/vashisth/Documents/GitHub/ANLP_projects/anlp-project/logs_errors_outputs/gsm8k-pruned'
+            )
+            updated_results = {'results': results['results']}
+            print(f"Epoch {epoch_} evaluation results:")
+            print(updated_results)
+            results_str = f"prune_model_epoch_{epoch_}\n" + str(updated_results)
         epoch_ += 1
         mask_info_loc = os.path.join(prune_info_path, 'mask_info_{}.pkl'.format(epoch_))
+
     final_param_count = get_param_count(model)
     print('Final model sparsity is : {:.3f} '.format(1.0 - final_param_count/original_param_count))
     print('Final model param count : {}'.format(final_param_count))
     gc.collect()
-    torch.cuda.empty_cache() 
+    torch.cuda.empty_cache()
+
 
 def prune_mlp(mask_, module):
     index = mask_.squeeze().nonzero().squeeze()
@@ -469,63 +491,9 @@ def main():
     )
     logger.info(f"Training/evaluation parameters {training_args}")
 
-    # # Detecting last checkpoint.
-    # last_checkpoint = None
-    # if os.path.isdir(training_args.output_dir) and training_args.do_train and not training_args.overwrite_output_dir:
-    # 	last_checkpoint = get_last_checkpoint(training_args.output_dir)
-    # 	if last_checkpoint is None and len(os.listdir(training_args.output_dir)) > 0:
-    # 		raise ValueError(
-    # 			f"Output directory ({training_args.output_dir}) already exists and is not empty. "
-    # 			"Use --overwrite_output_dir to overcome."
-    # 		)
-    # 	elif last_checkpoint is not None and training_args.resume_from_checkpoint is None:
-    # 		logger.info(
-    # 			f"Checkpoint detected, resuming training at {last_checkpoint}. To avoid this behavior, change "
-    # 			"the `--output_dir` or add `--overwrite_output_dir` to train from scratch."
-    # 		)
-
-    # Set seed before initializing model.
     set_seed(training_args.seed)
 
-    # Get the datasets: you can either provide your own CSV/JSON/TXT training and evaluation files (see below)
-    # or just provide the name of one of the public datasets available on the hub at https://huggingface.co/datasets/
-    # (the dataset will be downloaded automatically from the datasets Hub).
-    #
-    # For CSV/JSON files, this script will use the column called 'text' or the first column if no column called
-    # 'text' is found. You can easily tweak this behavior (see below).
-    #
-    # In distributed training, the load_dataset function guarantee that only one local process can concurrently
-    # download the dataset.
 
-    # TODO[ldery] -- we need to change this to account for fine-tuning on the right dataset
-    raw_datasets = load_dataset(
-        'allenai/c4', data_files={'train': 'en/c4-train.00000-of-01024.json.gz', 'validation': 'en/c4-validation.00000-of-00008.json.gz'}
-    )
-
-    if "c4" not in data_args.dataset_name:
-        raw_datasets["validation"] = load_dataset(
-            data_args.dataset_name,
-            data_args.dataset_config_name,
-            split=f"train[:{data_args.validation_split_percentage}%]",
-            use_auth_token=True if model_args.use_auth_token else None,
-            streaming=data_args.streaming,
-        )
-        raw_datasets["train"] = load_dataset(
-            data_args.dataset_name,
-            data_args.dataset_config_name,
-            split=f"train[{data_args.validation_split_percentage}%:]",
-            use_auth_token=True if model_args.use_auth_token else None,
-            streaming=data_args.streaming,
-        )
-
-    # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
-    # https://huggingface.co/docs/datasets/loading_datasets.html.
-
-    # Load pretrained model and tokenizer
-    #
-    # Distributed training:
-    # The .from_pretrained methods guarantee that only one local process can concurrently
-    # download model & vocab.
 
     config_kwargs = {
         "cache_dir": model_args.cache_dir,
@@ -559,6 +527,7 @@ def main():
         print("File created successfully.")
     except IOError as e:
         print("Error creating the file:", e)
+    
     # Do the pre-training evaluation
     # Evaluation
     if training_args.do_eval:
@@ -566,21 +535,13 @@ def main():
         model.eval()
         og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
         out_str = "Original perplexity on wikitext = {:.3f}".format(og_ppl)
-        og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+        print(out_str)
+        # gsm8k ppl
+        og_ppl_gsm, og_runtime_gsm = evaluate_ppl('gsm8k', model, tokenizer, model.seqlen)
+        out_str = "Original perplexity on gsm8k = {:.3f}".format(og_ppl_gsm)
+        print(out_str)
 
-        # print(out_str)
-
-    # Preprocessing the datasets.
-    # First we tokenize all the texts.
-    # if training_args.do_train:
-    # 	column_names = list(raw_datasets["train"].features)
-    # else:
-    # 	column_names = list(raw_datasets["validation"].features)
-    # text_column_name = "text" if "text" in column_names else column_names[0]
-
-    # since this will be pickled to avoid _LazyModule error in Hasher force logger loading before tokenize_function
     tok_logger = transformers.utils.logging.get_logger("transformers.tokenization_utils_base")
-
 
     if data_args.block_size is None:
         block_size = tokenizer.model_max_length
@@ -599,101 +560,88 @@ def main():
             )
         block_size = min(data_args.block_size, tokenizer.model_max_length)
 
-    # Main data processing function that will concatenate all texts from our dataset and generate chunks of block_size.
-    def group_texts(examples):
-        # Concatenate all texts.
-        concatenated_examples = {k: list(chain(*examples[k])) for k in examples.keys()}
-        total_length = len(concatenated_examples[list(examples.keys())[0]])
-        # We drop the small remainder, we could add padding if the model supported it instead of this drop, you can
-        # customize this part to your needs.
-        if total_length >= block_size:
-            total_length = (total_length // block_size) * block_size
-        # Split by chunks of max_len.
-        result = {
-            k: [t[i : i + block_size] for i in range(0, total_length, block_size)]
-            for k, t in concatenated_examples.items()
-        }
-
-        result["labels"] = result["input_ids"].copy()
-        return result
-
-
+   
     should_i_do_eleuther_eval = True
     print("Num params = : ", get_param_count(model) )
-    # if training_args.do_eleuther_eval:
-    if should_i_do_eleuther_eval:
-        print('eleuther eval for original model')
-    # 	# transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
-        # results = evaluator.simple_evaluate(
-        # 	model="hf-causal-experimental",
-        # 	model_args="pretrained={}".format(model_args.model_name_or_path),
-        # 	# tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
-           # 	tasks=["gsm8k"],
-        # 	num_fewshot=5,
-        # 	no_cache=True,
-        # 	pretrained_model=model,
-        # )
+    # just run this once 
+    # if should_i_do_eleuther_eval:
+    #     print('eleuther eval for original model')
+    #   ## transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
+    #     results = evaluator.simple_evaluate(
+    #       model="hf-causal-experimental",
+    #       model_args="pretrained={}".format(model_args.model_name_or_path),
+    #         tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
+    #           # tasks=["gsm8k"],
+    #       num_fewshot=0,
+    #       no_cache=True,
+    #        write_out=True,
+    #       output_base_path='/Users/vashisth/Documents/GitHub/ANLP_projects/anlp-project/logs_errors_outputs/gsm8k-pruned', # writes to the current dir if commented out
+    #       pretrained_model=model,
+    #     )
+    #     start_time = time.time()
+    #     print('Eleuther eval for original model done')
+    #     before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+    #     updated_results = {'results': results['results']}
+    #     print(updated_results)
 
-    # updated_results = {'results': results['results']}
-    # print(updated_results)
-    # results_str = 'orginal-model \n' + str(updated_results)
-    # out_file.write(results_str + "\n")
-
-    current_epoch = 0
     if model_args.prune_info_path is not None:
-        prune_model(model, tokenizer, model_args.prune_info_path, target_epoch=1)
-        print("Num params = : ", get_param_count(model))
+        prune_model(model, tokenizer, model_args.prune_info_path, evaluator= should_i_do_eleuther_eval)
         gc.collect()
         torch.cuda.empty_cache()
         logger.info("*** Evaluate ***")
         model.eval()
         start_time = time.time()
-        # import pdb
-        # pdb.set_trace()
         before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
         speedup = og_runtime / final_runtime
         out_str = "[SpeedUp={:.3f}] Original perplexity on wikitext = {:.3f} | Before Training perplexity on wikitext = {:.3f}".format(speedup, og_ppl, before_train_ppl, speedup)
-        # out_file.write(out_str + "\n")
-        # print(out_str)
-        finetuned_model = False
+        print(out_str)
+        og_ppl_gsm, og_runtime_gsm = evaluate_ppl('gsm8k', model, tokenizer, model.seqlen)
+        out_str = "Original perplexity on gsm8k = {:.3f}".format(og_ppl_gsm)
+        print(out_str)
+    
+    finetuned_model = False
     if finetuned_model:
-        
         adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_c4_ft_wiki/'
-        # model.load_adapter(adapter_name)
-        # model.set_active_adapters('prune-c4_ft_wiki_adapter')
-
-        model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_c4_ft_wiki_adapter")
-
-
-    if should_i_do_eleuther_eval:
+        model = PeftModel.from_pretrained(model, adapter_name,
+                                          adapter_name="prune_c4_ft_wiki_adapter")
+        
+        # evaluation 
+        print('finetuned model')
+        before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+        speedup = og_runtime / final_runtime
+        out_str = "[SpeedUp={:.3f}] Original perplexity on wikitext = {:.3f} | Before Training perplexity on wikitext = {:.3f}".format(speedup, og_ppl, before_train_ppl, speedup)
+        print(out_str)
+        og_ppl_gsm, og_runtime_gsm = evaluate_ppl('gsm8k', model, tokenizer, model.seqlen)
+        out_str = "Original perplexity on gsm8k = {:.3f}".format(og_ppl_gsm)
+        print(out_str)
+    
+        if should_i_do_eleuther_eval:
         #transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
-        results = evaluator.simple_evaluate(
-            model="hf-causal-experimental",
-            model_args="pretrained={}".format(model_args.model_name_or_path),
-            # tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
-               tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
-            # tasks = ['gsm8k'],
-            # num_fewshot=0,
-            # limit = , # how much of the original dataset to test on 
-               # tasks=["hellaswag"],
-            # num_fewshot={"hellaswag": 0, "arc_challenge":0}
-            no_cache=True,
-            pretrained_model=model,
-            # write_out=True, 
-	        # output_base_path=None, # writes to the current dir
-        )
-    updated_results = {'results': results['results']}
-    print(updated_results)
-    results_str = "prune_model\n" + str(updated_results)
-    with open(file_path, 'w') as out_file:
-        out_file.write("\n")
-        out_file.write(results_str + "\n")
-        out_file.flush()
+            results = evaluator.simple_evaluate(
+                model="hf-causal-experimental",
+                model_args="pretrained={}".format(model_args.model_name_or_path),
+                tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
+                # tasks = ['gsm8k'],
+                num_fewshot=0,
+                # limit = , # how much of the original dataset to test on 
+                no_cache=True,
+                pretrained_model=model,
+                write_out=True, 
+                output_base_path='/Users/vashisth/Documents/GitHub/ANLP_projects/anlp-project/logs_errors_outputs/gsm8k-pruned', # writes to the current dir if commented out 
+            )
+        
+        updated_results = {'results': results['results']}
+        print(updated_results)
+        results_str = "prune_model\n" + str(updated_results)
+        
+    # with open(file_path, 'w') as out_file:
+    #     out_file.write("\n")
+    #     out_file.write(results_str + "\n")
+    #     out_file.flush()
 
 def _mp_fn(index):
     # For xla_spawn (TPUs)
     main()
-
 
 if __name__ == "__main__":
     main()
