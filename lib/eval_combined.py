@@ -7,11 +7,14 @@ import torch.nn as nn
 import pdb
 from .data import get_loaders 
 import numpy as np
+import string
+import re
+from collections import Counter
 
 EXPECTED_METRIC_WEIGHTS_LENGTH = 1
 
 # Function to evaluate perplexity (ppl) on a specified model and tokenizer
-def eval_ppl(model, tokenizer, trainenc, testenc, metric_weights, device=torch.device("cuda:0"), dataset="wikitext2", bsz=1):
+def eval_combined(model, tokenizer, trainenc, testenc, metric_weights, device=torch.device("cuda:0"), dataset="wikitext2", bsz=1):
 
 	# Print status
 	print(f"evaluating on {dataset}")
@@ -24,6 +27,7 @@ def eval_ppl(model, tokenizer, trainenc, testenc, metric_weights, device=torch.d
 	ppl_weight = metric_weights[0]
 	lexsim_weight = metric_weights[1]
 	cossim_weight = metric_weights[2]
+	acc_weight = metric_weights[3]
 
 	# Evaluate ppl in no grad context to avoid updating the model
 	with torch.no_grad():
@@ -34,16 +38,18 @@ def eval_ppl(model, tokenizer, trainenc, testenc, metric_weights, device=torch.d
 			lexsim_test = eval_lexsim_gsm8k(model, testenc, tokenizer, bsz, device)
 			cossim_train = eval_semantic_sim_gsm8k(model, trainloader, tokenizer, bsz, device)
 			cossim_test = eval_semantic_sim_gsm8k(model, testloader, tokenizer, bsz, device)
+			acc_train = eval_acc_gsm8k(model, trainloader, tokenizer, bsz, device)
+			acc_test = eval_acc_gsm8k(model, testloader, tokenizer, bsz, device)
 		else:
 			ppl_test = eval_ppl_test(model, testloader, bsz, device)
 			ppl_train = eval_ppl_train(model, trainloader, bsz, device)
 
-	combined_train = ppl_weight * ppl_train + lexsim_weight * lexsim_train + cossim_weight * cossim_train
-	combined_test = ppl_weight * ppl_test + lexsim_weight * lexsim_test + cossim_weight * cossim_test
+	combined_train = ppl_weight * ppl_train + lexsim_weight * lexsim_train + cossim_weight * cossim_train + acc_weight * acc_train
+	combined_test = ppl_weight * ppl_test + lexsim_weight * lexsim_test + cossim_weight * cossim_test + acc_weight * acc_test
 	return combined_train, combined_test 
 
 # Function to evaluate perplexity (ppl) on a specified model and tokenizer
-def eval_ppl_trainonly(model, tokenizer, trainenc, testenc, metric_weights, bsz=1, nsamples=128, device=torch.device("cuda:0"), seed=0, dataset="wikitext2"):
+def eval_combined_trainonly(model, tokenizer, trainenc, testenc, metric_weights, bsz=1, nsamples=128, device=torch.device("cuda:0"), seed=0, dataset="wikitext2"):
 
 	print(f"evaluating on {dataset}")
 	# Get the test loader
@@ -54,14 +60,16 @@ def eval_ppl_trainonly(model, tokenizer, trainenc, testenc, metric_weights, bsz=
 	ppl_weight = metric_weights[0]
 	lexsim_weight = metric_weights[1]
 	cossim_weight = metric_weights[2]
+	acc_weight = weight_metrics[3]
 
 	# Evaluate ppl in no grad context to avoid updating the model
 	with torch.no_grad():
-		ppl_train = eval_ppl_train(model, trainloader, bsz, device)
+		ppl_train = eval_ppl_train_gsm8k(model, trainloader, bsz, device)
 		lexsim_train = eval_lexsim_gsm8k(model, trainloader, tokenizer, device)
 		cossim_train = eval_semantic_sim_gsm8k(model, trainloader, tokenizer, device)
+		acc_train = eval_acc_gsm8k(model, trainloader, tokenizer, device)
 
-	combined_train = ppl_weight * ppl_train + lexsim_weight * lexsim_train + cossim_weight * cossim_train
+	combined_train = ppl_weight * ppl_train + lexsim_weight * lexsim_train + cossim_weight * cossim_train + acc_weight * acc_train
 
 	return combined_train
 
@@ -334,3 +342,37 @@ def eval_semantic_sim_gsm8k(model, dataloader, tokenizer, bs=1, device=None):
 	# Empty CUDA cache to save memory
 	torch.cuda.empty_cache()
 	return cos_sim / int(nsamples / bs)
+
+def em(prediction, ground_truth, normalize_fn):
+	norm_prediction = normalize_fn(prediction)
+	# this is ok bc we normalized all white spaces
+	prediction_tokens = norm_prediction.split(" ")
+
+	norm_truth = normalize_fn(ground_truth)
+	if norm_truth in prediction_tokens:
+		return 1.0
+    
+	return 0.0
+
+def eval_acc_gsm8k(model, loader, tokenizer, bs=1, device=None):
+	nsamples = len(loader)
+
+	# List to store negative log likelihoods
+	em_sum = 0.0
+	print(f"accuracy: nsamples {nsamples}")
+
+	# Loop through each batch
+	for i in range(0,nsamples,bs):
+		# if i % 50 == 0:
+		print(f"sample {i}")
+		input_ids = loader[i][0].to(device)
+		outputs = model.generate(input_ids, max_length=(input_ids.shape[1]+100))
+		outputs_decoded = tokenizer.decode(outputs[:,input_ids.size(1):][0])
+		answer = loader[i][2]
+		em_score = em(outputs_decoded, answer, normalize_answer)
+		em_sum += em_score
+
+	# Empty CUDA cache to save memory
+	torch.cuda.empty_cache()
+
+	return em_sum / nsamples

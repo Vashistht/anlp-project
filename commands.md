@@ -6,6 +6,10 @@
 conda create -n prune_llm mamba python=3.9 -c conda-forge
 source activate prune_llm
 
+### mamba
+conda install -n base conda-libmamba-solver
+conda config --set solver libmamba
+
 conda install -c pytorch -c conda-forge -c defaults wheel=0.41.2 # from the env yaml
 
 conda install -c pytorch -c conda-forge -c defaults transformers==4.28.0 tokenizers==0.13.3 
@@ -33,7 +37,7 @@ pip3 install ipykernel scipy matplotlib
 
 ### Install additional Python packages
 ```
-pip3 install torch numpy wandb accelerate==0.24.1 chardet==5.2.0 datasets==2.16.1 huggingface-hub pandas plotly tqdm urllib3 
+pip3 install numpy wandb accelerate==0.24.1 chardet==5.2.0 datasets==2.16.1 huggingface-hub pandas plotly tqdm urllib3 
 ```
 
 ### Upgrade huggingface_hub for CLI support
