@@ -34,12 +34,14 @@ def eval_combined(model, tokenizer, trainenc, testenc, metric_weights, device=to
 		if dataset == 'gsm8k':
 			ppl_train = eval_ppl_train_gsm8k(model, trainloader, bsz, device)
 			ppl_test = eval_ppl_test_gsm8k(model, testloader, bsz, device)
-			lexsim_train = eval_lexsim_gsm8k(model, trainloader, tokenizer, bsz, device)
-			lexsim_test = eval_lexsim_gsm8k(model, testenc, tokenizer, bsz, device)
-			cossim_train = eval_semantic_sim_gsm8k(model, trainloader, tokenizer, bsz, device)
-			cossim_test = eval_semantic_sim_gsm8k(model, testloader, tokenizer, bsz, device)
-			acc_train = eval_acc_gsm8k(model, trainloader, tokenizer, bsz, device)
-			acc_test = eval_acc_gsm8k(model, testloader, tokenizer, bsz, device)
+			lexsim_train, cossim_train, acc_train = eval_combined_helper(model, trainloader, tokenizer, bsz, device)
+			lexsim_test, cossim_test, acc_test = eval_combined_helper(model, testloader, tokenizer, bsz, device)
+			# lexsim_train = eval_lexsim_gsm8k(model, trainloader, tokenizer, bsz, device)
+			# lexsim_test = eval_lexsim_gsm8k(model, testenc, tokenizer, bsz, device)
+			# cossim_train = eval_semantic_sim_gsm8k(model, trainloader, tokenizer, bsz, device)
+			# cossim_test = eval_semantic_sim_gsm8k(model, testloader, tokenizer, bsz, device)
+			# acc_train = eval_acc_gsm8k(model, trainloader, tokenizer, bsz, device)
+			# acc_test = eval_acc_gsm8k(model, testloader, tokenizer, bsz, device)
 		else:
 			ppl_test = eval_ppl_test(model, testloader, bsz, device)
 			ppl_train = eval_ppl_train(model, trainloader, bsz, device)
@@ -254,6 +256,37 @@ def eval_ppl_test_gsm8k(model, testenc, bs=1, device=None):
 
 	return ppl.item()
 
+# HELPER to combine lexical + semantic + accuracy together 
+# purpose: model is run once on each question
+def eval_combined_helper(model, loader, tokenizer, bs=1, device=None):
+	nsamples = len(loader)
+
+	# List to store negative log likelihoods
+	f1_sum = 0.0
+	cos_sim = 0.0
+	em_sum = 0.0
+	print(f"helper: nsamples {nsamples}")
+
+	# Loop through each batch
+	for i in range(0,nsamples,bs):
+		# if i % 50 == 0:
+		print(f"sample {i}")
+		input_ids = loader[i][0].to(device)
+		# Calculate negative log likelihood
+		outputs = model.generate(input_ids, max_length=(input_ids.shape[1]+100))
+		outputs_decoded = tokenizer.decode(outputs[:,input_ids.size(1):][0])
+		rationale = loader[i][1]
+		answer = loader[i][2]
+		
+		f1_sum += f1(outputs_decoded, rationale, normalize_answer)
+		cos_sim += cosine_sim(outputs_decoded, rationale, tokenizer)
+		em_sum += em(outputs_decoded, answer, normalize_answer)
+
+	# Empty CUDA cache to save memory
+	torch.cuda.empty_cache()
+
+	return f1_sum / nsamples, cos_sim / int(nsamples / bs), em_sum / nsamples
+
 def normalize_answer(s: str) -> str:
     def remove_articles(text):
         return re.sub(r"\b(a|an|the)\b", " ", text)
@@ -283,29 +316,29 @@ def f1(prediction, ground_truth, normalize_fn):
     f1 = (2 * precision * recall) / (precision + recall)
     return f1
 
-def eval_lexsim_gsm8k(model, loader, tokenizer, bs=1, device=None):
-	nsamples = len(loader)
+# def eval_lexsim_gsm8k(model, loader, tokenizer, bs=1, device=None):
+# 	nsamples = len(loader)
 
-	# List to store negative log likelihoods
-	f1_sum = 0.0
-	print(f"train lexical similarity: nsamples {nsamples}")
+# 	# List to store negative log likelihoods
+# 	f1_sum = 0.0
+# 	print(f"train lexical similarity: nsamples {nsamples}")
 
-	# Loop through each batch
-	for i in range(0,nsamples,bs):
-		# if i % 50 == 0:
-		print(f"sample {i}")
-		input_ids = loader[i][0].to(device)
-		# Calculate negative log likelihood
-		outputs = model.generate(input_ids, max_length=(input_ids.shape[1]+100))
-		outputs_decoded = tokenizer.decode(outputs[:,input_ids.size(1):][0])
-		rationale = loader[i][1]
-		f1_score = f1(outputs_decoded, rationale, normalize_answer)
-		f1_sum += f1_score
+# 	# Loop through each batch
+# 	for i in range(0,nsamples,bs):
+# 		# if i % 50 == 0:
+# 		print(f"sample {i}")
+# 		input_ids = loader[i][0].to(device)
+# 		# Calculate negative log likelihood
+# 		outputs = model.generate(input_ids, max_length=(input_ids.shape[1]+100))
+# 		outputs_decoded = tokenizer.decode(outputs[:,input_ids.size(1):][0])
+# 		rationale = loader[i][1]
+# 		f1_score = f1(outputs_decoded, rationale, normalize_answer)
+# 		f1_sum += f1_score
 
-	# Empty CUDA cache to save memory
-	torch.cuda.empty_cache()
+# 	# Empty CUDA cache to save memory
+# 	torch.cuda.empty_cache()
 
-	return f1_sum / nsamples
+# 	return f1_sum / nsamples
 
 
 def cosine_sim(predictions, ground_truths, tokenizer):
@@ -320,28 +353,28 @@ def cosine_sim(predictions, ground_truths, tokenizer):
     return cos_sim.item()
 
 
-def eval_semantic_sim_gsm8k(model, dataloader, tokenizer, bs=1, device=None):
-	nsamples = len(dataloader)
+# def eval_semantic_sim_gsm8k(model, dataloader, tokenizer, bs=1, device=None):
+# 	nsamples = len(dataloader)
 
-	# Running avg
-	cos_sim = 0.0
+# 	# Running avg
+# 	cos_sim = 0.0
 
-	for i in range(0,nsamples,bs):
-		if i % 50 == 0:
-			print(f"sample {i}")
-		input_ids = dataloader[i][0].to(device)
-		target_ids = input_ids.clone()
-		target_ids[:, :-1] = -100 #ignore_index token
-		# Calculate negative log likelihood
-		outputs = model(input_ids, labels=target_ids)
-		outputs_decoded = tokenizer.decode(outputs)
-		rationale_decoded = tokenizer.decode(dataloader[i][1].to(device))
-		# cosine_sim returns avg cos_sim of batch
-		cos_sim += cosine_sim(outputs_decoded, rationale_decoded, tokenizer)
+# 	for i in range(0,nsamples,bs):
+# 		if i % 50 == 0:
+# 			print(f"sample {i}")
+# 		input_ids = dataloader[i][0].to(device)
+# 		target_ids = input_ids.clone()
+# 		target_ids[:, :-1] = -100 #ignore_index token
+# 		# Calculate negative log likelihood
+# 		outputs = model(input_ids, labels=target_ids)
+# 		outputs_decoded = tokenizer.decode(outputs)
+# 		rationale_decoded = tokenizer.decode(dataloader[i][1].to(device))
+# 		# cosine_sim returns avg cos_sim of batch
+# 		cos_sim += cosine_sim(outputs_decoded, rationale_decoded, tokenizer)
 
-	# Empty CUDA cache to save memory
-	torch.cuda.empty_cache()
-	return cos_sim / int(nsamples / bs)
+# 	# Empty CUDA cache to save memory
+# 	torch.cuda.empty_cache()
+# 	return cos_sim / int(nsamples / bs)
 
 def em(prediction, ground_truth, normalize_fn):
 	norm_prediction = normalize_fn(prediction)
@@ -354,25 +387,25 @@ def em(prediction, ground_truth, normalize_fn):
     
 	return 0.0
 
-def eval_acc_gsm8k(model, loader, tokenizer, bs=1, device=None):
-	nsamples = len(loader)
+# def eval_acc_gsm8k(model, loader, tokenizer, bs=1, device=None):
+# 	nsamples = len(loader)
 
-	# List to store negative log likelihoods
-	em_sum = 0.0
-	print(f"accuracy: nsamples {nsamples}")
+# 	# List to store negative log likelihoods
+# 	em_sum = 0.0
+# 	print(f"accuracy: nsamples {nsamples}")
 
-	# Loop through each batch
-	for i in range(0,nsamples,bs):
-		# if i % 50 == 0:
-		print(f"sample {i}")
-		input_ids = loader[i][0].to(device)
-		outputs = model.generate(input_ids, max_length=(input_ids.shape[1]+100))
-		outputs_decoded = tokenizer.decode(outputs[:,input_ids.size(1):][0])
-		answer = loader[i][2]
-		em_score = em(outputs_decoded, answer, normalize_answer)
-		em_sum += em_score
+# 	# Loop through each batch
+# 	for i in range(0,nsamples,bs):
+# 		# if i % 50 == 0:
+# 		print(f"sample {i}")
+# 		input_ids = loader[i][0].to(device)
+# 		outputs = model.generate(input_ids, max_length=(input_ids.shape[1]+100))
+# 		outputs_decoded = tokenizer.decode(outputs[:,input_ids.size(1):][0])
+# 		answer = loader[i][2]
+# 		em_score = em(outputs_decoded, answer, normalize_answer)
+# 		em_sum += em_score
 
-	# Empty CUDA cache to save memory
-	torch.cuda.empty_cache()
+# 	# Empty CUDA cache to save memory
+# 	torch.cuda.empty_cache()
 
-	return em_sum / nsamples
+# 	return em_sum / nsamples
