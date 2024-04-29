@@ -76,7 +76,9 @@ def get_random_mask_scores(model, tokenizer, trainenc, testenc, module_map, all_
             # this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
                # this_acc = eval_acc_trainonly (model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
             # this_metric = this_ppl - weight_acc * this_acc
-            this_metric = eval_combined_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
+            this_metric = eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
+                                metric_weights=metric_weights, bsz=this_bsz, \
+                                nsamples=nsamples, seed=seed_, dataset=dataset_)
    
         except Exception as e:
             print(e)
@@ -86,7 +88,9 @@ def get_random_mask_scores(model, tokenizer, trainenc, testenc, module_map, all_
             # this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
             # this_acc = eval_acc_trainonly (model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
             # this_metric = this_ppl - weight_acc * this_acc
-            this_metric = eval_combined_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
+            this_metric = eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
+                                metric_weights=metric_weights, bsz=this_bsz, \
+                                nsamples=nsamples, seed=seed_, dataset=dataset_)
 
         # print('[v1]Iter : ', iter_, ' PPL = ', this_ppl)
         # print('[v1]Iter : ', iter_, ' ACC = ', this_acc)
@@ -104,7 +108,9 @@ def get_random_mask_scores(model, tokenizer, trainenc, testenc, module_map, all_
         set_masks(module_map, all_masks, all_sampling_proba, pfrac=pfrac, mlp_attn_ratio=mlp_attn_ratio, use_complement=True)
         # this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
         # this_acc = eval_acc_trainonly (model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
-        this_metric = eval_combined_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
+        this_metric = eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
+                                metric_weights=metric_weights, bsz=this_bsz, \
+                                nsamples=nsamples, seed=seed_, dataset=dataset_)
   
         # print('[v2]Iter : ', iter_, ' PPL = ', this_ppl)
           # print('[v2]Iter : ', iter_, ' ACC = ', this_acc)
@@ -295,13 +301,17 @@ def investigate_score_based_mask(args, model, trainenc, testenc, wandb_run, epoc
     # Doing this in case the batch_size we have specified is too large for a forwar pass
     # Revert to a forward pass with batch size of 1
     try:
-        eval_combined_trainonly(model, tokenizer, trainenc, testenc, bsz=args.bsz, nsamples=args.nsamples, dataset=args.dataset)
+        eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
+                                metric_weights=metric_weights, bsz=this_bsz, \
+                                nsamples=nsamples, seed=seed_, dataset=dataset_)
         # eval_acc_trainonly(model, tokenizer, bsz=args.bsz, nsamples=args.nsamples, dataset=args.dataset)
     except Exception as e:
         print(e)
         gc.collect()
         torch.cuda.empty_cache()
-        eval_combined_trainonly(model, tokenizer, trainenc, testenc, bsz=1, nsamples=args.nsamples, dataset=args.dataset)
+        eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
+                                metric_weights=metric_weights, bsz=this_bsz, \
+                                nsamples=nsamples, seed=seed_, dataset=dataset_)
         # eval_acc_trainonly(model, tokenizer, bsz=args.bsz, nsamples=args.nsamples, dataset=args.dataset)
 
     # Get the initial prior distribution by running the un-modified model
