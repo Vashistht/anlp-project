@@ -345,7 +345,7 @@ def prune_model(model, tokenizer, prune_info_path, evaluator=False):
     while os.path.exists(mask_info_loc):
         with open(mask_info_loc, 'rb') as handle:
             mask_info = pkl.load(handle)
-
+        print('Pruning model for epoch {}\n'.format(epoch_) )
         for (name, module) in model.named_modules():
             if name not in mask_info:
                 continue  # We are not pruning this
@@ -370,10 +370,13 @@ def prune_model(model, tokenizer, prune_info_path, evaluator=False):
                 model_args="pretrained={}".format(model_args.model_name_or_path),
                 tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"],
                 no_cache=True,
+                limit = .01, # how much of the original dataset to test on 
+                num_fewshot=0,
                 pretrained_model=model,
                 write_out = True,
-                output_base_path='/Users/vashisth/Documents/GitHub/ANLP_projects/anlp-project/logs_errors_outputs/gsm8k-pruned'
+                output_base_path=f'/Users/vashisth/Documents/GitHub/ANLP_projects/anlp-project/logs_errors_outputs/gsm8k-pruned-all-other-datasets-{epoch_}.json'
             )
+            torch.cuda.empty_cache()
             updated_results = {'results': results['results']}
             print(f"Epoch {epoch_} evaluation results:")
             print(updated_results)
@@ -533,9 +536,9 @@ def main():
     if training_args.do_eval:
         logger.info("*** Evaluate ***")
         model.eval()
-        og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-        out_str = "Original perplexity on wikitext = {:.3f}".format(og_ppl)
-        print(out_str)
+        # og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+        # out_str = "Original perplexity on wikitext = {:.3f}".format(og_ppl)
+        # print(out_str)
         # gsm8k ppl
         og_ppl_gsm, og_runtime_gsm = evaluate_ppl('gsm8k', model, tokenizer, model.seqlen)
         out_str = "Original perplexity on gsm8k = {:.3f}".format(og_ppl_gsm)
@@ -591,9 +594,9 @@ def main():
         logger.info("*** Evaluate ***")
         model.eval()
         start_time = time.time()
-        before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-        speedup = og_runtime / final_runtime
-        out_str = "[SpeedUp={:.3f}] Original perplexity on wikitext = {:.3f} | Before Training perplexity on wikitext = {:.3f}".format(speedup, og_ppl, before_train_ppl, speedup)
+        # before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+        # speedup = og_runtime / final_runtime
+        # out_str = "[SpeedUp={:.3f}] Original perplexity on wikitext = {:.3f} | Before Training perplexity on wikitext = {:.3f}".format(speedup, og_ppl, before_train_ppl, speedup)
         print(out_str)
         og_ppl_gsm, og_runtime_gsm = evaluate_ppl('gsm8k', model, tokenizer, model.seqlen)
         out_str = "Original perplexity on gsm8k = {:.3f}".format(og_ppl_gsm)
@@ -607,10 +610,10 @@ def main():
         
         # evaluation 
         print('finetuned model')
-        before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-        speedup = og_runtime / final_runtime
-        out_str = "[SpeedUp={:.3f}] Original perplexity on wikitext = {:.3f} | Before Training perplexity on wikitext = {:.3f}".format(speedup, og_ppl, before_train_ppl, speedup)
-        print(out_str)
+        # before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+        # speedup = og_runtime / final_runtime
+        # out_str = "[SpeedUp={:.3f}] Original perplexity on wikitext = {:.3f} | Before Training perplexity on wikitext = {:.3f}".format(speedup, og_ppl, before_train_ppl, speedup)
+        # print(out_str)
         og_ppl_gsm, og_runtime_gsm = evaluate_ppl('gsm8k', model, tokenizer, model.seqlen)
         out_str = "Original perplexity on gsm8k = {:.3f}".format(og_ppl_gsm)
         print(out_str)
@@ -623,7 +626,7 @@ def main():
                 tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
                 # tasks = ['gsm8k'],
                 num_fewshot=0,
-                # limit = , # how much of the original dataset to test on 
+                limit = .01, # how much of the original dataset to test on 
                 no_cache=True,
                 pretrained_model=model,
                 write_out=True, 
