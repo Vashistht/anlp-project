@@ -52,8 +52,8 @@ def evaluate_ppl(dataset_name, model, tokenizer, ctx_length, ignore_last=False):
         seq_len = 256 * model_seqlen
     elif dataset_name == "gsm8k":
         # testdata = load_dataset("gsm8k", "main", split='test')
-        traindata, testdata = get_raw_dataset('gsm8k', tokenizer)
-        _, testenc = get_gsm8k(traindata, testdata, nsamples=1000, seed=0, seqlen=model.seqlen, tokenizer=tokenizer)
+        _, testdata = get_raw_dataset('gsm8k', tokenizer, split_list=[0,3])
+        _, testenc = get_gsm8k(None, testdata, nsamples=50, seed=0, seqlen=model.seqlen, tokenizer=tokenizer)
         start_time = time()
         ppl = eval_ppl_test_gsm8k(model, testenc, device = model.device)
         total_iters = len(testenc)
