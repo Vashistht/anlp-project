@@ -318,12 +318,16 @@ def f1(prediction, ground_truth, normalize_fn):
     return f1
 
 
-def cosine_sim(predictions, ground_truths, tokenizer):
+def cosine_sim(predictions, ground_truths, tokenizer, model):
     # Assuming string inputs
     cos = nn.CosineSimilarity(dim=1, eps=1e-6)
-    embed_pred = tokenizer.encode(predictions, return_tensors='pt', padding=True, truncation=True)
-    embed_truth = tokenizer.encode(ground_truths, return_tensors='pt', padding=True, truncation=True)
-    cos_sims = cos(embed_pred, embed_truth)
+    # embed_pred = tokenizer.encode(predictions, return_tensors='pt', padding=True, truncation=True)
+    # embed_truth = tokenizer.encode(ground_truths, return_tensors='pt', padding=True, truncation=True)
+    
+    import pdb; pdb.set_trace()
+    cos_sims = cos(embed_pred, embed_truth.float())
+    # to resolve *** RuntimeError: expected common dtype to be floating point, yet common dtype is Long
+    # new error: *** RuntimeError: The size of tensor a (102) must match the size of tensor b (131) at non-singleton dimension 1
 	# Get avg of batch
     cos_sim = cos_sims.mean()
     return cos_sim.item()

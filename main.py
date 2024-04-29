@@ -591,6 +591,7 @@ def main():
     model = get_llm(args.model, args.cache_dir)
     model.eval()
     tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=False)
+    tokenizer.pad_token = tokenizer.eos_token
     print('tokenizer done')
     trainenc, testenc = get_raw_dataset(args.dataset, tokenizer)
     # Getting the initial evaluation of the model
