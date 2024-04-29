@@ -1,3 +1,6 @@
+## prune_target_epoch to get stats per epoch, other suppors to get get intermediate stats
+
+
 #!/usr/bin/env python
 # coding=utf-8
 # Copyright 2020 The HuggingFace Inc. team. All rights reserved.
