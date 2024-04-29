@@ -34,16 +34,23 @@ def load_c4(tokenizer):
     
     return traindata, valdata
 
-def load_gsm8k(tokenizer): # make sim to load_c4 @vashistht
-    traindata = load_dataset("gsm8k", "main", split='train')
-    testdata = load_dataset("gsm8k", "main", split='test')
+# https://discuss.huggingface.co/t/loading-a-fraction-of-data/39373
+def load_gsm8k(tokenizer, split_list=None): # make sim to load_c4 @vashistht
+    if split_list is not None:
+        train_split = f'train[:{split_list[0]}%]'
+        test_split = f'test[:{split_list[1]}%]'
+    else:
+        train_split = 'train'
+        test_split = 'test'
+    traindata = load_dataset("gsm8k", "main", split=train_split)
+    testdata = load_dataset("gsm8k", "main", split=test_split)
     
     # trainenc = tokenizer(" ".join(traindata['question']), return_tensors='pt')
     # testenc = tokenizer("\n\n".join(testdata['question']), return_tensors='pt')
     # return trainenc, testenc
     return traindata, testdata
 
-def get_raw_dataset(name, tokenizer):
+def get_raw_dataset(name, tokenizer,split_list=None):
     if 'wikitext2' in name:
         # trainenc, testenc = load_wikitext2(tokenizer)
         return load_wikitext2(tokenizer)
@@ -52,7 +59,7 @@ def get_raw_dataset(name, tokenizer):
         return load_c4(tokenizer)
     if 'gsm8k' in name:
         # trainenc, testenc = load_gsm8k(tokenizer)
-        return load_gsm8k(tokenizer)
+        return load_gsm8k(tokenizer, split_list=split_list)
 
 # Generate random subsets from datasets
 def get_wikitext2(trainenc, testenc, nsamples, seed, seqlen):
