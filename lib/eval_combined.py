@@ -3,6 +3,7 @@
 """
 import time
 import torch
+from torch import Tensor
 import torch.nn as nn
 import pdb
 from .data import get_loaders 
@@ -10,6 +11,7 @@ import numpy as np
 import string
 import re
 from collections import Counter
+from sentence_transformers import SentenceTransformer
 
 EXPECTED_METRIC_WEIGHTS_LENGTH = 1
 
@@ -280,7 +282,7 @@ def eval_combined_helper(model, loader, tokenizer, bs=1, device=None):
 		answer = loader[i][2]
 		
 		f1_sum += f1(outputs_decoded, rationale, normalize_answer)
-		cos_sim += cosine_sim(outputs_decoded, rationale, tokenizer)
+		cos_sim += cosine_sim(outputs_decoded, rationale)
 		em_sum += em(outputs_decoded, answer, normalize_answer)
 
 	# Empty CUDA cache to save memory
@@ -289,48 +291,71 @@ def eval_combined_helper(model, loader, tokenizer, bs=1, device=None):
 	return f1_sum / nsamples, cos_sim / int(nsamples / bs), em_sum / nsamples
 
 def normalize_answer(s: str) -> str:
-    def remove_articles(text):
-        return re.sub(r"\b(a|an|the)\b", " ", text)
+	def remove_articles(text):
+		return re.sub(r"\b(a|an|the)\b", " ", text)
 
-    def white_space_fix(text):
-        return " ".join(text.split())
+	def white_space_fix(text):
+		return " ".join(text.split())
 
-    def remove_punc(text):
-        exclude = set(string.punctuation)
-        return "".join(ch for ch in text if ch not in exclude)
+	def remove_punc(text):
+		exclude = set(string.punctuation)
+		return "".join(ch for ch in text if ch not in exclude)
 
-    def lower(text):
-        return text.lower()
+	def lower(text):
+		return text.lower()
 
-    return white_space_fix(remove_articles(remove_punc(lower(s))))
+	return white_space_fix(remove_articles(remove_punc(lower(s))))
 
 def f1(prediction, ground_truth, normalize_fn):
-    prediction_tokens = normalize_fn(prediction).split()
-    ground_truth_tokens = normalize_fn(ground_truth).split()
-    common = Counter(prediction_tokens) & Counter(ground_truth_tokens)
-    num_same = sum(common.values())
+	prediction_tokens = normalize_fn(prediction).split()
+	ground_truth_tokens = normalize_fn(ground_truth).split()
+	common = Counter(prediction_tokens) & Counter(ground_truth_tokens)
+	num_same = sum(common.values())
 
-    if num_same == 0:
-        return 0, 0
-    precision = 1.0 * num_same / len(prediction_tokens)
-    recall = 1.0 * num_same / len(ground_truth_tokens)
-    f1 = (2 * precision * recall) / (precision + recall)
-    return f1
+	if num_same == 0:
+		return 0, 0
+	precision = 1.0 * num_same / len(prediction_tokens)
+	recall = 1.0 * num_same / len(ground_truth_tokens)
+	f1 = (2 * precision * recall) / (precision + recall)
+	return f1
 
+# From SentenceBert: https://github.com/UKPLab/sentence-transformers/blob/master/sentence_transformers/util.py
+def cosine_similarity(a: Tensor, b: Tensor) -> Tensor:
+	"""
+	Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
+	:return: Matrix with res[i][j]  = cos_sim(a[i], b[j])
+	"""
+	if not isinstance(a, torch.Tensor):
+		a = torch.tensor(a)
 
-def cosine_sim(predictions, ground_truths, tokenizer, model):
-    # Assuming string inputs
-    cos = nn.CosineSimilarity(dim=1, eps=1e-6)
-    # embed_pred = tokenizer.encode(predictions, return_tensors='pt', padding=True, truncation=True)
-    # embed_truth = tokenizer.encode(ground_truths, return_tensors='pt', padding=True, truncation=True)
-    
-    import pdb; pdb.set_trace()
-    cos_sims = cos(embed_pred, embed_truth.float())
-    # to resolve *** RuntimeError: expected common dtype to be floating point, yet common dtype is Long
-    # new error: *** RuntimeError: The size of tensor a (102) must match the size of tensor b (131) at non-singleton dimension 1
-	# Get avg of batch
-    cos_sim = cos_sims.mean()
-    return cos_sim.item()
+	if not isinstance(b, torch.Tensor):
+		b = torch.tensor(b)
+
+	if len(a.shape) == 1:
+		a = a.unsqueeze(0)
+
+	if len(b.shape) == 1:
+		b = b.unsqueeze(0)
+
+	a_norm = torch.nn.functional.normalize(a, p=2, dim=1)
+	b_norm = torch.nn.functional.normalize(b, p=2, dim=1)
+	return torch.mm(a_norm, b_norm.transpose(0, 1))
+
+embedding_model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+
+def cosine_sim(prediction, ground_truth):
+	"""
+	Computes the cosine similarity between prediction and ground truth.
+
+	Assumes string inputs and batch size = 1
+
+	:return: float within [0, 1]
+	"""
+	embed_pred = embedding_model.encode(prediction, convert_to_tensor=True)
+	embed_gt = embedding_model.encode(ground_truth, convert_to_tensor=True)
+
+	cos_sim = cosine_similarity(embed_pred, embed_gt)
+	return cos_sim.item()
 
 
 def em(prediction, ground_truth, normalize_fn):
@@ -341,5 +366,5 @@ def em(prediction, ground_truth, normalize_fn):
 	norm_truth = normalize_fn(ground_truth)
 	if norm_truth in prediction_tokens:
 		return 1.0
-    
+	
 	return 0.0

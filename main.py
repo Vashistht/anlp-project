@@ -8,7 +8,7 @@ import pdb
 from time import time
 import datetime
 from lib.modelling_llama_mod import LlamaForCausalLM
-from lib.eval_combined import eval_combined, eval_combined_trainonly
+from lib.eval_combined import eval_combined, eval_combined_trainonly, embedding_model
 from collections import defaultdict
 import pickle as pkl
 import random
@@ -56,7 +56,7 @@ def get_random_mask(intermediate_sz, main_mask, sampling_proba, pfrac):
     return init_set
 
 # Instantiate a virtual sub-model and run forward passes through it to get the performance of the sub-model
-def get_random_mask_scores(model, tokenizer, trainenc, testenc, module_map, all_sampling_proba, bsz=12, nsamples=32, mpi=100, pfrac=0.1, mlp_attn_ratio=1.0, dataset_="wikitext2"):
+def get_random_mask_scores(model, tokenizer, trainenc, testenc, metric_weights, module_map, all_sampling_proba, bsz=12, nsamples=32, mpi=100, pfrac=0.1, mlp_attn_ratio=1.0, dataset_="wikitext2"):
 
     # set to use main
     for k, (name, module) in module_map.items():
@@ -224,7 +224,7 @@ def run_data_to_sampling_proba(info, module, pfrac):
     return sampling_proba, fixed_indices, use_indices
 
 # Main Code for algorithm
-def investigate_score_based_mask(args, model, trainenc, testenc, wandb_run, epoch_=1):
+def investigate_score_based_mask(args, model, trainenc, testenc, metric_weights, wandb_run, epoch_=1):
 
     def update_mask_one_layer(module, info, score_info, prune_frac, regression_weights, fixed_indices, use_indices, preset_qt=None):
         score_model_weights = torch.zeros_like(info['in'][1]).squeeze()
@@ -302,16 +302,16 @@ def investigate_score_based_mask(args, model, trainenc, testenc, wandb_run, epoc
     # Revert to a forward pass with batch size of 1
     try:
         eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
-                                metric_weights=metric_weights, bsz=this_bsz, \
-                                nsamples=nsamples, seed=seed_, dataset=dataset_)
+                                metric_weights=metric_weights, bsz=args.bsz, \
+                                nsamples=args.nsamples, dataset=args.dataset)
         # eval_acc_trainonly(model, tokenizer, bsz=args.bsz, nsamples=args.nsamples, dataset=args.dataset)
     except Exception as e:
         print(e)
         gc.collect()
         torch.cuda.empty_cache()
         eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
-                                metric_weights=metric_weights, bsz=this_bsz, \
-                                nsamples=nsamples, seed=seed_, dataset=dataset_)
+                                metric_weights=metric_weights, bsz=args.bsz, \
+                                nsamples=args.nsamples, dataset=args.dataset)
         # eval_acc_trainonly(model, tokenizer, bsz=args.bsz, nsamples=args.nsamples, dataset=args.dataset)
 
     # Get the initial prior distribution by running the un-modified model
@@ -633,7 +633,7 @@ def main():
             with open(save_loc, 'rb') as handle:
                 mask_info = pkl.load(handle)
         else:
-            mask_info = investigate_score_based_mask(args, model, trainenc, testenc, wandb_run, epoch_=epoch_)
+            mask_info = investigate_score_based_mask(args, model, trainenc, testenc, metric_weights, wandb_run, epoch_=epoch_)
             # Save the mask info for the epoch
             with open(save_loc, 'wb') as handle:
                 pkl.dump(mask_info, handle)
