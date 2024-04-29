@@ -1,0 +1,56 @@
+[
+    {
+        "doc_id": 0,
+        "prompt_0": "NCIS: New Orleans (season 4) -- The fourth season of NCIS: New Orleans premiered on September 26, 2017 on CBS. The series continues to air following Bull, Tuesday at 10:00 p.m. (ET) and contained 24 episodes. The season concluded on May 15, 2018.\nQuestion: is ncis new orleans over for the season?\nAnswer: yes",
+        "prompt_1": "NCIS: New Orleans (season 4) -- The fourth season of NCIS: New Orleans premiered on September 26, 2017 on CBS. The series continues to air following Bull, Tuesday at 10:00 p.m. (ET) and contained 24 episodes. The season concluded on May 15, 2018.\nQuestion: is ncis new orleans over for the season?\nAnswer: no",
+        "logit_0": -5.40625,
+        "truth": " yes",
+        "logit_1": -5.83984375,
+        "acc": "1.0"
+    },
+    {
+        "doc_id": 1,
+        "prompt_0": "Facial hair in the military -- All branches of the U.S. Military currently prohibit beards for a vast majority of recruits, although some mustaches are still allowed, based on policies that were initiated during the period of World War I.\nQuestion: can i have a beard in the military?\nAnswer: yes",
+        "prompt_1": "Facial hair in the military -- All branches of the U.S. Military currently prohibit beards for a vast majority of recruits, although some mustaches are still allowed, based on policies that were initiated during the period of World War I.\nQuestion: can i have a beard in the military?\nAnswer: no",
+        "logit_0": -3.86328125,
+        "truth": " no",
+        "logit_1": -3.87109375,
+        "acc": "0.0"
+    },
+    {
+        "doc_id": 2,
+        "prompt_0": "Scrum (rugby) -- While the Laws of the Game continue to provide for competitive scrums, a convention exists that some scrum rules are not enforced. During the 1970s, scrum penalties for feeding the ball into the legs of the second row, packs moving off the ``mark'' or collapsing the scrum were seen as unattractive. The ability of teams to win a game purely on goals from scrum penalties was also seen as unfair. In an effort to improve this situation, changes to rules and their enforcement were made. The number of scrums was reduced with the introduction of the ``handover'' after a team has used a set of six tackles, the differential penalty, one which cannot be kicked at goal was brought in for offences at scrums and referees ceased enforcing some rules regarding feeding the ball into scrum. Aided by this change, it is common for professional teams not to fully contest scrums, according to their choice of tactics.\nQuestion: can you contest a scrum in rugby league?\nAnswer: yes",
+        "prompt_1": "Scrum (rugby) -- While the Laws of the Game continue to provide for competitive scrums, a convention exists that some scrum rules are not enforced. During the 1970s, scrum penalties for feeding the ball into the legs of the second row, packs moving off the ``mark'' or collapsing the scrum were seen as unattractive. The ability of teams to win a game purely on goals from scrum penalties was also seen as unfair. In an effort to improve this situation, changes to rules and their enforcement were made. The number of scrums was reduced with the introduction of the ``handover'' after a team has used a set of six tackles, the differential penalty, one which cannot be kicked at goal was brought in for offences at scrums and referees ceased enforcing some rules regarding feeding the ball into scrum. Aided by this change, it is common for professional teams not to fully contest scrums, according to their choice of tactics.\nQuestion: can you contest a scrum in rugby league?\nAnswer: no",
+        "logit_0": -2.833984375,
+        "truth": " yes",
+        "logit_1": -3.794921875,
+        "acc": "1.0"
+    },
+    {
+        "doc_id": 3,
+        "prompt_0": "Now You See Me (film series) -- Now You See Me is a series of heist thriller films written by Ed Solomon, Boaz Yakin, and Edward Ricourt. They focus on the actions of a team of illusionists named ``The Four Horsemen'' who pull off near impossible heists. The series features an ensemble cast including Jesse Eisenberg, Mark Ruffalo, Woody Harrelson, Isla Fisher, Dave Franco, Michael Caine, Lizzy Caplan, and Morgan Freeman. The first film was released in 2013, while the second was released in 2016, and a third film is currently in development and set to be released in 2019. The series has received mixed reviews from critics and audiences and grossed nearly $700 million worldwide.\nQuestion: will there be another now you see me movie?\nAnswer: yes",
+        "prompt_1": "Now You See Me (film series) -- Now You See Me is a series of heist thriller films written by Ed Solomon, Boaz Yakin, and Edward Ricourt. They focus on the actions of a team of illusionists named ``The Four Horsemen'' who pull off near impossible heists. The series features an ensemble cast including Jesse Eisenberg, Mark Ruffalo, Woody Harrelson, Isla Fisher, Dave Franco, Michael Caine, Lizzy Caplan, and Morgan Freeman. The first film was released in 2013, while the second was released in 2016, and a third film is currently in development and set to be released in 2019. The series has received mixed reviews from critics and audiences and grossed nearly $700 million worldwide.\nQuestion: will there be another now you see me movie?\nAnswer: no",
+        "logit_0": -3.07421875,
+        "truth": " yes",
+        "logit_1": -4.92578125,
+        "acc": "1.0"
+    },
+    {
+        "doc_id": 4,
+        "prompt_0": "Acute and obtuse triangles -- An acute triangle is a triangle with all three angles acute (less than 90°). An obtuse triangle is one with one obtuse angle (greater than 90°) and two acute angles. Since a triangle's angles must sum to 180°, no triangle can have more than one obtuse angle.\nQuestion: is it possible to have a triangle with two obtuse angles?\nAnswer: yes",
+        "prompt_1": "Acute and obtuse triangles -- An acute triangle is a triangle with all three angles acute (less than 90°). An obtuse triangle is one with one obtuse angle (greater than 90°) and two acute angles. Since a triangle's angles must sum to 180°, no triangle can have more than one obtuse angle.\nQuestion: is it possible to have a triangle with two obtuse angles?\nAnswer: no",
+        "logit_0": -2.673828125,
+        "truth": " no",
+        "logit_1": -3.197265625,
+        "acc": "0.0"
+    },
+    {
+        "doc_id": 5,
+        "prompt_0": "St George's Chapel, Windsor Castle -- St George's Chapel at Windsor Castle in England, is a chapel designed in the high-medieval Gothic style. It is both a Royal Peculiar, a church under the direct jurisdiction of the monarch, and the Chapel of the Order of the Garter. Seating approximately 800, it is located in the Lower Ward of the castle.\nQuestion: is st george's chapel in westminster abbey?\nAnswer: yes",
+        "prompt_1": "St George's Chapel, Windsor Castle -- St George's Chapel at Windsor Castle in England, is a chapel designed in the high-medieval Gothic style. It is both a Royal Peculiar, a church under the direct jurisdiction of the monarch, and the Chapel of the Order of the Garter. Seating approximately 800, it is located in the Lower Ward of the castle.\nQuestion: is st george's chapel in westminster abbey?\nAnswer: no",
+        "logit_0": -3.583984375,
+        "truth": " no",
+        "logit_1": -3.322265625,
+        "acc": "1.0"
+    }
+]
