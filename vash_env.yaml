@@ -223,3 +223,40 @@ dependencies:
       - triton==2.1.0
       - wandb==0.16.6
 prefix: /home/vashistt/ENTER/envs/bonsai_pruning
+
+
+
+# Requirement already satisfied: mpmath>=0.19 in /home/vashistt/.local/lib/python3.9/site-packages (from sympy->torch>=1.6.0->sentence-transformers==2.2.2) (1.3.0)
+# '''
+# Downloading torch-2.2.1-cp39-cp39-manylinux1_x86_64.whl (755.5 MB)
+#    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 755.5/755.5 MB 11.5 MB/s eta 0:00:00
+# Using cached nvidia_nccl_cu12-2.19.3-py3-none-manylinux1_x86_64.whl (166.0 MB)
+# Downloading triton-2.2.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (167.9 MB)
+#    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 167.9/167.9 MB 43.8 MB/s eta 0:00:00
+# Building wheels for collected packages: sentence-transformers
+#   Building wheel for sentence-transformers (setup.py) ... done
+#   Created wheel for sentence-transformers: filename=sentence_transformers-2.2.2-py3-none-any.whl size=125924 sha256=f0c5fb945124b629cfd53a06ced1c12db94f4270ae16bb53f5f4b298b014160b
+#   Stored in directory: /home/vashistt/.cache/pip/wheels/71/67/06/162a3760c40d74dd40bc855d527008d26341c2b0ecf3e8e11f
+# Successfully built sentence-transformers
+# Installing collected packages: triton, nvidia-nccl-cu12, torch, sentence-transformers
+#   Attempting uninstall: triton
+#     Found existing installation: triton 2.1.0
+#     Uninstalling triton-2.1.0:
+#       Successfully uninstalled triton-2.1.0
+#   Attempting uninstall: nvidia-nccl-cu12
+#     Found existing installation: nvidia-nccl-cu12 2.18.1
+#     Uninstalling nvidia-nccl-cu12-2.18.1:
+#       Successfully uninstalled nvidia-nccl-cu12-2.18.1
+#   Attempting uninstall: torch
+#     Found existing installation: torch 2.1.1
+#     Uninstalling torch-2.1.1:
+#       Successfully uninstalled torch-2.1.1
+#   Attempting uninstall: sentence-transformers
+#     Found existing installation: sentence-transformers 2.3.0
+#     Uninstalling sentence-transformers-2.3.0:
+#       Successfully uninstalled sentence-transformers-2.3.0
+# ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+# auto-gptq 0.7.1 requires accelerate>=0.26.0, but you have accelerate 0.24.1 which is incompatible.
+# auto-gptq 0.7.1 requires transformers>=4.31.0, but you have transformers 4.28.0 which is incompatible.
+# autoawq 0.1.0 requires transformers>=4.32.0, but you have transformers 4.28.0 which is incompatible.
+# Successfully installed nvidia-nccl-cu12-2.19.3 sentence-transformers-2.2.2 torch-2.2.1 triton-2.2.0

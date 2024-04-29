@@ -263,7 +263,6 @@ def eval_ppl_test_gsm8k(model, testenc, bs=1, device=None):
 # purpose: model is run once on each question
 def eval_combined_helper(model, loader, tokenizer, bs=1, device=None):
 	nsamples = len(loader)
-
 	# List to store negative log likelihoods
 	f1_sum = 0.0
 	cos_sim = 0.0
@@ -280,14 +279,16 @@ def eval_combined_helper(model, loader, tokenizer, bs=1, device=None):
 		outputs_decoded = tokenizer.decode(outputs[:,input_ids.size(1):][0])
 		rationale = loader[i][1]
 		answer = loader[i][2]
-		
+		# if i==45:
+		# 	import pdb; pdb.set_trace()
+        
 		f1_sum += f1(outputs_decoded, rationale, normalize_answer)
 		cos_sim += cosine_sim(outputs_decoded, rationale)
 		em_sum += em(outputs_decoded, answer, normalize_answer)
 
 	# Empty CUDA cache to save memory
 	torch.cuda.empty_cache()
-
+	print(f"avg_f1: {f1_sum / nsamples}, avg_cos_sim: {cos_sim / int(nsamples / bs)}, avg_em_sum: {em_sum / nsamples}")
 	return f1_sum / nsamples, cos_sim / int(nsamples / bs), em_sum / nsamples
 
 def normalize_answer(s: str) -> str:
@@ -310,13 +311,12 @@ def f1(prediction, ground_truth, normalize_fn):
 	prediction_tokens = normalize_fn(prediction).split()
 	ground_truth_tokens = normalize_fn(ground_truth).split()
 	common = Counter(prediction_tokens) & Counter(ground_truth_tokens)
-	num_same = sum(common.values())
-
+	num_same = sum(common.values())  
 	if num_same == 0:
-		return 0, 0
+		return 0
 	precision = 1.0 * num_same / len(prediction_tokens)
 	recall = 1.0 * num_same / len(ground_truth_tokens)
-	f1 = (2 * precision * recall) / (precision + recall)
+	f1 = (2 * precision * recall) / (precision + recall + 1e-8)
 	return f1
 
 # From SentenceBert: https://github.com/UKPLab/sentence-transformers/blob/master/sentence_transformers/util.py
