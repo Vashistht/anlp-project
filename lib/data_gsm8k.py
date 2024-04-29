@@ -43,32 +43,38 @@ def extract_answer(completion):
 
 def get_gsm8k(traindata, testdata, nsamples, seed, seqlen, tokenizer, example= True):
     random.seed(seed)
-    trainloader = []
-    example =  traindata[0]
-    question = example['question']
-    rationale, answer = extract_answer(example['answer'])
-    example = question + '\nRationale:' + rationale + '\nAnswer:' + answer
+    # this is to deal with case where only testdata is needed/provided
+    if traindata is not None:
+        trainloader = []
+        example =  traindata[0]
+        question = example['question']
+        rationale, answer = extract_answer(example['answer'])
+        example = question + '\nRationale:' + rationale + '\nAnswer:' + answer
 
-    for _ in range(nsamples): # no need of while true here 
-        i = random.randint(1, len(traindata) - 1)
-        sample = traindata[i]  # Get the complete sample
-        question_instruction = sample['question']
-        if example is True:
-            print('entered if statement')
-            prepend = f'Example: + {example}\n + Question:'
-            question_instruction = prepend + question_instruction
+        for _ in range(nsamples): # no need of while true here 
+            i = random.randint(1, len(traindata) - 1)
+            sample = traindata[i]  # Get the complete sample
+            question_instruction = sample['question']
+            if example is True:
+                print('entered if statement')
+                prepend = f'Example: + {example}\n + Question:'
+                question_instruction = prepend + question_instruction
 
-        rationale, answer = extract_answer(sample['answer'])
-        # rationale_enc = tokenizer(rationale, return_tensors='pt')
-        # answer_enc = tokenizer(str(answer), return_tensors='pt') 
-        
-        question_instruction += '\nlets think step by step to get the rationale and the answer:'
-        question_instruction_enc = tokenizer(question_instruction, return_tensors='pt')
-                
-        i = question_instruction_enc.input_ids.shape[1]
-        inp = question_instruction_enc.input_ids[:, 0:i]
-        trainloader.append((inp, str(rationale), str(answer)))
-
+            rationale, answer = extract_answer(sample['answer'])
+            # rationale_enc = tokenizer(rationale, return_tensors='pt')
+            # answer_enc = tokenizer(str(answer), return_tensors='pt') 
+            
+            question_instruction += '\nlets think step by step to get the rationale and the answer:'
+            question_instruction_enc = tokenizer(question_instruction, return_tensors='pt')
+                    
+            i = question_instruction_enc.input_ids.shape[1]
+            inp = question_instruction_enc.input_ids[:, 0:i]
+            trainloader.append((inp, str(rationale), str(answer)))
+    
+    else: 
+        example = 'Given a mathematical question, think in steps to get the answer and the rationale.'
+        trainloader = (None, None, None)
+    
     testloader = []
     for sample in testdata:
         question = sample['question']
