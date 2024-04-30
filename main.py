@@ -2,6 +2,10 @@ import argparse
 import os 
 import numpy as np
 import torch
+
+import torch.cuda
+from torch.profiler import profile, record_function, ProfilerActivity
+
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from importlib.metadata import version
 import pdb
@@ -73,20 +77,15 @@ def get_random_mask_scores(model, tokenizer, trainenc, testenc, metric_weights, 
         # Doing this in case the batch_size we have specified is too large for a forward pass
         # Revert to a forward pass with batch size of 1
         try:
-            # this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
-               # this_acc = eval_acc_trainonly (model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
-            # this_metric = this_ppl - weight_acc * this_acc
             this_metric = eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
-                                metric_weights=metric_weights, bsz=this_bsz, \
-                                nsamples=nsamples, seed=seed_, dataset=dataset_)
-   
+                                    metric_weights=metric_weights, bsz=this_bsz, \
+                                    nsamples=nsamples, seed=seed_, dataset=dataset_)
+
         except Exception as e:
             print(e)
             gc.collect()
             torch.cuda.empty_cache()
             this_bsz = 1
-            # this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
-            # this_metric = this_ppl - weight_acc * this_acc
             this_metric = eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
                                 metric_weights=metric_weights, bsz=this_bsz, \
                                 nsamples=nsamples, seed=seed_, dataset=dataset_)
@@ -105,7 +104,6 @@ def get_random_mask_scores(model, tokenizer, trainenc, testenc, metric_weights, 
 
         # set the complement mask here
         set_masks(module_map, all_masks, all_sampling_proba, pfrac=pfrac, mlp_attn_ratio=mlp_attn_ratio, use_complement=True)
-        # this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
         this_metric = eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
                                 metric_weights=metric_weights, bsz=this_bsz, \
                                 nsamples=nsamples, seed=seed_, dataset=dataset_)
@@ -214,9 +212,9 @@ def run_data_to_sampling_proba(info, module, pfrac):
         sampling_proba *= (module.main_mask).cpu().float().squeeze().numpy()
     sampling_proba /= np.sum(sampling_proba)
     
-    if np.isnan(sampling_proba).any():
-        print('We got nan in the sampling probability')
-        pdb.set_trace()
+    # if np.isnan(sampling_proba).any():
+    #     print('We got nan in the sampling probability')
+    #     pdb.set_trace()
 
     assert not np.isnan(sampling_proba).any(), 'Nans encountered in the sampling probability distribution'
     return sampling_proba, fixed_indices, use_indices
@@ -302,7 +300,7 @@ def investigate_score_based_mask(args, model, trainenc, testenc, metric_weights,
         eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
                                 metric_weights=metric_weights, bsz=args.bsz, \
                                 nsamples=args.nsamples, dataset=args.dataset)
-        # eval_acc_trainonly(model, tokenizer, bsz=args.bsz, nsamples=args.nsamples, dataset=args.dataset)
+
     except Exception as e:
         print(e)
         gc.collect()
@@ -310,7 +308,6 @@ def investigate_score_based_mask(args, model, trainenc, testenc, metric_weights,
         eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
                                 metric_weights=metric_weights, bsz=args.bsz, \
                                 nsamples=args.nsamples, dataset=args.dataset)
-        # eval_acc_trainonly(model, tokenizer, bsz=args.bsz, nsamples=args.nsamples, dataset=args.dataset)
 
     # Get the initial prior distribution by running the un-modified model
     hp_dict = get_linearmodel_hpdict(args)
@@ -330,10 +327,11 @@ def investigate_score_based_mask(args, model, trainenc, testenc, metric_weights,
             info_cache[k] = dict()
 
         start = time()
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
+
         score_info = get_random_mask_scores(
-                            model, tokenizer, trainenc, testenc, module_map,
-                            metric_weights= metric_weights,
+                            model, tokenizer, trainenc, testenc,
+                            metric_weights, module_map,
                             all_sampling_proba=all_sampling_proba,
                             bsz=args.bsz, nsamples=args.nsamples,
                             mpi=args.masks_per_iter, pfrac=args.prune_frac, mlp_attn_ratio=args.mlp_attn_ratio,
@@ -565,7 +563,7 @@ def main():
 
     # Hyperparams for pruning evaluation metric weights
     # NOTE that the order of weights is ppl
-    parser.add_argument('--weights', nargs=4, help="array of weights in order of ppl, lexical similarity")
+    parser.add_argument('--weights', nargs=4, type=float, help="array of weights in order of ppl, lexical similarity, semantic similarity, accuracy")
 
     args = parser.parse_args()
     print(args)
@@ -578,14 +576,18 @@ def main():
     EXPECTED_METRIC_WEIGHTS_LENGTH = 4
     if not metric_weights:
         print('WARNING: weights for pruning eval should be specified. Using even split')
-        metric_weights = [1] * EXPECTED_METRIC_WEIGHTS_LENGTH
+        metric_weights = [100] * EXPECTED_METRIC_WEIGHTS_LENGTH
         metric_weights = [float(i)/sum(metric_weights) for i in metric_weights]
+    else:
+        print('Metric weights: ', metric_weights)
 
    
     metric_weights = np.pad(metric_weights, (0, EXPECTED_METRIC_WEIGHTS_LENGTH), 'constant')
     metric_weights = metric_weights[:EXPECTED_METRIC_WEIGHTS_LENGTH]
     print(f"metric weights: {metric_weights}")
-    assert sum(metric_weights) == 1.0, "given pruning metric weights don't sum to 1"
+    # Ensure weights sum to approximately 100
+    # 40 / 10 / 50
+    assert np.isclose(sum(metric_weights), 100.0, atol=1e-3), "Given pruning metric weights don't sum to 100"
 
     # Setting seeds for reproducibility
     np.random.seed(args.seed)
@@ -600,6 +602,8 @@ def main():
     wandb.log({'dataset': args.dataset})
     model_name = args.model.split("/")[-1]
     print(f"loading llm model {args.model}")
+    print(f"metric weights: {metric_weights}")
+
     model = get_llm(args.model, args.cache_dir)
     model.eval()
     tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=False)
