@@ -11,16 +11,14 @@ from collections import Counter
 import re
 import string
 
+
+ 
 # Function to evaluate perplexity (ppl) on a specified model and tokenizer
-def eval_ppl(model, tokenizer, trainenc, testenc, device=torch.device("cuda:0"), dataset="wikitext2", bsz=1):
+def eval_ppl(model, tokenizer, trainloader, testloader, device=torch.device("cuda:0"), dataset="wikitext2", bsz=1):
 
 	# Print status
 	print(f"evaluating on {dataset}")
 
-	# Get the test loader
-	trainloader, testloader = get_loaders(
-		dataset, trainenc, testenc, seed=0, seqlen=model.seqlen, tokenizer=tokenizer 
-	)
 
 	# Evaluate ppl in no grad context to avoid updating the model
 	with torch.no_grad():

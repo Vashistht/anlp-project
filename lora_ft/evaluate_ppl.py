@@ -51,11 +51,11 @@ def evaluate_ppl(dataset_name, model, tokenizer, ctx_length, ignore_last=False):
         # encodings = encodings.input_ids[:, :(256 * model.seqlen)]
         seq_len = 256 * model_seqlen
     elif dataset_name == "gsm8k":
-        # testdata = load_dataset("gsm8k", "main", split='test')
-        _, testdata = get_raw_dataset('gsm8k', tokenizer, split_list=[0,3])
-        _, testenc = get_gsm8k(None, testdata, nsamples=50, seed=0, seqlen=model.seqlen, tokenizer=tokenizer)
+        trainenc, testenc = get_raw_dataset('gsm8k', tokenizer)
+                                            # , split_list=[0,3])
+        _, testloader = get_loaders("gsm8k", trainenc, testenc, seed=0, seqlen=model.seqlen, tokenizer=tokenizer)  
         start_time = time()
-        ppl = eval_ppl_test_gsm8k(model, testenc, device = model.device)
+        ppl = eval_ppl_test_gsm8k(model, testloader, device = model.device)
         total_iters = len(testenc)
         end_time = time()
         total_time = end_time - start_time
