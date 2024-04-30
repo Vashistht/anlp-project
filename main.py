@@ -17,7 +17,7 @@ import wandb
 from transformers.pytorch_utils import  find_pruneable_heads_and_indices, prune_linear_layer
 import gc
 import random
-from lib.data import get_raw_dataset
+from lib.data import get_raw_dataset, get_loaders
 
 print('torch', version('torch'))
 print('transformers', version('transformers'))
@@ -86,7 +86,6 @@ def get_random_mask_scores(model, tokenizer, trainenc, testenc, metric_weights, 
             torch.cuda.empty_cache()
             this_bsz = 1
             # this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
-            # this_acc = eval_acc_trainonly (model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
             # this_metric = this_ppl - weight_acc * this_acc
             this_metric = eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
                                 metric_weights=metric_weights, bsz=this_bsz, \
@@ -107,7 +106,6 @@ def get_random_mask_scores(model, tokenizer, trainenc, testenc, metric_weights, 
         # set the complement mask here
         set_masks(module_map, all_masks, all_sampling_proba, pfrac=pfrac, mlp_attn_ratio=mlp_attn_ratio, use_complement=True)
         # this_ppl = eval_ppl_trainonly(model, tokenizer, trainenc, testenc, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
-        # this_acc = eval_acc_trainonly (model, tokenizer, bsz=this_bsz, nsamples=nsamples, seed=seed_, dataset=dataset_)
         this_metric = eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
                                 metric_weights=metric_weights, bsz=this_bsz, \
                                 nsamples=nsamples, seed=seed_, dataset=dataset_)
@@ -332,12 +330,16 @@ def investigate_score_based_mask(args, model, trainenc, testenc, metric_weights,
             info_cache[k] = dict()
 
         start = time()
+        import pdb; pdb.set_trace()
         score_info = get_random_mask_scores(
-                            model, tokenizer, trainenc, testenc, module_map, all_sampling_proba,
+                            model, tokenizer, trainenc, testenc, module_map,
+                            metric_weights= metric_weights,
+                            all_sampling_proba=all_sampling_proba,
                             bsz=args.bsz, nsamples=args.nsamples,
                             mpi=args.masks_per_iter, pfrac=args.prune_frac, mlp_attn_ratio=args.mlp_attn_ratio,
                             dataset_=args.dataset
         )
+        
         gen_scores_time = time() - start
         start = time()
         score_model_maps = get_score_models(score_info, module_map, info_cache, hp_dict, wandb_run, all_sampling_proba, parent_id='Iter.{}'.format(epoch_), model_type=args.sm_lin_model_type)
@@ -604,8 +606,9 @@ def main():
     tokenizer.pad_token = tokenizer.eos_token
     print('tokenizer done')
     trainenc, testenc = get_raw_dataset(args.dataset, tokenizer)
+    trainloader, testloader = get_loaders(args.dataset, trainenc, testenc, seed=0, seqlen=model.seqlen, tokenizer=tokenizer)    
     # Getting the initial evaluation of the model
-    _, orig_test_combined = eval_combined(model, tokenizer, trainenc, testenc, metric_weights, model.device, dataset=args.dataset, bsz= args.bsz)
+    _, orig_test_combined = eval_combined(model, tokenizer, trainloader, testloader, metric_weights, model.device, dataset=args.dataset, bsz= args.bsz)
     print('eval done original_test_combined:', orig_test_combined)
     original_param_count = get_param_count(model)
     model.original_param_count = original_param_count
@@ -644,14 +647,13 @@ def main():
         print(model)
 
         # Evaluate the performance of the pruned model
-        ppl_train, ppl_test = eval_combined(model, tokenizer, trainenc, testenc, metric_weights, model.device, dataset=args.dataset, bsz=args.bsz)
+        ppl_train, ppl_test = eval_combined(model, tokenizer, trainloader, testloader, metric_weights, model.device, dataset=args.dataset, bsz=args.bsz)
         # acc_train, acc_test = eval_acc(model, tokenizer, model.device, dataset=args.dataset)
 
-        wandb_run.log({'Sparsity': cur_sparsity, 'TrainPPL': ppl_train, 'TestPPL': ppl_test})
+        wandb_run.log({'Sparsity': cur_sparsity, 'TrainCombinedMetric': ppl_train, 'TestCombinedMetric': ppl_test})
           # wandb_run.log({'Sparsity': cur_sparsity, 'TrainACC': acc_train, 'TestACC': acc_test})
 
-        print('Sparsity = {:.3f}| Train PPL = {:.3f} | Test PPL = {:.3f}'.format(cur_sparsity, ppl_train, ppl_test))
-          # print('Sparsity = {:.3f}| Train ACC = {:.3f} | Test ACC = {:.3f}'.format(cur_sparsity, acc_train, acc_test))
+        print('Sparsity = {:.3f}| Train Combined Metric = {:.3f} | Test Combined Metric = {:.3f}'.format(cur_sparsity, ppl_train, ppl_test))
         epoch_ += 1
 
     wandb_run.log({'sparsity': cur_sparsity})

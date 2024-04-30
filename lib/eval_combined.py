@@ -16,15 +16,15 @@ from sentence_transformers import SentenceTransformer
 EXPECTED_METRIC_WEIGHTS_LENGTH = 1
 
 # Function to evaluate perplexity (ppl) on a specified model and tokenizer
-def eval_combined(model, tokenizer, trainenc, testenc, metric_weights, device=torch.device("cuda:0"), dataset="wikitext2", bsz=1):
+def eval_combined(model, tokenizer, trainloader, testloader, metric_weights, device=torch.device("cuda:0"), dataset="wikitext2", bsz=1):
 
 	# Print status
 	print(f"evaluating on {dataset}")
 
-	# Get the test loader
-	trainloader, testloader = get_loaders(
-		dataset, trainenc, testenc, seed=0, seqlen=model.seqlen, tokenizer=tokenizer 
-	)
+	# # Get the test loader
+	# trainloader, testloader = get_loaders(
+	# 	dataset, trainenc, testenc, seed=0, seqlen=model.seqlen, tokenizer=tokenizer 
+	# )
 
 	ppl_weight = metric_weights[0]
 	lexsim_weight = metric_weights[1]
@@ -38,12 +38,6 @@ def eval_combined(model, tokenizer, trainenc, testenc, metric_weights, device=to
 			ppl_test = eval_ppl_test_gsm8k(model, testloader, bsz, device)
 			lexsim_train, cossim_train, acc_train = eval_combined_helper(model, trainloader, tokenizer, bsz, device)
 			lexsim_test, cossim_test, acc_test = eval_combined_helper(model, testloader, tokenizer, bsz, device)
-			# lexsim_train = eval_lexsim_gsm8k(model, trainloader, tokenizer, bsz, device)
-			# lexsim_test = eval_lexsim_gsm8k(model, testenc, tokenizer, bsz, device)
-			# cossim_train = eval_semantic_sim_gsm8k(model, trainloader, tokenizer, bsz, device)
-			# cossim_test = eval_semantic_sim_gsm8k(model, testloader, tokenizer, bsz, device)
-			# acc_train = eval_acc_gsm8k(model, trainloader, tokenizer, bsz, device)
-			# acc_test = eval_acc_gsm8k(model, testloader, tokenizer, bsz, device)
 		else:
 			ppl_test = eval_ppl_test(model, testloader, bsz, device)
 			ppl_train = eval_ppl_train(model, trainloader, bsz, device)
@@ -229,7 +223,7 @@ def eval_ppl_test_gsm8k(model, testenc, bs=1, device=None):
 	nsamples = len(testenc)
 	# List to store negative log likelihoods
 	nlls = []
-	print(f"test: nsamples {nsamples}")
+	print(f"ppl test: nsamples {nsamples}")
 
 	# Loop through each batch
 	for i in range(0,nsamples,bs):
@@ -262,25 +256,23 @@ def eval_ppl_test_gsm8k(model, testenc, bs=1, device=None):
 # HELPER to combine lexical + semantic + accuracy together 
 # purpose: model is run once on each question
 def eval_combined_helper(model, loader, tokenizer, bs=1, device=None):
-	nsamples = len(loader)
+	nsamples = min(3, len(loader) )
 	# List to store negative log likelihoods
 	f1_sum = 0.0
 	cos_sim = 0.0
 	em_sum = 0.0
-	print(f"helper: nsamples {nsamples}")
+	print(f"helper (combined): nsamples {nsamples}")
 
 	# Loop through each batch
 	for i in range(0,nsamples,bs):
-		# if i % 50 == 0:
-		print(f"sample {i}")
+		if i % 50 == 0:
+			print(f"sample {i}")
 		input_ids = loader[i][0].to(device)
 		# Calculate negative log likelihood
 		outputs = model.generate(input_ids, max_length=(input_ids.shape[1]+100))
 		outputs_decoded = tokenizer.decode(outputs[:,input_ids.size(1):][0])
 		rationale = loader[i][1]
 		answer = loader[i][2]
-		# if i==45:
-		# 	import pdb; pdb.set_trace()
         
 		f1_sum += f1(outputs_decoded, rationale, normalize_answer)
 		cos_sim += cosine_sim(outputs_decoded, rationale)
