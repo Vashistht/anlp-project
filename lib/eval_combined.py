@@ -102,7 +102,7 @@ def eval_ppl_train(model, trainloader, bs=1, device=None):
 
 		# Forward pass through the model
 		lm_logits = model(inputs).logits
-
+		
 		# Shift logits and labels for next token prediction
 		shift_logits = lm_logits[:, :-1, :].contiguous()
 		shift_labels = inputs[:, 1:]
@@ -256,7 +256,8 @@ def eval_ppl_test_gsm8k(model, testenc, bs=1, device=None):
 # HELPER to combine lexical + semantic + accuracy together 
 # purpose: model is run once on each question
 def eval_combined_helper(model, loader, tokenizer, bs=1, device=None):
-	nsamples = min(3, len(loader) )
+	# nsamples = 3 
+	nsamples = len(loader)
 	# List to store negative log likelihoods
 	f1_sum = 0.0
 	cos_sim = 0.0
@@ -277,7 +278,7 @@ def eval_combined_helper(model, loader, tokenizer, bs=1, device=None):
 		f1_sum += f1(outputs_decoded, rationale, normalize_answer)
 		cos_sim += cosine_sim(outputs_decoded, rationale)
 		em_sum += em(outputs_decoded, answer, normalize_answer)
-
+		# import pdb; pdb.set_trace()
 	# Empty CUDA cache to save memory
 	torch.cuda.empty_cache()
 	print(f"avg_f1: {f1_sum / nsamples}, avg_cos_sim: {cos_sim / int(nsamples / bs)}, avg_em_sum: {em_sum / nsamples}")

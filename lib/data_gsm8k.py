@@ -52,7 +52,7 @@ def get_gsm8k(traindata, testdata, nsamples, seed, seqlen, tokenizer, example= T
         example = question + '\nRationale:' + rationale + '\nAnswer:' + answer
 
         for _ in range(nsamples): # no need of while true here 
-            i = random.randint(1, len(traindata) - 1)
+            i = random.randint(1, len(traindata) - 1) # samples here
             sample = traindata[i]  # Get the complete sample
             question_instruction = sample['question']
             if example is True:
