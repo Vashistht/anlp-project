@@ -12,7 +12,7 @@ import os
 from time import time
 import fnmatch
 import re
-sys.path.append('../') # go back a directory to access the files in lib
+sys.path.append('.') # go back a directory to access the files in lib
 from lib.data import get_loaders
 from lib.eval_combined import eval_ppl_test_gsm8k
 from lib.data import get_raw_dataset

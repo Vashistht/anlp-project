@@ -76,7 +76,8 @@ from peft import (
     # prepare_model_for_int8_training,
     set_peft_model_state_dict,
 )
-from evaluate_ppl import evaluate_ppl
+
+# from evaluate_ppl import evaluate_ppl
 
 # Will error if the minimal version of Transformers is not installed. Remove at your own risks.
 # check_min_version("4.29.0.dev0")
@@ -448,6 +449,7 @@ def get_param_count(model, exclude=['embed', 'head']):
     return sum([p.numel() for n, p in model.named_parameters() if not any(x in n for x in exclude)])
 
 def main():
+    torch.cuda.empty_cache()
     # See all possible arguments in src/transformers/training_args.py
     # or by passing the --help flag to this script.
     # We now keep distinct sets of args, for a cleaner separation of concerns.
@@ -563,9 +565,9 @@ def main():
         logger.info("*** Evaluate ***")
         model.eval()
         print(f'STDOUT: Evaluating on {data_args.dataset_name}')
-        og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-        out_str = "STDOUT: Original perplexity on {} = {:.3f}".format(data_args.dataset_name, og_ppl)
-        print(out_str)
+        # og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+        # out_str = "STDOUT: Original perplexity on {} = {:.3f}".format(data_args.dataset_name, og_ppl)
+        # print(out_str)
 
     # since this will be pickled to avoid _LazyModule error in Hasher force logger loading before tokenize_function
     tok_logger = transformers.utils.logging.get_logger("transformers.tokenization_utils_base")
@@ -579,7 +581,8 @@ def main():
                 " of 1024. If you would like to use a longer `block_size` up to `tokenizer.model_max_length` you can"
                 " override this default with `--block_size xxx`."
             )
-            block_size = 1024
+            # block_size = 1024
+            block_size = 256
     else:
         if data_args.block_size > tokenizer.model_max_length:
             logger.warning(
@@ -617,10 +620,10 @@ def main():
         results = evaluator.simple_evaluate(
             model="hf-causal-experimental",
             model_args="pretrained={}".format(model_args.model_name_or_path),
-            tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
+            tasks=["winogrande", "olq"], #, "arc_challenge", "arc_easy", "hellaswag"], # main one here
             # tasks = ['gsm8k'],
             num_fewshot=0,
-            limit = .005, # how much of the original dataset to test on 
+            limit = .3, # how much of the original dataset to test on 
             no_cache=True,
             pretrained_model=model,
             write_out=True, 
@@ -644,12 +647,12 @@ def main():
         torch.cuda.empty_cache()
         logger.info("*** Evaluate ***")
         model.eval()
-        start_time = time.time()
-        before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-        speedup = og_runtime / final_runtime
-        out_str = "STDOUT: [Dataset: {}| SpeedUp={:.3f}] Original perplexity = {:.3f} | Before Training perplexity = {:.3f}".format(data_args.dataset_name,speedup, og_ppl, before_train_ppl, speedup)
-        # out_file.write(out_str + "\n")
-        print('STDOUT: ', out_str)
+        # start_time = time.time()
+        # before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+        # speedup = og_runtime / final_runtime
+        # out_str = "STDOUT: [Dataset: {}| SpeedUp={:.3f}] Original perplexity = {:.3f} | Before Training perplexity = {:.3f}".format(data_args.dataset_name,speedup, og_ppl, before_train_ppl, speedup)
+        # # out_file.write(out_str + "\n")
+        # print('STDOUT: ', out_str)
 
         should_i_do_eleuther_eval = model_args.do_eleuther_eval
         print(f'STDOUT: Eleuther eval for pruned model (no finetuning): {should_i_do_eleuther_eval}')
@@ -659,10 +662,10 @@ def main():
             results = evaluator.simple_evaluate(
                 model="hf-causal-experimental",
                 model_args="pretrained={}".format(model_args.model_name_or_path),
-                tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
+                tasks=["winogrande", "boolq"], #, "arc_challenge", "arc_easy", "hellaswag"], # main one here
                 # tasks = ['gsm8k'],
                 num_fewshot=0,
-                limit = .5, # how much of the original dataset to test on 
+                limit = .3, # how much of the original dataset to test on 
                 # num_fewshot={"hellaswag": 0, "arc_challenge":0}
                 no_cache=True,
                 pretrained_model=model,
@@ -697,10 +700,10 @@ def main():
             results = evaluator.simple_evaluate(
                 model="hf-causal-experimental",
                 model_args="pretrained={}".format(model_args.model_name_or_path),
-                tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
+                tasks=["winogrande", "boolq"], #, "arc_challenge", "arc_easy", "hellaswag"], # main one here
                 # tasks = ['gsm8k'],
                 num_fewshot=0,
-                limit = .5, # how much of the original dataset to test on 
+                limit = .3, # how much of the original dataset to test on 
                 # num_fewshot={"hellaswag": 0, "arc_challenge":0}
                 no_cache=True,
                 pretrained_model=model,
