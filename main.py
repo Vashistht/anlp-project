@@ -79,7 +79,8 @@ def get_random_mask_scores(model, tokenizer, trainenc, testenc, metric_weights, 
         try:
             this_metric = eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
                                     metric_weights=metric_weights, bsz=this_bsz, \
-                                    nsamples=nsamples, seed=seed_, dataset=dataset_)
+                                    nsamples=nsamples, seed=seed_, dataset=dataset_, \
+                                    debug=True)
 
         except Exception as e:
             print(e)
@@ -88,7 +89,8 @@ def get_random_mask_scores(model, tokenizer, trainenc, testenc, metric_weights, 
             this_bsz = 1
             this_metric = eval_combined_trainonly(model, tokenizer, trainenc, testenc, \
                                 metric_weights=metric_weights, bsz=this_bsz, \
-                                nsamples=nsamples, seed=seed_, dataset=dataset_)
+                                nsamples=nsamples, seed=seed_, dataset=dataset_, \
+                                debug=True)
 
         # print('[v1]Iter : ', iter_, ' PPL = ', this_ppl)
         # print('[v1]Iter : ', iter_, ' ACC = ', this_acc)
@@ -577,7 +579,7 @@ def main():
     if not metric_weights:
         print('WARNING: weights for pruning eval should be specified. Using even split')
         metric_weights = [100] * EXPECTED_METRIC_WEIGHTS_LENGTH
-        metric_weights = [float(i)/sum(metric_weights) for i in metric_weights]
+        metric_weights = [float(i)/sum(metric_weights)*100 for i in metric_weights]
     else:
         print('Metric weights: ', metric_weights)
 
@@ -595,7 +597,7 @@ def main():
 
     wandb_run = wandb.init(
         project=args.wandb_project_name,
-        name= str(args.dataset) + "_masks-" + str(args.masks_per_iter)+ "_" + args.model + str_of_args,
+        name= str(args.dataset) + 'metric_wt' + str(metric_weights) + "_masks-" + str(args.masks_per_iter)+ "_" + args.model + str_of_args,
         config=args_to_dict(args),
     )
 
@@ -610,6 +612,7 @@ def main():
     tokenizer.pad_token = tokenizer.eos_token
     print('tokenizer done')
     trainenc, testenc = get_raw_dataset(args.dataset, tokenizer)
+    # convert the dataset to desired 1 shot format
     trainloader, testloader = get_loaders(args.dataset, trainenc, testenc, seed=0, seqlen=model.seqlen, tokenizer=tokenizer)    
     # Getting the initial evaluation of the model
     _, orig_test_combined = eval_combined(model, tokenizer, trainloader, testloader, metric_weights, model.device, dataset=args.dataset, bsz= args.bsz)
