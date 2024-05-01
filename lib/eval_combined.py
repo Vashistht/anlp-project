@@ -26,35 +26,59 @@ def eval_combined(model, tokenizer, trainloader, testloader, metric_weights, dev
 	lexsim_weight = metric_weights[1]
 	cossim_weight = metric_weights[2]
 	acc_weight = metric_weights[3]
-
+	# print(f'weights (ppl, lex, cossim, acc_weight) = {ppl_weight, lexsim_weight, cossim_weight, acc_weight}')
 	# Evaluate ppl in no grad context to avoid updating the model
 	with torch.no_grad():
 		if dataset == 'gsm8k':
-			ppl_train = eval_ppl_train_gsm8k(model, trainloader, bsz, device)
-			ppl_test = eval_ppl_test_gsm8k(model, testloader, bsz, device)
-			lexsim_train, cossim_train, acc_train = eval_combined_helper(model, 
+			# 1. check if we want ppl
+			if ppl_weight != 0:
+				# if trainloader is None, then we are only evaluating on testloader
+				if trainloader is not None:
+					print('evaluating ppl on train data for gsm8k')
+					ppl_train = eval_ppl_train_gsm8k(model, trainloader, bsz, device)
+				else:
+					ppl_train = 0
+					print('no train ppl calculated')
+				
+				# ppl on testloader
+				ppl_test = eval_ppl_test_gsm8k(model, testloader, bsz, device)
+
+			else: 
+				ppl_train, ppl_test = 0,0
+
+			# 2: calaculate other stats if needed
+   			# if trainloader is None, then we are only evaluating on testloader
+			if trainloader is not None: 
+				print('evaluating other metrics on train data for gsm8k')
+				lexsim_train, cossim_train, acc_train = eval_combined_helper(model, 
 																trainloader, tokenizer, bsz, device)
+			else:
+				lexsim_train, cossim_train, acc_train = 0,0,0
+				print('no train lexsim, cossim, acc calculated')
+
+			# other metrics on testloader
 			lexsim_test, cossim_test, acc_test = eval_combined_helper(model, 
 															 testloader, tokenizer, bsz, device)
 		else:
+			# just ppl for non gsm datasets
 			ppl_test = eval_ppl_test(model, testloader, bsz, device)
 			ppl_train = eval_ppl_train(model, trainloader, bsz, device)
 
-	combined_train = ppl_weight * ppl_train + lexsim_weight * lexsim_train + \
+	combined_train = -1* ppl_weight * ppl_train + lexsim_weight * lexsim_train + \
 					 cossim_weight * cossim_train + acc_weight * acc_train
-	combined_test = ppl_weight * ppl_test + lexsim_weight * lexsim_test + \
+	combined_test = -1* ppl_weight * ppl_test + lexsim_weight * lexsim_test + \
 					cossim_weight * cossim_test + acc_weight * acc_test
 	return combined_train, combined_test 
 
 # Function to evaluate perplexity (ppl) on a specified model and tokenizer
-def eval_combined_trainonly(model, tokenizer, trainenc, testenc, metric_weights, bsz=1, nsamples=128, device=torch.device("cuda:0"), seed=0, dataset="wikitext2"):
+def eval_combined_trainonly(model, tokenizer, trainenc, testenc, metric_weights, bsz=1, nsamples=128, device=torch.device("cuda:0"), seed=0, dataset="wikitext2", debug=False):
 
 	print(f"evaluating on {dataset}")
 	# Get the test loader
 	trainloader, _ = get_loaders(
 		dataset, trainenc, testenc, nsamples=nsamples, seed=seed, seqlen=model.seqlen, tokenizer=tokenizer 
 	)
-
+	print('train_loader_shape',len(trainloader), ', nsamples', nsamples) 
 	ppl_weight = metric_weights[0]
 	lexsim_weight = metric_weights[1]
 	cossim_weight = metric_weights[2]
@@ -62,8 +86,11 @@ def eval_combined_trainonly(model, tokenizer, trainenc, testenc, metric_weights,
 
 	# Evaluate ppl in no grad context to avoid updating the model
 	with torch.no_grad():
-		ppl_train = eval_ppl_train_gsm8k(model, trainloader, bsz, device)
-		lexsim_train, cossim_train, acc_train = eval_combined_helper(model, trainloader, tokenizer, bsz, device)
+		if ppl_weight != 0:
+			ppl_train = eval_ppl_train_gsm8k(model, trainloader, bsz, device)
+		else:
+			ppl_train = 0
+		lexsim_train, cossim_train, acc_train = eval_combined_helper(model, trainloader, tokenizer, bsz, device, debug=debug)
 
 	combined_train = ppl_weight * ppl_train + lexsim_weight * lexsim_train + \
 					 cossim_weight * cossim_train + acc_weight * acc_train
@@ -71,7 +98,7 @@ def eval_combined_trainonly(model, tokenizer, trainenc, testenc, metric_weights,
 
 # HELPER to combine lexical + semantic + accuracy together 
 # purpose: model is run once on each question
-def eval_combined_helper(model, loader, tokenizer, bs=1, device=None):
+def eval_combined_helper(model, loader, tokenizer, bs=1, device=None, debug=False):
 	nsamples = len(loader)
 
 	f1_sum = 0.0
@@ -84,11 +111,15 @@ def eval_combined_helper(model, loader, tokenizer, bs=1, device=None):
 		if i % 50 == 0:
 			print(f"sample {i}")
 		input_ids = loader[i][0].to(device)
-		# Calculate negative log likelihood
-		outputs = model.generate(input_ids, max_length=(input_ids.shape[1]+20))
+		outputs = model.generate(input_ids, max_length=(input_ids.shape[1]+100))
 		outputs_decoded = tokenizer.decode(outputs[:,input_ids.size(1):][0])
 		rationale = loader[i][1]
 		answer = loader[i][2]
+		if (debug is True) and (i % 4 == 0):
+			# question = tokenizer.decode(input_ids)
+			# print(f'STDOUT: sample {i}, question: {question}')
+			print(f'STDOUT: sample {i}, rationale: {rationale}')
+			print(f'STDOUT: sample {i}, output: {outputs_decoded}')
         
 		f1_sum += f1(outputs_decoded, rationale, normalize_answer)
 		cos_sim += cosine_sim(outputs_decoded, rationale)
@@ -202,7 +233,7 @@ def eval_ppl_train(model, trainloader, bs=1, device=None):
 
 	# List to store negative log likelihoods
 	nlls = []
-	print(f"nsamples {nsamples}")
+	print(f"ppl: nsamples {nsamples}")
 
 	# Loop through each batch
 	for i in range(0,nsamples,bs):
@@ -254,7 +285,7 @@ def eval_ppl_test(model, testenc, bs=1, device=None):
 
 	# List to store negative log likelihoods
 	nlls = []
-	print(f"nsamples {nsamples}")
+	print(f"ppl: nsamples {nsamples}")
 
 	# Loop through each batch
 	for i in range(0,nsamples,bs):

@@ -1,0 +1,42 @@
+ 1 loading llm model meta-llama/Llama-2-7b-hf
+ 2 metric weights: [ 0.     33.3333 33.3333 33.3333]
+ 3 Loading checkpoint shards: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2/2 [00:02<00:00,  1.48s/it]
+ 4 tokenizer done
+ 5 evaluating on gsm8k
+ 6 no train lexsim, cossim, acc calculated
+ 7 helper (combined): nsamples 1319
+ 8 sample 0
+ 9 sample 50
+10 sample 100
+11 sample 150
+12 sample 200
+13 sample 250
+14 sample 300
+15 sample 350
+16 sample 400
+17 sample 450
+18 sample 500
+19 sample 550
+20 sample 600
+21 sample 650
+22 sample 700
+23 sample 750
+24 sample 800
+25 sample 850
+26 sample 900
+27 sample 950
+28 sample 1000
+29 sample 1050
+30 sample 1100
+31 sample 1150
+32 sample 1200
+33 sample 1250
+34 sample 1300
+35 avg_f1: 0.30026344667547333, avg_cos_sim: 0.6877037460828896, avg_em_sum: 0.07884761182714177
+36 eval done original_test_combined: 35.56045792569001
+
+
+
+
+
+## 
