@@ -76,7 +76,7 @@ huggingface-cli login --token YOUR_HF_API_TOKEN
 CUDA_VISIBLE_DEVICES=0 python3 main.py --model meta-llama/Llama-2-7b-hf --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-llama2 --masks_per_iter 100 --nsamples 8 --save outdir_wikitext_a4 --prune_frac 0.2 --bsz 1 --prune_method wanda
 
 # gsm
-CUDA_VISIBLE_DEVICES=0 python3 main.py --model meta-llama/Llama-2-7b-hf --dataset gsm8k --sparsity_ratio 0.5 --wandb_project_name pruning-llama2 --masks_per_iter 100 --nsamples 8 --save outdir_gsm8k_a4 --prune_frac 0.2 --bsz 1 --prune_method wanda
+CUDA_VISIBLE_DEVICES=9 python3 main.py --model meta-llama/Llama-2-7b-hf --dataset gsm8k --sparsity_ratio 0.5 --wandb_project_name pruning-llama2 --masks_per_iter 100 --nsamples 8 --save outdir_gsm8k_a4_100toks --prune_frac 0.2 --bsz 1 --prune_method wanda --weights 0 33.3333 33.3333 33.3333
 ```
 
 
