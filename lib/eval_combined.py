@@ -93,10 +93,15 @@ def eval_combined_helper(model, loader, tokenizer, bs=1, device=None):
 		f1_sum += f1(outputs_decoded, rationale, normalize_answer)
 		cos_sim += cosine_sim(outputs_decoded, rationale)
 		em_sum += em(outputs_decoded, answer, normalize_answer)
-		# import pdb; pdb.set_trace()
 	# Empty CUDA cache to save memory
 	torch.cuda.empty_cache()
 	print(f"avg_f1: {f1_sum / nsamples}, avg_cos_sim: {cos_sim / int(nsamples / bs)}, avg_em_sum: {em_sum / nsamples}")
+
+	# Pring last output at end of loop
+	print("GTR: ", rationale)
+	print("GTA: ", answer)
+	print("Output: ", outputs_decoded)
+
 	return f1_sum / nsamples, cos_sim / int(nsamples / bs), em_sum / nsamples
 
 
