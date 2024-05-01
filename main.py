@@ -615,8 +615,8 @@ def main():
     # convert the dataset to desired 1 shot format
     trainloader, testloader = get_loaders(args.dataset, trainenc, testenc, seed=0, seqlen=model.seqlen, tokenizer=tokenizer)    
     # Getting the initial evaluation of the model
-    _, orig_test_combined = eval_combined(model, tokenizer, trainloader, testloader, metric_weights, model.device, dataset=args.dataset, bsz= args.bsz)
-    print('eval done original_test_combined:', orig_test_combined)
+    # _, orig_test_combined = eval_combined(model, tokenizer, None, testloader, metric_weights, model.device, dataset=args.dataset, bsz= args.bsz)
+    # print('eval done original_test_combined:', orig_test_combined)
     original_param_count = get_param_count(model)
     model.original_param_count = original_param_count
     cur_sparsity = 1.0 - (get_param_count(model) / original_param_count)

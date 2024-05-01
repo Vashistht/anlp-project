@@ -662,7 +662,7 @@ def main():
                 tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
                 # tasks = ['gsm8k'],
                 num_fewshot=0,
-                limit = .005, # how much of the original dataset to test on 
+                limit = .5, # how much of the original dataset to test on 
                 # num_fewshot={"hellaswag": 0, "arc_challenge":0}
                 no_cache=True,
                 pretrained_model=model,
@@ -672,14 +672,25 @@ def main():
             updated_results = {'results': results['results']}
             print('STDOUT:', updated_results)
     
-           
+    
     finetuned_model = model_args.add_finetuned_adapter
     print('STDOUT: Finetuning the Model: ', finetuned_model)
     # if model_args.add_finetuned_adapter, meaning the adapters for finetuning are there and we want to finetune
+    model.args.finetune_adapter_dataset = 'not_given'
     if finetuned_model:
-        adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_c4_ft_wiki/'
-        model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_c4_ft_wiki_adapter")
+        if model.args.finetune_ft_dataset is 'wiki' or model.args.finetune_adapter_dataset is 'not_given':
+            adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_c4_ft_wiki/'
+            model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_c4_ft_wiki_adapter")
+        elif model.args.finetune_adapter_dataset is 'c4':
+            adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_gsm8k_ft_c4/'
+            model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_wiki_ft_wiki_adapter")
+        elif model.args.finetune_adapter_dataset is 'gsm8k':
+            adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_gsm8k_ft_gsm8k/'
+            model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_gsm8k_ft_gsm8k_adapter")
+        else:
+            raise ValueError("Invalid adapter dataset name")
 
+        # eleuther eval for finetuned model
         if should_i_do_eleuther_eval:
             #transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
             print('STDOUT: Eleuther eval for pruned model + finetuning')
@@ -689,7 +700,7 @@ def main():
                 tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
                 # tasks = ['gsm8k'],
                 num_fewshot=0,
-                limit = .005, # how much of the original dataset to test on 
+                limit = .5, # how much of the original dataset to test on 
                 # num_fewshot={"hellaswag": 0, "arc_challenge":0}
                 no_cache=True,
                 pretrained_model=model,
@@ -708,7 +719,6 @@ def main():
 def _mp_fn(index):
     # For xla_spawn (TPUs)
     main()
-
 
 if __name__ == "__main__":
     main()
