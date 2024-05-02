@@ -109,7 +109,7 @@ def get_c4(traindata, valdata, nsamples, seed, seqlen, tokenizer):
 #     return trainloader, testenc
 
 # Function to select the appropriate loader based on dataset name
-def get_loaders(name, trainenc, testenc, nsamples=128, seed=0, seqlen=1024, tokenizer=None):
+def get_loaders(name, trainenc, testenc, nsamples=128, seed=0, seqlen=1024, tokenizer=None, example=True):
     if 'wikitext2' in name:
         # trainenc, testenc = load_wikitext2(tokenizer)
         return get_wikitext2(trainenc, testenc, nsamples, seed, seqlen)
@@ -118,4 +118,4 @@ def get_loaders(name, trainenc, testenc, nsamples=128, seed=0, seqlen=1024, toke
         return get_c4(trainenc, testenc, nsamples, seed, seqlen, tokenizer)
     if 'gsm8k' in name:
         # trainenc, testenc = load_gsm8k(tokenizer)
-        return get_gsm8k(trainenc, testenc, nsamples, seed, seqlen, tokenizer)
+        return get_gsm8k(trainenc, testenc, nsamples, seed, seqlen, tokenizer, example=example)
