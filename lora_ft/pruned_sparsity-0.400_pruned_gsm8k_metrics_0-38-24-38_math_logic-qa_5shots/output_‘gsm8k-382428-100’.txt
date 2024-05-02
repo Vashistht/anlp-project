@@ -1,0 +1,224 @@
+05/02/2024 19:12:47 - WARNING - __main__ - Process rank: -1, device: cuda:0, n_gpu: 1distributed training: False, 16-bits training: False
+05/02/2024 19:12:47 - INFO - __main__ - Training/evaluation parameters TrainingArguments(
+_n_gpu=1,
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_pin_memory=True,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+do_eval=False,
+do_predict=False,
+do_train=False,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_steps=None,
+evaluation_strategy=no,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'fsdp_min_num_params': 0, 'xla': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=0.0001,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=-1,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=“/home/ec2-user/anlp-project/finetuned_model/‘gsm8k-382428-100’”/runs/May02_19-12-47_ip-172-31-71-155.ec2.internal,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+no_cuda=False,
+num_train_epochs=1.0,
+optim=adamw_hf,
+optim_args=None,
+output_dir=“/home/ec2-user/anlp-project/finetuned_model/‘gsm8k-382428-100’”,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=1,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['wandb'],
+resume_from_checkpoint=None,
+run_name=“/home/ec2-user/anlp-project/finetuned_model/‘gsm8k-382428-100’”,
+save_on_each_node=False,
+save_safetensors=False,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+sharded_ddp=[],
+skip_memory_metrics=True,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+xpu_backend=None,
+)
+STDOUT: Not evaluating the og ppl
+STDOUT: Eleuther eval for og model:  False
+STDOUT: Num params = :  6476271616
+STDOUT: original model param count : 6476271616
+STDOUT: Pruning for epoch : 1
+STDOUT: epoch 1, param count is 5182390272
+STDOUT: Pruning for epoch : 2
+STDOUT: epoch 2, param count is 3887140864
+STDOUT: Final model sparsity is : 0.400 
+STDOUT: Final model param count : 3887140864
+STDOUT: Num params = :  3887140864
+STDOUT: Final sparsity is : 0.400
+05/02/2024 19:14:05 - INFO - __main__ - *** Evaluate ***
+STDOUT: Not evaluating the ppl
+STDOUT: Eleuther eval for pruned model (no finetuning): True
+We have loaded the new model !
+05/02/2024 19:14:57 - INFO - datasets.utils.file_utils - https://huggingface.co/datasets/cais/mmlu/resolve/c30699e8356da336a370243923dbaf21066bb9fe/README.md not found in cache or force_download set to True, downloading to /home/ec2-user/.cache/huggingface/datasets/downloads/d4b151ae6dc369aa5c56b6522f18c49d5101d33927e8cc10fbfa9a7f953e63c7.68ce9b83ea0fc1a34cb6a0f6d4f671d576c7caf04a0c1855ea5c7d102f1dbf13.incomplete
+05/02/2024 19:14:57 - INFO - datasets.utils.file_utils - storing https://huggingface.co/datasets/cais/mmlu/resolve/c30699e8356da336a370243923dbaf21066bb9fe/README.md in cache at /home/ec2-user/.cache/huggingface/datasets/downloads/d4b151ae6dc369aa5c56b6522f18c49d5101d33927e8cc10fbfa9a7f953e63c7.68ce9b83ea0fc1a34cb6a0f6d4f671d576c7caf04a0c1855ea5c7d102f1dbf13
+05/02/2024 19:14:57 - INFO - datasets.utils.file_utils - creating metadata file for /home/ec2-user/.cache/huggingface/datasets/downloads/d4b151ae6dc369aa5c56b6522f18c49d5101d33927e8cc10fbfa9a7f953e63c7.68ce9b83ea0fc1a34cb6a0f6d4f671d576c7caf04a0c1855ea5c7d102f1dbf13
+05/02/2024 19:14:58 - INFO - datasets.utils.file_utils - https://huggingface.co/datasets/cais/mmlu/resolve/c30699e8356da336a370243923dbaf21066bb9fe/dataset_infos.json not found in cache or force_download set to True, downloading to /home/ec2-user/.cache/huggingface/datasets/downloads/80097d8fbe67f2d2701971efa5b9ace17c4b2b6dd6a421270ea28784d1720dc8.57e5d4c30e735be03d09564bd5db48ae4ec02889c95db65318af59d51f0a9e82.incomplete
+05/02/2024 19:14:58 - INFO - datasets.utils.file_utils - storing https://huggingface.co/datasets/cais/mmlu/resolve/c30699e8356da336a370243923dbaf21066bb9fe/dataset_infos.json in cache at /home/ec2-user/.cache/huggingface/datasets/downloads/80097d8fbe67f2d2701971efa5b9ace17c4b2b6dd6a421270ea28784d1720dc8.57e5d4c30e735be03d09564bd5db48ae4ec02889c95db65318af59d51f0a9e82
+05/02/2024 19:14:58 - INFO - datasets.utils.file_utils - creating metadata file for /home/ec2-user/.cache/huggingface/datasets/downloads/80097d8fbe67f2d2701971efa5b9ace17c4b2b6dd6a421270ea28784d1720dc8.57e5d4c30e735be03d09564bd5db48ae4ec02889c95db65318af59d51f0a9e82
+05/02/2024 19:14:58 - INFO - datasets.builder - Generating dataset mmlu (/home/ec2-user/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe)
+05/02/2024 19:14:58 - INFO - datasets.builder - Downloading and preparing dataset mmlu/elementary_mathematics to /home/ec2-user/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe...
+05/02/2024 19:14:58 - INFO - datasets.builder - Dataset not on Hf google storage. Downloading and preparing it from source
+05/02/2024 19:14:59 - INFO - datasets.utils.file_utils - hf://datasets/cais/mmlu@c30699e8356da336a370243923dbaf21066bb9fe/elementary_mathematics/test-00000-of-00001.parquet not found in cache or force_download set to True, downloading to /home/ec2-user/.cache/huggingface/datasets/downloads/8a99b728dbcaa572a8f5f0e75043bd16c35cf9f0a424192a181439bd3c4a7247.incomplete
+05/02/2024 19:14:59 - INFO - datasets.utils.file_utils - storing hf://datasets/cais/mmlu@c30699e8356da336a370243923dbaf21066bb9fe/elementary_mathematics/test-00000-of-00001.parquet in cache at /home/ec2-user/.cache/huggingface/datasets/downloads/8a99b728dbcaa572a8f5f0e75043bd16c35cf9f0a424192a181439bd3c4a7247
+05/02/2024 19:14:59 - INFO - datasets.utils.file_utils - creating metadata file for /home/ec2-user/.cache/huggingface/datasets/downloads/8a99b728dbcaa572a8f5f0e75043bd16c35cf9f0a424192a181439bd3c4a7247
+05/02/2024 19:14:59 - INFO - datasets.utils.file_utils - hf://datasets/cais/mmlu@c30699e8356da336a370243923dbaf21066bb9fe/elementary_mathematics/validation-00000-of-00001.parquet not found in cache or force_download set to True, downloading to /home/ec2-user/.cache/huggingface/datasets/downloads/2b9b6e9b8b1d90ac58d06530e6973da54b1be13a9157163c6b9bfe696c94761b.incomplete
+05/02/2024 19:14:59 - INFO - datasets.utils.file_utils - storing hf://datasets/cais/mmlu@c30699e8356da336a370243923dbaf21066bb9fe/elementary_mathematics/validation-00000-of-00001.parquet in cache at /home/ec2-user/.cache/huggingface/datasets/downloads/2b9b6e9b8b1d90ac58d06530e6973da54b1be13a9157163c6b9bfe696c94761b
+05/02/2024 19:14:59 - INFO - datasets.utils.file_utils - creating metadata file for /home/ec2-user/.cache/huggingface/datasets/downloads/2b9b6e9b8b1d90ac58d06530e6973da54b1be13a9157163c6b9bfe696c94761b
+05/02/2024 19:14:59 - INFO - datasets.utils.file_utils - hf://datasets/cais/mmlu@c30699e8356da336a370243923dbaf21066bb9fe/elementary_mathematics/dev-00000-of-00001.parquet not found in cache or force_download set to True, downloading to /home/ec2-user/.cache/huggingface/datasets/downloads/625d431b8be010cb0b52dcc8211a020088c531e4ea19aa322f48887f27dbd63d.incomplete
+05/02/2024 19:14:59 - INFO - datasets.utils.file_utils - storing hf://datasets/cais/mmlu@c30699e8356da336a370243923dbaf21066bb9fe/elementary_mathematics/dev-00000-of-00001.parquet in cache at /home/ec2-user/.cache/huggingface/datasets/downloads/625d431b8be010cb0b52dcc8211a020088c531e4ea19aa322f48887f27dbd63d
+05/02/2024 19:14:59 - INFO - datasets.utils.file_utils - creating metadata file for /home/ec2-user/.cache/huggingface/datasets/downloads/625d431b8be010cb0b52dcc8211a020088c531e4ea19aa322f48887f27dbd63d
+05/02/2024 19:14:59 - INFO - datasets.download.download_manager - Downloading took 0.0 min
+05/02/2024 19:14:59 - INFO - datasets.download.download_manager - Checksum Computation took 0.0 min
+05/02/2024 19:14:59 - INFO - datasets.builder - Generating test split
+05/02/2024 19:14:59 - INFO - datasets.builder - Generating validation split
+05/02/2024 19:14:59 - INFO - datasets.builder - Generating dev split
+05/02/2024 19:14:59 - INFO - datasets.utils.info_utils - All the splits matched successfully.
+05/02/2024 19:14:59 - INFO - datasets.builder - Dataset mmlu downloaded and prepared to /home/ec2-user/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe. Subsequent calls will reuse this data.
+Task: hendrycksTest-elementary_mathematics; number of docs: 378
+Task: hendrycksTest-elementary_mathematics; document 0; context prompt (starting on next line):
+The following are multiple choice questions (with answers) about elementary mathematics.
+
+The population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?
+A. 5 thousands
+B. 5 hundreds
+C. 5 tens
+D. 5 ones
+Answer: A
+
+Olivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?
+A. The 10th number in the pattern will be an even number.
+B. The number pattern will never have two even numbers next to each other.
+C. The next two numbers in the pattern will be an even number then an odd number.
+D. If the number pattern started with an odd number then the pattern would have only odd numbers in it.
+Answer: B
+
+A total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?
+A. Add 5 to 30 to find 35 teams.
+B. Divide 30 by 5 to find 6 teams.
+C. Multiply 30 and 5 to find 150 teams.
+D. Subtract 5 from 30 to find 25 teams.
+Answer: B
+
+A store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?
+A. 749
+B. 2,675
+C. 2,945
+D. 4,250
+Answer: B
+
+Which expression is equivalent to 5 x 9?
+A. (5 x 4) x (6 x 5)
+B. (5 x 5) + (5 x 4)
+C. (5 x 5) + (5 x 9)
+D. (5 x 9) x (6 x 9)
+Answer: B
+
+Find 13 over 14 + 7 over 14.
+A. 1 and 4 over 7
+B. 1 and 3 over 7
+C. 1 and 5 over 14
+D. 20 over 28
+Answer:
+(end of prompt on previous line)
+Requests: [Req_loglikelihood('The following are multiple choice questions (with answers) about elementary mathematics.\n\nThe population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?\nA. 5 thousands\nB. 5 hundreds\nC. 5 tens\nD. 5 ones\nAnswer: A\n\nOlivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?\nA. The 10th number in the pattern will be an even number.\nB. The number pattern will never have two even numbers next to each other.\nC. The next two numbers in the pattern will be an even number then an odd number.\nD. If the number pattern started with an odd number then the pattern would have only odd numbers in it.\nAnswer: B\n\nA total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?\nA. Add 5 to 30 to find 35 teams.\nB. Divide 30 by 5 to find 6 teams.\nC. Multiply 30 and 5 to find 150 teams.\nD. Subtract 5 from 30 to find 25 teams.\nAnswer: B\n\nA store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?\nA. 749\nB. 2,675\nC. 2,945\nD. 4,250\nAnswer: B\n\nWhich expression is equivalent to 5 x 9?\nA. (5 x 4) x (6 x 5)\nB. (5 x 5) + (5 x 4)\nC. (5 x 5) + (5 x 9)\nD. (5 x 9) x (6 x 9)\nAnswer: B\n\nFind 13 over 14 + 7 over 14.\nA. 1 and 4 over 7\nB. 1 and 3 over 7\nC. 1 and 5 over 14\nD. 20 over 28\nAnswer:', ' A')[0]
+, Req_loglikelihood('The following are multiple choice questions (with answers) about elementary mathematics.\n\nThe population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?\nA. 5 thousands\nB. 5 hundreds\nC. 5 tens\nD. 5 ones\nAnswer: A\n\nOlivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?\nA. The 10th number in the pattern will be an even number.\nB. The number pattern will never have two even numbers next to each other.\nC. The next two numbers in the pattern will be an even number then an odd number.\nD. If the number pattern started with an odd number then the pattern would have only odd numbers in it.\nAnswer: B\n\nA total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?\nA. Add 5 to 30 to find 35 teams.\nB. Divide 30 by 5 to find 6 teams.\nC. Multiply 30 and 5 to find 150 teams.\nD. Subtract 5 from 30 to find 25 teams.\nAnswer: B\n\nA store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?\nA. 749\nB. 2,675\nC. 2,945\nD. 4,250\nAnswer: B\n\nWhich expression is equivalent to 5 x 9?\nA. (5 x 4) x (6 x 5)\nB. (5 x 5) + (5 x 4)\nC. (5 x 5) + (5 x 9)\nD. (5 x 9) x (6 x 9)\nAnswer: B\n\nFind 13 over 14 + 7 over 14.\nA. 1 and 4 over 7\nB. 1 and 3 over 7\nC. 1 and 5 over 14\nD. 20 over 28\nAnswer:', ' B')[0]
+, Req_loglikelihood('The following are multiple choice questions (with answers) about elementary mathematics.\n\nThe population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?\nA. 5 thousands\nB. 5 hundreds\nC. 5 tens\nD. 5 ones\nAnswer: A\n\nOlivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?\nA. The 10th number in the pattern will be an even number.\nB. The number pattern will never have two even numbers next to each other.\nC. The next two numbers in the pattern will be an even number then an odd number.\nD. If the number pattern started with an odd number then the pattern would have only odd numbers in it.\nAnswer: B\n\nA total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?\nA. Add 5 to 30 to find 35 teams.\nB. Divide 30 by 5 to find 6 teams.\nC. Multiply 30 and 5 to find 150 teams.\nD. Subtract 5 from 30 to find 25 teams.\nAnswer: B\n\nA store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?\nA. 749\nB. 2,675\nC. 2,945\nD. 4,250\nAnswer: B\n\nWhich expression is equivalent to 5 x 9?\nA. (5 x 4) x (6 x 5)\nB. (5 x 5) + (5 x 4)\nC. (5 x 5) + (5 x 9)\nD. (5 x 9) x (6 x 9)\nAnswer: B\n\nFind 13 over 14 + 7 over 14.\nA. 1 and 4 over 7\nB. 1 and 3 over 7\nC. 1 and 5 over 14\nD. 20 over 28\nAnswer:', ' C')[0]
+, Req_loglikelihood('The following are multiple choice questions (with answers) about elementary mathematics.\n\nThe population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?\nA. 5 thousands\nB. 5 hundreds\nC. 5 tens\nD. 5 ones\nAnswer: A\n\nOlivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?\nA. The 10th number in the pattern will be an even number.\nB. The number pattern will never have two even numbers next to each other.\nC. The next two numbers in the pattern will be an even number then an odd number.\nD. If the number pattern started with an odd number then the pattern would have only odd numbers in it.\nAnswer: B\n\nA total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?\nA. Add 5 to 30 to find 35 teams.\nB. Divide 30 by 5 to find 6 teams.\nC. Multiply 30 and 5 to find 150 teams.\nD. Subtract 5 from 30 to find 25 teams.\nAnswer: B\n\nA store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?\nA. 749\nB. 2,675\nC. 2,945\nD. 4,250\nAnswer: B\n\nWhich expression is equivalent to 5 x 9?\nA. (5 x 4) x (6 x 5)\nB. (5 x 5) + (5 x 4)\nC. (5 x 5) + (5 x 9)\nD. (5 x 9) x (6 x 9)\nAnswer: B\n\nFind 13 over 14 + 7 over 14.\nA. 1 and 4 over 7\nB. 1 and 3 over 7\nC. 1 and 5 over 14\nD. 20 over 28\nAnswer:', ' D')[0]
+]
+Task: bigbench_logical_deduction_three_objects; number of docs: 300
+Task: bigbench_logical_deduction_three_objects; document 0; context prompt (starting on next line):
+The following paragraphs each describe a set of three objects arranged in a fixed order. The statements are logically consistent within each paragraph.
+
+On a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. The quail is the leftmost.
+
+On a shelf, there are three books: a purple book, a black book, and a blue book. The purple book is to the right of the blue book. The black book is the second from the left. The blue book is the leftmost.
+
+In a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Ana finished last.
+
+On a branch, there are three birds: a blue jay, a falcon, and a hummingbird. The blue jay is to the right of the falcon. The hummingbird is to the left of the falcon. The blue jay is the rightmost.
+
+In a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Joe finished first.
+
+On a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. 
+(end of prompt on previous line)
+Requests: [Req_loglikelihood('The following paragraphs each describe a set of three objects arranged in a fixed order. The statements are logically consistent within each paragraph.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. The quail is the leftmost.\n\nOn a shelf, there are three books: a purple book, a black book, and a blue book. The purple book is to the right of the blue book. The black book is the second from the left. The blue book is the leftmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Ana finished last.\n\nOn a branch, there are three birds: a blue jay, a falcon, and a hummingbird. The blue jay is to the right of the falcon. The hummingbird is to the left of the falcon. The blue jay is the rightmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Joe finished first.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. ', 'The blue jay is the second from the left.')[0]
+, Req_loglikelihood('The following paragraphs each describe a set of three objects arranged in a fixed order. The statements are logically consistent within each paragraph.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. The quail is the leftmost.\n\nOn a shelf, there are three books: a purple book, a black book, and a blue book. The purple book is to the right of the blue book. The black book is the second from the left. The blue book is the leftmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Ana finished last.\n\nOn a branch, there are three birds: a blue jay, a falcon, and a hummingbird. The blue jay is to the right of the falcon. The hummingbird is to the left of the falcon. The blue jay is the rightmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Joe finished first.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. ', 'The quail is the second from the left.')[0]
+, Req_loglikelihood('The following paragraphs each describe a set of three objects arranged in a fixed order. The statements are logically consistent within each paragraph.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. The quail is the leftmost.\n\nOn a shelf, there are three books: a purple book, a black book, and a blue book. The purple book is to the right of the blue book. The black book is the second from the left. The blue book is the leftmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Ana finished last.\n\nOn a branch, there are three birds: a blue jay, a falcon, and a hummingbird. The blue jay is to the right of the falcon. The hummingbird is to the left of the falcon. The blue jay is the rightmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Joe finished first.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. ', 'The falcon is the second from the left.')[0]
+]
+Running loglikelihood requests
+STDOUT: {'results': {'hendrycksTest-elementary_mathematics': {'acc': 0.24867724867724866, 'acc_stderr': 0.03152480234871164, 'acc_norm': 0.24867724867724866, 'acc_norm_stderr': 0.03152480234871164}, 'bigbench_logical_deduction_three_objects': {'multiple_choice_grade': 0.42857142857142855, 'multiple_choice_grade_stderr': 0.03609222518856511}}}
+STDOUT: Finetuning the Model:  False
