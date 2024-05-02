@@ -600,7 +600,7 @@ def main():
             model="hf-causal-experimental",
             model_args="pretrained={}".format(model_args.model_name_or_path),
             # tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
-            tasks = ['hendrycksTest-elementary_mathematics','bigbench_logical_deduction_three_objects'],
+            tasks = ['hendrycksTest-elementary_mathematics','bigbench_logical_deduction_three_objects', 'gsm8k'],
             num_fewshot=5,
             limit = .5, # how much of the original dataset to test on 
             no_cache=True,
@@ -643,7 +643,7 @@ def main():
                 model="hf-causal-experimental",
                 model_args="pretrained={}".format(model_args.model_name_or_path),
                 # tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
-                tasks = ['hendrycksTest-elementary_mathematics','bigbench_logical_deduction_three_objects'],
+                tasks = ['hendrycksTest-elementary_mathematics','bigbench_logical_deduction_three_objects', 'gsm8k'],
                 num_fewshot=5,
                 limit = .5, # how much of the original dataset to test on 
                 # num_fewshot={"hellaswag": 0, "arc_challenge":0}
@@ -680,7 +680,7 @@ def main():
                 model="hf-causal-experimental",
                 model_args="pretrained={}".format(model_args.model_name_or_path),
                 # tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
-                tasks = ['hendrycksTest-elementary_mathematics','bigbench_logical_deduction_three_objects'],
+                tasks = ['hendrycksTest-elementary_mathematics','bigbench_logical_deduction_three_objects', 'gsm8k'],
                 num_fewshot=5,
                 limit = .5, # how much of the original dataset to test on 
                 # num_fewshot={"hellaswag": 0, "arc_challenge":0}
