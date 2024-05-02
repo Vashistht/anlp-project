@@ -1,0 +1,375 @@
+05/02/2024 01:00:27 - WARNING - __main__ - Process rank: -1, device: cuda:0, n_gpu: 1distributed training: False, 16-bits training: False
+05/02/2024 01:00:27 - INFO - __main__ - Training/evaluation parameters TrainingArguments(
+_n_gpu=1,
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_pin_memory=True,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+do_eval=False,
+do_predict=False,
+do_train=False,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_steps=None,
+evaluation_strategy=no,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'fsdp_min_num_params': 0, 'xla': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=0.0001,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=-1,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=/home/vashistt/Desktop/anlp-project/finetuned_model/c4_masks-100/runs/May02_01-00-27_lovelace.ece.local.cmu.edu,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+no_cuda=False,
+num_train_epochs=1.0,
+optim=adamw_hf,
+optim_args=None,
+output_dir=/home/vashistt/Desktop/anlp-project/finetuned_model/c4_masks-100,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=1,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['wandb'],
+resume_from_checkpoint=None,
+run_name=/home/vashistt/Desktop/anlp-project/finetuned_model/c4_masks-100,
+save_on_each_node=False,
+save_safetensors=False,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+sharded_ddp=[],
+skip_memory_metrics=True,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+xpu_backend=None,
+)
+[INFO|configuration_utils.py:668] 2024-05-02 01:00:27,374 >> loading configuration file config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/config.json
+[INFO|configuration_utils.py:720] 2024-05-02 01:00:27,374 >> Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-2-7b-hf",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 11008,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 32,
+  "pad_token_id": 0,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.28.0",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 01:00:27,420 >> loading file tokenizer.model from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/tokenizer.model
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 01:00:27,420 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 01:00:27,420 >> loading file special_tokens_map.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/special_tokens_map.json
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 01:00:27,420 >> loading file tokenizer_config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/tokenizer_config.json
+[INFO|configuration_utils.py:668] 2024-05-02 01:00:27,471 >> loading configuration file config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/config.json
+[INFO|configuration_utils.py:720] 2024-05-02 01:00:27,472 >> Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-2-7b-hf",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 11008,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 32,
+  "pad_token_id": 0,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.28.0",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|modeling_utils.py:2534] 2024-05-02 01:00:27,474 >> loading weights file model.safetensors from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/model.safetensors.index.json
+[INFO|modeling_utils.py:1176] 2024-05-02 01:00:27,477 >> Instantiating LlamaForCausalLM model under default dtype torch.float16.
+[INFO|configuration_utils.py:575] 2024-05-02 01:00:27,478 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:02<00:02,  2.05s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.29s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.40s/it]
+[INFO|modeling_utils.py:3190] 2024-05-02 01:00:30,746 >> All model checkpoint weights were used when initializing LlamaForCausalLM.
+
+[INFO|modeling_utils.py:3198] 2024-05-02 01:00:30,747 >> All the weights of LlamaForCausalLM were initialized from the model checkpoint at meta-llama/Llama-2-7b-hf.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use LlamaForCausalLM for predictions without further training.
+[INFO|configuration_utils.py:537] 2024-05-02 01:00:30,811 >> loading configuration file generation_config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/generation_config.json
+[INFO|modeling_utils.py:2839] 2024-05-02 01:00:30,811 >> Generation config file not found, using a generation config created from the model config.
+STDOUT: Not evaluating the og ppl
+STDOUT: Eleuther eval for og model:  False
+STDOUT: Num params = :  6476271616
+STDOUT: original model param count : 6476271616
+STDOUT: Pruning for epoch : 1
+STDOUT: epoch 1, param count is 5181026304
+STDOUT: Pruning for epoch : 2
+STDOUT: epoch 2, param count is 3886903296
+STDOUT: Pruning for epoch : 3
+STDOUT: epoch 3, param count is 3240022016
+STDOUT: Final model sparsity is : 0.500 
+STDOUT: Final model param count : 3240022016
+STDOUT: Num params = :  3240022016
+STDOUT: Final sparsity is : 0.500
+05/02/2024 01:02:10 - INFO - __main__ - *** Evaluate ***
+[INFO|configuration_utils.py:668] 2024-05-02 01:02:10,658 >> loading configuration file config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/config.json
+[INFO|configuration_utils.py:720] 2024-05-02 01:02:10,658 >> Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-2-7b-hf",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 11008,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 32,
+  "pad_token_id": 0,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.28.0",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 01:02:10,696 >> loading file tokenizer.model from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/tokenizer.model
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 01:02:10,696 >> loading file tokenizer.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/tokenizer.json
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 01:02:10,696 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 01:02:10,696 >> loading file special_tokens_map.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/special_tokens_map.json
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 01:02:10,696 >> loading file tokenizer_config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/tokenizer_config.json
+[INFO|configuration_utils.py:668] 2024-05-02 01:02:10,787 >> loading configuration file config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/config.json
+[INFO|configuration_utils.py:720] 2024-05-02 01:02:10,788 >> Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-2-7b-hf",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 11008,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 32,
+  "pad_token_id": 0,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.28.0",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|modeling_utils.py:2534] 2024-05-02 01:02:10,789 >> loading weights file model.safetensors from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/model.safetensors.index.json
+[INFO|modeling_utils.py:1176] 2024-05-02 01:02:10,789 >> Instantiating LlamaForCausalLM model under default dtype torch.float16.
+[INFO|configuration_utils.py:575] 2024-05-02 01:02:10,790 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+STDOUT: Not evaluating the ppl
+STDOUT: Eleuther eval for pruned model (no finetuning): True
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:02<00:02,  2.70s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:03<00:00,  1.70s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:03<00:00,  1.85s/it]
+[INFO|modeling_utils.py:3190] 2024-05-02 01:03:21,673 >> All model checkpoint weights were used when initializing LlamaForCausalLM.
+
+[INFO|modeling_utils.py:3198] 2024-05-02 01:03:21,673 >> All the weights of LlamaForCausalLM were initialized from the model checkpoint at meta-llama/Llama-2-7b-hf.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use LlamaForCausalLM for predictions without further training.
+[INFO|configuration_utils.py:537] 2024-05-02 01:03:21,708 >> loading configuration file generation_config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/generation_config.json
+[INFO|configuration_utils.py:575] 2024-05-02 01:03:21,708 >> Generate config GenerationConfig {
+  "bos_token_id": 1,
+  "do_sample": true,
+  "eos_token_id": 2,
+  "max_length": 4096,
+  "pad_token_id": 0,
+  "temperature": 0.6,
+  "top_p": 0.9,
+  "transformers_version": "4.28.0"
+}
+
+Overwrite dataset info from restored data version if exists.
+We have loaded the new model !
+05/02/2024 01:03:26 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe
+05/02/2024 01:03:26 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe
+Found cached dataset mmlu (/home/vashistt/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe)
+05/02/2024 01:03:26 - INFO - datasets.builder - Found cached dataset mmlu (/home/vashistt/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe)
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe
+05/02/2024 01:03:26 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe
+Task: hendrycksTest-elementary_mathematics; number of docs: 378
+Task: hendrycksTest-elementary_mathematics; document 0; context prompt (starting on next line):
+The following are multiple choice questions (with answers) about elementary mathematics.
+
+The population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?
+A. 5 thousands
+B. 5 hundreds
+C. 5 tens
+D. 5 ones
+Answer: A
+
+Olivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?
+A. The 10th number in the pattern will be an even number.
+B. The number pattern will never have two even numbers next to each other.
+C. The next two numbers in the pattern will be an even number then an odd number.
+D. If the number pattern started with an odd number then the pattern would have only odd numbers in it.
+Answer: B
+
+A total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?
+A. Add 5 to 30 to find 35 teams.
+B. Divide 30 by 5 to find 6 teams.
+C. Multiply 30 and 5 to find 150 teams.
+D. Subtract 5 from 30 to find 25 teams.
+Answer: B
+
+A store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?
+A. 749
+B. 2,675
+C. 2,945
+D. 4,250
+Answer: B
+
+Which expression is equivalent to 5 x 9?
+A. (5 x 4) x (6 x 5)
+B. (5 x 5) + (5 x 4)
+C. (5 x 5) + (5 x 9)
+D. (5 x 9) x (6 x 9)
+Answer: B
+
+Find 13 over 14 + 7 over 14.
+A. 1 and 4 over 7
+B. 1 and 3 over 7
+C. 1 and 5 over 14
+D. 20 over 28
+Answer:
+(end of prompt on previous line)
+Requests: [Req_loglikelihood('The following are multiple choice questions (with answers) about elementary mathematics.\n\nThe population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?\nA. 5 thousands\nB. 5 hundreds\nC. 5 tens\nD. 5 ones\nAnswer: A\n\nOlivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?\nA. The 10th number in the pattern will be an even number.\nB. The number pattern will never have two even numbers next to each other.\nC. The next two numbers in the pattern will be an even number then an odd number.\nD. If the number pattern started with an odd number then the pattern would have only odd numbers in it.\nAnswer: B\n\nA total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?\nA. Add 5 to 30 to find 35 teams.\nB. Divide 30 by 5 to find 6 teams.\nC. Multiply 30 and 5 to find 150 teams.\nD. Subtract 5 from 30 to find 25 teams.\nAnswer: B\n\nA store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?\nA. 749\nB. 2,675\nC. 2,945\nD. 4,250\nAnswer: B\n\nWhich expression is equivalent to 5 x 9?\nA. (5 x 4) x (6 x 5)\nB. (5 x 5) + (5 x 4)\nC. (5 x 5) + (5 x 9)\nD. (5 x 9) x (6 x 9)\nAnswer: B\n\nFind 13 over 14 + 7 over 14.\nA. 1 and 4 over 7\nB. 1 and 3 over 7\nC. 1 and 5 over 14\nD. 20 over 28\nAnswer:', ' A')[0]
+, Req_loglikelihood('The following are multiple choice questions (with answers) about elementary mathematics.\n\nThe population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?\nA. 5 thousands\nB. 5 hundreds\nC. 5 tens\nD. 5 ones\nAnswer: A\n\nOlivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?\nA. The 10th number in the pattern will be an even number.\nB. The number pattern will never have two even numbers next to each other.\nC. The next two numbers in the pattern will be an even number then an odd number.\nD. If the number pattern started with an odd number then the pattern would have only odd numbers in it.\nAnswer: B\n\nA total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?\nA. Add 5 to 30 to find 35 teams.\nB. Divide 30 by 5 to find 6 teams.\nC. Multiply 30 and 5 to find 150 teams.\nD. Subtract 5 from 30 to find 25 teams.\nAnswer: B\n\nA store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?\nA. 749\nB. 2,675\nC. 2,945\nD. 4,250\nAnswer: B\n\nWhich expression is equivalent to 5 x 9?\nA. (5 x 4) x (6 x 5)\nB. (5 x 5) + (5 x 4)\nC. (5 x 5) + (5 x 9)\nD. (5 x 9) x (6 x 9)\nAnswer: B\n\nFind 13 over 14 + 7 over 14.\nA. 1 and 4 over 7\nB. 1 and 3 over 7\nC. 1 and 5 over 14\nD. 20 over 28\nAnswer:', ' B')[0]
+, Req_loglikelihood('The following are multiple choice questions (with answers) about elementary mathematics.\n\nThe population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?\nA. 5 thousands\nB. 5 hundreds\nC. 5 tens\nD. 5 ones\nAnswer: A\n\nOlivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?\nA. The 10th number in the pattern will be an even number.\nB. The number pattern will never have two even numbers next to each other.\nC. The next two numbers in the pattern will be an even number then an odd number.\nD. If the number pattern started with an odd number then the pattern would have only odd numbers in it.\nAnswer: B\n\nA total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?\nA. Add 5 to 30 to find 35 teams.\nB. Divide 30 by 5 to find 6 teams.\nC. Multiply 30 and 5 to find 150 teams.\nD. Subtract 5 from 30 to find 25 teams.\nAnswer: B\n\nA store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?\nA. 749\nB. 2,675\nC. 2,945\nD. 4,250\nAnswer: B\n\nWhich expression is equivalent to 5 x 9?\nA. (5 x 4) x (6 x 5)\nB. (5 x 5) + (5 x 4)\nC. (5 x 5) + (5 x 9)\nD. (5 x 9) x (6 x 9)\nAnswer: B\n\nFind 13 over 14 + 7 over 14.\nA. 1 and 4 over 7\nB. 1 and 3 over 7\nC. 1 and 5 over 14\nD. 20 over 28\nAnswer:', ' C')[0]
+, Req_loglikelihood('The following are multiple choice questions (with answers) about elementary mathematics.\n\nThe population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?\nA. 5 thousands\nB. 5 hundreds\nC. 5 tens\nD. 5 ones\nAnswer: A\n\nOlivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?\nA. The 10th number in the pattern will be an even number.\nB. The number pattern will never have two even numbers next to each other.\nC. The next two numbers in the pattern will be an even number then an odd number.\nD. If the number pattern started with an odd number then the pattern would have only odd numbers in it.\nAnswer: B\n\nA total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?\nA. Add 5 to 30 to find 35 teams.\nB. Divide 30 by 5 to find 6 teams.\nC. Multiply 30 and 5 to find 150 teams.\nD. Subtract 5 from 30 to find 25 teams.\nAnswer: B\n\nA store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?\nA. 749\nB. 2,675\nC. 2,945\nD. 4,250\nAnswer: B\n\nWhich expression is equivalent to 5 x 9?\nA. (5 x 4) x (6 x 5)\nB. (5 x 5) + (5 x 4)\nC. (5 x 5) + (5 x 9)\nD. (5 x 9) x (6 x 9)\nAnswer: B\n\nFind 13 over 14 + 7 over 14.\nA. 1 and 4 over 7\nB. 1 and 3 over 7\nC. 1 and 5 over 14\nD. 20 over 28\nAnswer:', ' D')[0]
+]
+Task: bigbench_logical_deduction_three_objects; number of docs: 300
+Task: bigbench_logical_deduction_three_objects; document 0; context prompt (starting on next line):
+The following paragraphs each describe a set of three objects arranged in a fixed order. The statements are logically consistent within each paragraph.
+
+On a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. The quail is the leftmost.
+
+On a shelf, there are three books: a purple book, a black book, and a blue book. The purple book is to the right of the blue book. The black book is the second from the left. The blue book is the leftmost.
+
+In a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Ana finished last.
+
+On a branch, there are three birds: a blue jay, a falcon, and a hummingbird. The blue jay is to the right of the falcon. The hummingbird is to the left of the falcon. The blue jay is the rightmost.
+
+In a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Joe finished first.
+
+On a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. 
+(end of prompt on previous line)
+Requests: [Req_loglikelihood('The following paragraphs each describe a set of three objects arranged in a fixed order. The statements are logically consistent within each paragraph.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. The quail is the leftmost.\n\nOn a shelf, there are three books: a purple book, a black book, and a blue book. The purple book is to the right of the blue book. The black book is the second from the left. The blue book is the leftmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Ana finished last.\n\nOn a branch, there are three birds: a blue jay, a falcon, and a hummingbird. The blue jay is to the right of the falcon. The hummingbird is to the left of the falcon. The blue jay is the rightmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Joe finished first.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. ', 'The blue jay is the second from the left.')[0]
+, Req_loglikelihood('The following paragraphs each describe a set of three objects arranged in a fixed order. The statements are logically consistent within each paragraph.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. The quail is the leftmost.\n\nOn a shelf, there are three books: a purple book, a black book, and a blue book. The purple book is to the right of the blue book. The black book is the second from the left. The blue book is the leftmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Ana finished last.\n\nOn a branch, there are three birds: a blue jay, a falcon, and a hummingbird. The blue jay is to the right of the falcon. The hummingbird is to the left of the falcon. The blue jay is the rightmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Joe finished first.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. ', 'The quail is the second from the left.')[0]
+, Req_loglikelihood('The following paragraphs each describe a set of three objects arranged in a fixed order. The statements are logically consistent within each paragraph.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. The quail is the leftmost.\n\nOn a shelf, there are three books: a purple book, a black book, and a blue book. The purple book is to the right of the blue book. The black book is the second from the left. The blue book is the leftmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Ana finished last.\n\nOn a branch, there are three birds: a blue jay, a falcon, and a hummingbird. The blue jay is to the right of the falcon. The hummingbird is to the left of the falcon. The blue jay is the rightmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Joe finished first.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. ', 'The falcon is the second from the left.')[0]
+]
+Running loglikelihood requests
+  0%|          | 0/1319 [00:00<?, ?it/s]  0%|          | 1/1319 [00:00<05:14,  4.19it/s]  0%|          | 3/1319 [00:00<02:36,  8.42it/s]  0%|          | 5/1319 [00:00<02:06, 10.37it/s]  1%|          | 7/1319 [00:00<01:55, 11.36it/s]  1%|          | 9/1319 [00:00<01:49, 12.00it/s]  1%|          | 11/1319 [00:00<01:45, 12.43it/s]  1%|          | 13/1319 [00:01<01:42, 12.77it/s]  1%|          | 15/1319 [00:01<01:40, 12.96it/s]  1%|▏         | 17/1319 [00:01<01:38, 13.17it/s]  1%|▏         | 19/1319 [00:01<01:37, 13.29it/s]  2%|▏         | 21/1319 [00:01<01:36, 13.42it/s]  2%|▏         | 23/1319 [00:01<01:36, 13.37it/s]  2%|▏         | 25/1319 [00:02<01:35, 13.49it/s]  2%|▏         | 27/1319 [00:02<01:35, 13.54it/s]  2%|▏         | 29/1319 [00:02<01:35, 13.55it/s]  2%|▏         | 31/1319 [00:02<01:34, 13.61it/s]  3%|▎         | 33/1319 [00:02<01:34, 13.61it/s]  3%|▎         | 35/1319 [00:02<01:34, 13.63it/s]  3%|▎         | 37/1319 [00:02<01:34, 13.58it/s]  3%|▎         | 39/1319 [00:03<01:33, 13.63it/s]  3%|▎         | 41/1319 [00:03<01:34, 13.52it/s]  3%|▎         | 43/1319 [00:03<01:33, 13.63it/s]  3%|▎         | 45/1319 [00:03<01:34, 13.53it/s]  4%|▎         | 47/1319 [00:03<01:33, 13.65it/s]  4%|▎         | 49/1319 [00:03<01:33, 13.63it/s]  4%|▍         | 51/1319 [00:03<01:32, 13.66it/s]  4%|▍         | 53/1319 [00:04<01:32, 13.64it/s]  4%|▍         | 55/1319 [00:04<01:32, 13.67it/s]  4%|▍         | 57/1319 [00:04<01:31, 13.75it/s]  4%|▍         | 59/1319 [00:04<01:29, 14.04it/s]  5%|▍         | 61/1319 [00:04<01:29, 14.10it/s]  5%|▍         | 63/1319 [00:04<01:28, 14.21it/s]  5%|▍         | 65/1319 [00:04<01:28, 14.19it/s]  5%|▌         | 67/1319 [00:05<01:27, 14.28it/s]  5%|▌         | 69/1319 [00:05<01:27, 14.27it/s]  5%|▌         | 71/1319 [00:05<01:27, 14.31it/s]  6%|▌         | 73/1319 [00:05<01:27, 14.31it/s]  6%|▌         | 75/1319 [00:05<01:27, 14.29it/s]  6%|▌         | 77/1319 [00:05<01:26, 14.35it/s]  6%|▌         | 79/1319 [00:05<01:26, 14.39it/s]  6%|▌         | 81/1319 [00:06<01:26, 14.37it/s]  6%|▋         | 83/1319 [00:06<01:26, 14.29it/s]  6%|▋         | 85/1319 [00:06<01:25, 14.39it/s]  7%|▋         | 87/1319 [00:06<01:25, 14.38it/s]  7%|▋         | 89/1319 [00:06<01:25, 14.43it/s]  7%|▋         | 91/1319 [00:06<01:25, 14.38it/s]  7%|▋         | 93/1319 [00:06<01:25, 14.40it/s]  7%|▋         | 95/1319 [00:07<01:25, 14.37it/s]  7%|▋         | 97/1319 [00:07<01:24, 14.45it/s]  8%|▊         | 99/1319 [00:07<01:24, 14.38it/s]  8%|▊         | 101/1319 [00:07<01:24, 14.46it/s]  8%|▊         | 103/1319 [00:07<01:24, 14.35it/s]  8%|▊         | 105/1319 [00:07<01:24, 14.44it/s]  8%|▊         | 107/1319 [00:07<01:24, 14.35it/s]  8%|▊         | 109/1319 [00:07<01:23, 14.44it/s]  8%|▊         | 111/1319 [00:08<01:24, 14.36it/s]  9%|▊         | 113/1319 [00:08<01:23, 14.43it/s]  9%|▊         | 115/1319 [00:08<01:24, 14.32it/s]  9%|▉         | 117/1319 [00:08<01:23, 14.41it/s]  9%|▉         | 119/1319 [00:08<01:23, 14.41it/s]  9%|▉         | 121/1319 [00:08<01:22, 14.47it/s]  9%|▉         | 123/1319 [00:08<01:23, 14.37it/s]  9%|▉         | 125/1319 [00:09<01:22, 14.44it/s] 10%|▉         | 127/1319 [00:09<01:22, 14.43it/s] 10%|▉         | 129/1319 [00:09<01:22, 14.50it/s] 10%|▉         | 131/1319 [00:09<01:22, 14.42it/s] 10%|█         | 133/1319 [00:09<01:22, 14.45it/s] 10%|█         | 135/1319 [00:09<01:22, 14.34it/s] 10%|█         | 137/1319 [00:09<01:22, 14.39it/s] 11%|█         | 139/1319 [00:10<01:22, 14.28it/s] 11%|█         | 141/1319 [00:10<01:22, 14.34it/s] 11%|█         | 143/1319 [00:10<01:22, 14.29it/s] 11%|█         | 145/1319 [00:10<01:21, 14.39it/s] 11%|█         | 147/1319 [00:10<01:21, 14.42it/s] 11%|█▏        | 149/1319 [00:10<01:20, 14.55it/s] 11%|█▏        | 151/1319 [00:10<01:20, 14.47it/s] 12%|█▏        | 153/1319 [00:11<01:20, 14.53it/s] 12%|█▏        | 155/1319 [00:11<01:20, 14.50it/s] 12%|█▏        | 157/1319 [00:11<01:19, 14.54it/s] 12%|█▏        | 159/1319 [00:11<01:20, 14.43it/s] 12%|█▏        | 161/1319 [00:11<01:19, 14.49it/s] 12%|█▏        | 163/1319 [00:11<01:20, 14.40it/s] 13%|█▎        | 165/1319 [00:11<01:19, 14.48it/s] 13%|█▎        | 167/1319 [00:12<01:20, 14.39it/s] 13%|█▎        | 169/1319 [00:12<01:19, 14.45it/s] 13%|█▎        | 171/1319 [00:12<01:19, 14.35it/s] 13%|█▎        | 173/1319 [00:12<01:19, 14.49it/s] 13%|█▎        | 175/1319 [00:12<01:19, 14.44it/s] 13%|█▎        | 177/1319 [00:12<01:18, 14.47it/s] 14%|█▎        | 179/1319 [00:12<01:19, 14.39it/s] 14%|█▎        | 181/1319 [00:12<01:18, 14.46it/s] 14%|█▍        | 183/1319 [00:13<01:17, 14.70it/s] 14%|█▍        | 185/1319 [00:13<01:16, 14.87it/s] 14%|█▍        | 187/1319 [00:13<01:16, 14.78it/s] 14%|█▍        | 189/1319 [00:13<01:14, 15.10it/s] 14%|█▍        | 191/1319 [00:13<01:15, 15.03it/s] 15%|█▍        | 193/1319 [00:13<01:14, 15.09it/s] 15%|█▍        | 195/1319 [00:13<01:13, 15.30it/s] 15%|█▍        | 197/1319 [00:14<01:13, 15.18it/s] 15%|█▌        | 199/1319 [00:14<01:14, 15.10it/s] 15%|█▌        | 201/1319 [00:14<01:13, 15.26it/s] 15%|█▌        | 203/1319 [00:14<01:12, 15.39it/s] 16%|█▌        | 205/1319 [00:14<01:13, 15.25it/s] 16%|█▌        | 207/1319 [00:14<01:13, 15.14it/s] 16%|█▌        | 209/1319 [00:14<01:12, 15.28it/s] 16%|█▌        | 211/1319 [00:14<01:12, 15.22it/s] 16%|█▌        | 213/1319 [00:15<01:12, 15.17it/s] 16%|█▋        | 215/1319 [00:15<01:12, 15.29it/s] 16%|█▋        | 217/1319 [00:15<01:12, 15.23it/s] 17%|█▋        | 219/1319 [00:15<01:12, 15.24it/s] 17%|█▋        | 221/1319 [00:15<01:11, 15.42it/s] 17%|█▋        | 223/1319 [00:15<01:11, 15.42it/s] 17%|█▋        | 225/1319 [00:15<01:11, 15.30it/s] 17%|█▋        | 227/1319 [00:15<01:12, 15.13it/s] 17%|█▋        | 229/1319 [00:16<01:10, 15.46it/s] 18%|█▊        | 231/1319 [00:16<01:10, 15.38it/s] 18%|█▊        | 233/1319 [00:16<01:10, 15.30it/s] 18%|█▊        | 235/1319 [00:16<01:10, 15.36it/s] 18%|█▊        | 237/1319 [00:16<01:10, 15.27it/s] 18%|█▊        | 239/1319 [00:16<01:11, 15.18it/s] 18%|█▊        | 241/1319 [00:16<01:11, 15.03it/s] 18%|█▊        | 243/1319 [00:17<01:09, 15.38it/s] 19%|█▊        | 245/1319 [00:17<01:10, 15.30it/s] 19%|█▊        | 247/1319 [00:17<01:10, 15.25it/s] 19%|█▉        | 249/1319 [00:17<01:09, 15.32it/s] 19%|█▉        | 251/1319 [00:17<01:10, 15.18it/s] 19%|█▉        | 253/1319 [00:17<01:09, 15.31it/s] 19%|█▉        | 255/1319 [00:17<01:09, 15.33it/s] 19%|█▉        | 257/1319 [00:17<01:08, 15.41it/s] 20%|█▉        | 259/1319 [00:18<01:09, 15.23it/s] 20%|█▉        | 261/1319 [00:18<01:10, 15.09it/s] 20%|█▉        | 263/1319 [00:18<01:09, 15.29it/s] 20%|██        | 265/1319 [00:18<01:09, 15.14it/s] 20%|██        | 267/1319 [00:18<01:09, 15.04it/s] 20%|██        | 269/1319 [00:18<01:08, 15.22it/s] 21%|██        | 271/1319 [00:18<01:08, 15.27it/s] 21%|██        | 273/1319 [00:19<01:08, 15.38it/s] 21%|██        | 275/1319 [00:19<01:10, 14.79it/s] 21%|██        | 277/1319 [00:19<01:10, 14.79it/s] 21%|██        | 279/1319 [00:19<01:10, 14.68it/s] 21%|██▏       | 281/1319 [00:19<01:10, 14.76it/s] 21%|██▏       | 283/1319 [00:19<01:09, 14.81it/s] 22%|██▏       | 285/1319 [00:19<01:09, 14.78it/s] 22%|██▏       | 287/1319 [00:19<01:09, 14.82it/s] 22%|██▏       | 289/1319 [00:20<01:09, 14.82it/s] 22%|██▏       | 291/1319 [00:20<01:09, 14.69it/s] 22%|██▏       | 293/1319 [00:20<01:10, 14.65it/s] 22%|██▏       | 295/1319 [00:20<01:10, 14.56it/s] 23%|██▎       | 297/1319 [00:20<01:09, 14.62it/s] 23%|██▎       | 299/1319 [00:20<01:09, 14.67it/s] 23%|██▎       | 301/1319 [00:20<01:08, 14.77it/s] 23%|██▎       | 303/1319 [00:21<01:09, 14.71it/s] 23%|██▎       | 305/1319 [00:21<01:08, 14.77it/s] 23%|██▎       | 307/1319 [00:21<01:08, 14.73it/s] 23%|██▎       | 309/1319 [00:21<01:08, 14.85it/s] 24%|██▎       | 311/1319 [00:21<01:08, 14.73it/s] 24%|██▎       | 313/1319 [00:21<01:08, 14.75it/s] 24%|██▍       | 315/1319 [00:21<01:08, 14.71it/s] 24%|██▍       | 317/1319 [00:22<01:07, 14.79it/s] 24%|██▍       | 319/1319 [00:22<01:08, 14.65it/s] 24%|██▍       | 321/1319 [00:22<01:07, 14.69it/s] 24%|██▍       | 323/1319 [00:22<01:08, 14.56it/s] 25%|██▍       | 325/1319 [00:22<01:08, 14.60it/s] 25%|██▍       | 327/1319 [00:22<01:07, 14.59it/s] 25%|██▍       | 329/1319 [00:22<01:07, 14.73it/s] 25%|██▌       | 331/1319 [00:22<01:07, 14.64it/s] 25%|██▌       | 333/1319 [00:23<01:06, 14.77it/s] 25%|██▌       | 335/1319 [00:23<01:07, 14.63it/s] 26%|██▌       | 337/1319 [00:23<01:06, 14.68it/s] 26%|██▌       | 339/1319 [00:23<01:07, 14.61it/s] 26%|██▌       | 341/1319 [00:23<01:06, 14.74it/s] 26%|██▌       | 343/1319 [00:23<01:06, 14.63it/s] 26%|██▌       | 345/1319 [00:23<01:06, 14.73it/s] 26%|██▋       | 347/1319 [00:24<01:06, 14.59it/s] 26%|██▋       | 349/1319 [00:24<01:06, 14.68it/s] 27%|██▋       | 351/1319 [00:24<01:06, 14.60it/s] 27%|██▋       | 353/1319 [00:24<01:05, 14.70it/s] 27%|██▋       | 355/1319 [00:24<01:05, 14.68it/s] 27%|██▋       | 357/1319 [00:24<01:05, 14.68it/s] 27%|██▋       | 359/1319 [00:24<01:05, 14.71it/s] 27%|██▋       | 361/1319 [00:25<01:04, 14.76it/s] 28%|██▊       | 363/1319 [00:25<01:04, 14.85it/s] 28%|██▊       | 365/1319 [00:25<01:04, 14.77it/s] 28%|██▊       | 367/1319 [00:25<01:04, 14.79it/s] 28%|██▊       | 369/1319 [00:25<01:04, 14.69it/s] 28%|██▊       | 371/1319 [00:25<01:04, 14.71it/s] 28%|██▊       | 373/1319 [00:25<01:04, 14.78it/s] 28%|██▊       | 375/1319 [00:25<01:03, 14.82it/s] 29%|██▊       | 377/1319 [00:26<01:03, 14.79it/s] 29%|██▊       | 379/1319 [00:26<01:03, 14.87it/s] 29%|██▉       | 381/1319 [00:26<01:03, 14.77it/s] 29%|██▉       | 383/1319 [00:26<01:03, 14.82it/s] 29%|██▉       | 385/1319 [00:26<01:03, 14.76it/s] 29%|██▉       | 387/1319 [00:26<01:02, 14.89it/s] 29%|██▉       | 389/1319 [00:26<01:03, 14.75it/s] 30%|██▉       | 391/1319 [00:27<01:02, 14.82it/s] 30%|██▉       | 393/1319 [00:27<01:02, 14.82it/s] 30%|██▉       | 395/1319 [00:27<01:01, 14.93it/s] 30%|███       | 397/1319 [00:27<01:01, 14.91it/s] 30%|███       | 399/1319 [00:27<01:01, 14.91it/s] 30%|███       | 401/1319 [00:27<01:01, 14.87it/s] 31%|███       | 403/1319 [00:27<01:02, 14.69it/s] 31%|███       | 405/1319 [00:27<01:02, 14.71it/s] 31%|███       | 407/1319 [00:28<01:02, 14.64it/s] 31%|███       | 409/1319 [00:28<01:01, 14.74it/s] 31%|███       | 411/1319 [00:28<01:01, 14.69it/s] 31%|███▏      | 413/1319 [00:28<01:01, 14.79it/s] 31%|███▏      | 415/1319 [00:28<01:01, 14.66it/s] 32%|███▏      | 417/1319 [00:28<01:01, 14.72it/s] 32%|███▏      | 419/1319 [00:28<01:01, 14.64it/s] 32%|███▏      | 421/1319 [00:29<01:01, 14.67it/s] 32%|███▏      | 423/1319 [00:29<01:01, 14.55it/s] 32%|███▏      | 425/1319 [00:29<01:01, 14.64it/s] 32%|███▏      | 427/1319 [00:29<01:01, 14.60it/s] 33%|███▎      | 429/1319 [00:29<01:00, 14.68it/s] 33%|███▎      | 431/1319 [00:29<01:00, 14.63it/s] 33%|███▎      | 433/1319 [00:29<01:00, 14.66it/s] 33%|███▎      | 435/1319 [00:30<01:00, 14.62it/s] 33%|███▎      | 437/1319 [00:30<00:59, 14.71it/s] 33%|███▎      | 439/1319 [00:30<01:00, 14.61it/s] 33%|███▎      | 441/1319 [00:30<00:59, 14.72it/s] 34%|███▎      | 443/1319 [00:30<00:59, 14.68it/s] 34%|███▎      | 445/1319 [00:30<00:59, 14.72it/s] 34%|███▍      | 447/1319 [00:30<00:59, 14.63it/s] 34%|███▍      | 449/1319 [00:30<00:58, 14.75it/s] 34%|███▍      | 451/1319 [00:31<00:58, 14.72it/s] 34%|███▍      | 453/1319 [00:31<00:58, 14.84it/s] 34%|███▍      | 455/1319 [00:31<00:57, 14.93it/s] 35%|███▍      | 457/1319 [00:31<00:58, 14.84it/s] 35%|███▍      | 459/1319 [00:31<00:58, 14.72it/s] 35%|███▍      | 461/1319 [00:31<00:58, 14.65it/s] 35%|███▌      | 463/1319 [00:31<00:58, 14.57it/s] 35%|███▌      | 465/1319 [00:32<00:58, 14.63it/s] 35%|███▌      | 467/1319 [00:32<00:58, 14.61it/s] 36%|███▌      | 469/1319 [00:32<00:57, 14.71it/s] 36%|███▌      | 471/1319 [00:32<00:58, 14.60it/s] 36%|███▌      | 473/1319 [00:32<00:57, 14.68it/s] 36%|███▌      | 475/1319 [00:32<00:57, 14.58it/s] 36%|███▌      | 477/1319 [00:32<00:57, 14.66it/s] 36%|███▋      | 479/1319 [00:33<00:57, 14.70it/s] 36%|███▋      | 481/1319 [00:33<00:56, 14.75it/s] 37%|███▋      | 483/1319 [00:33<00:56, 14.68it/s] 37%|███▋      | 485/1319 [00:33<00:56, 14.74it/s] 37%|███▋      | 487/1319 [00:33<00:56, 14.68it/s] 37%|███▋      | 489/1319 [00:33<00:56, 14.76it/s] 37%|███▋      | 491/1319 [00:33<00:56, 14.63it/s] 37%|███▋      | 493/1319 [00:33<00:56, 14.69it/s] 38%|███▊      | 495/1319 [00:34<00:56, 14.59it/s] 38%|███▊      | 497/1319 [00:34<00:56, 14.64it/s] 38%|███▊      | 499/1319 [00:34<00:55, 14.68it/s] 38%|███▊      | 501/1319 [00:34<00:55, 14.78it/s] 38%|███▊      | 503/1319 [00:34<00:55, 14.72it/s] 38%|███▊      | 505/1319 [00:34<00:55, 14.79it/s] 38%|███▊      | 507/1319 [00:34<00:55, 14.76it/s] 39%|███▊      | 509/1319 [00:35<00:54, 14.81it/s] 39%|███▊      | 511/1319 [00:35<00:55, 14.65it/s] 39%|███▉      | 513/1319 [00:35<00:54, 14.71it/s] 39%|███▉      | 515/1319 [00:35<00:55, 14.59it/s] 39%|███▉      | 517/1319 [00:35<00:54, 14.69it/s] 39%|███▉      | 519/1319 [00:35<00:54, 14.68it/s] 39%|███▉      | 521/1319 [00:35<00:54, 14.78it/s] 40%|███▉      | 523/1319 [00:36<00:54, 14.67it/s] 40%|███▉      | 525/1319 [00:36<00:53, 14.73it/s] 40%|███▉      | 527/1319 [00:36<00:53, 14.67it/s] 40%|████      | 529/1319 [00:36<00:53, 14.78it/s] 40%|████      | 531/1319 [00:36<00:53, 14.65it/s] 40%|████      | 533/1319 [00:36<00:53, 14.73it/s] 41%|████      | 535/1319 [00:36<00:53, 14.70it/s] 41%|████      | 537/1319 [00:36<00:52, 14.85it/s] 41%|████      | 539/1319 [00:37<00:52, 14.75it/s] 41%|████      | 541/1319 [00:37<00:52, 14.79it/s] 41%|████      | 543/1319 [00:37<00:52, 14.73it/s] 41%|████▏     | 545/1319 [00:37<00:52, 14.82it/s] 41%|████▏     | 547/1319 [00:37<00:52, 14.72it/s] 42%|████▏     | 549/1319 [00:37<00:52, 14.79it/s] 42%|████▏     | 551/1319 [00:37<00:52, 14.64it/s] 42%|████▏     | 553/1319 [00:38<00:51, 14.74it/s] 42%|████▏     | 555/1319 [00:38<00:52, 14.64it/s] 42%|████▏     | 557/1319 [00:38<00:51, 14.75it/s] 42%|████▏     | 559/1319 [00:38<00:51, 14.79it/s] 43%|████▎     | 561/1319 [00:38<00:50, 14.93it/s] 43%|████▎     | 563/1319 [00:38<00:50, 15.10it/s] 43%|████▎     | 565/1319 [00:38<00:49, 15.15it/s] 43%|████▎     | 567/1319 [00:38<00:49, 15.24it/s] 43%|████▎     | 569/1319 [00:39<00:49, 15.12it/s] 43%|████▎     | 571/1319 [00:39<00:49, 15.15it/s] 43%|████▎     | 573/1319 [00:39<00:49, 15.06it/s] 44%|████▎     | 575/1319 [00:39<00:49, 15.07it/s] 44%|████▎     | 577/1319 [00:39<00:49, 14.99it/s] 44%|████▍     | 579/1319 [00:39<00:49, 15.09it/s] 44%|████▍     | 581/1319 [00:39<00:48, 15.11it/s] 44%|████▍     | 583/1319 [00:40<00:48, 15.21it/s] 44%|████▍     | 585/1319 [00:40<00:48, 15.15it/s] 45%|████▍     | 587/1319 [00:40<00:48, 15.18it/s] 45%|████▍     | 589/1319 [00:40<00:48, 15.06it/s] 45%|████▍     | 591/1319 [00:40<00:48, 15.10it/s] 45%|████▍     | 593/1319 [00:40<00:48, 15.03it/s] 45%|████▌     | 595/1319 [00:40<00:47, 15.11it/s] 45%|████▌     | 597/1319 [00:40<00:48, 14.97it/s] 45%|████▌     | 599/1319 [00:41<00:47, 15.14it/s] 46%|████▌     | 601/1319 [00:41<00:47, 15.11it/s] 46%|████▌     | 603/1319 [00:41<00:47, 15.17it/s] 46%|████▌     | 605/1319 [00:41<00:47, 15.18it/s] 46%|████▌     | 607/1319 [00:41<00:46, 15.16it/s] 46%|████▌     | 609/1319 [00:41<00:46, 15.21it/s] 46%|████▋     | 611/1319 [00:41<00:46, 15.13it/s] 46%|████▋     | 613/1319 [00:42<00:46, 15.22it/s] 47%|████▋     | 615/1319 [00:42<00:46, 15.16it/s] 47%|████▋     | 617/1319 [00:42<00:46, 15.18it/s] 47%|████▋     | 619/1319 [00:42<00:46, 15.18it/s] 47%|████▋     | 621/1319 [00:42<00:45, 15.24it/s] 47%|████▋     | 623/1319 [00:42<00:46, 15.04it/s] 47%|████▋     | 625/1319 [00:42<00:45, 15.16it/s] 48%|████▊     | 627/1319 [00:42<00:45, 15.07it/s] 48%|████▊     | 629/1319 [00:43<00:45, 15.25it/s] 48%|████▊     | 631/1319 [00:43<00:45, 15.23it/s] 48%|████▊     | 633/1319 [00:43<00:44, 15.33it/s] 48%|████▊     | 635/1319 [00:43<00:44, 15.34it/s] 48%|████▊     | 637/1319 [00:43<00:44, 15.27it/s] 48%|████▊     | 639/1319 [00:43<00:44, 15.24it/s] 49%|████▊     | 641/1319 [00:43<00:44, 15.12it/s] 49%|████▊     | 643/1319 [00:43<00:44, 15.17it/s] 49%|████▉     | 645/1319 [00:44<00:44, 15.11it/s] 49%|████▉     | 647/1319 [00:44<00:44, 15.22it/s] 49%|████▉     | 649/1319 [00:44<00:43, 15.26it/s] 49%|████▉     | 651/1319 [00:44<00:43, 15.40it/s] 50%|████▉     | 653/1319 [00:44<00:43, 15.33it/s] 50%|████▉     | 655/1319 [00:44<00:43, 15.32it/s] 50%|████▉     | 657/1319 [00:44<00:43, 15.18it/s] 50%|████▉     | 659/1319 [00:45<00:43, 15.23it/s] 50%|█████     | 661/1319 [00:45<00:43, 15.20it/s] 50%|█████     | 663/1319 [00:45<00:43, 15.25it/s] 50%|█████     | 665/1319 [00:45<00:42, 15.30it/s] 51%|█████     | 667/1319 [00:45<00:42, 15.20it/s] 51%|█████     | 669/1319 [00:45<00:42, 15.28it/s] 51%|█████     | 671/1319 [00:45<00:42, 15.20it/s] 51%|█████     | 673/1319 [00:45<00:42, 15.26it/s] 51%|█████     | 675/1319 [00:46<00:42, 15.22it/s] 51%|█████▏    | 677/1319 [00:46<00:42, 15.25it/s] 51%|█████▏    | 679/1319 [00:46<00:41, 15.26it/s] 52%|█████▏    | 681/1319 [00:46<00:41, 15.28it/s] 52%|█████▏    | 683/1319 [00:46<00:41, 15.28it/s] 52%|█████▏    | 685/1319 [00:46<00:41, 15.29it/s] 52%|█████▏    | 687/1319 [00:46<00:41, 15.20it/s] 52%|█████▏    | 689/1319 [00:47<00:41, 15.21it/s] 52%|█████▏    | 691/1319 [00:47<00:41, 15.11it/s] 53%|█████▎    | 693/1319 [00:47<00:41, 15.25it/s] 53%|█████▎    | 695/1319 [00:47<00:41, 15.21it/s] 53%|█████▎    | 697/1319 [00:47<00:40, 15.29it/s] 53%|█████▎    | 699/1319 [00:47<00:40, 15.25it/s] 53%|█████▎    | 701/1319 [00:47<00:40, 15.21it/s] 53%|█████▎    | 703/1319 [00:47<00:40, 15.26it/s] 53%|█████▎    | 705/1319 [00:48<00:40, 15.18it/s] 54%|█████▎    | 707/1319 [00:48<00:40, 15.25it/s] 54%|█████▍    | 709/1319 [00:48<00:40, 15.16it/s] 54%|█████▍    | 711/1319 [00:48<00:39, 15.21it/s] 54%|█████▍    | 713/1319 [00:48<00:39, 15.20it/s] 54%|█████▍    | 715/1319 [00:48<00:39, 15.25it/s] 54%|█████▍    | 717/1319 [00:48<00:39, 15.21it/s] 55%|█████▍    | 719/1319 [00:48<00:39, 15.25it/s] 55%|█████▍    | 721/1319 [00:49<00:39, 15.15it/s] 55%|█████▍    | 723/1319 [00:49<00:39, 15.19it/s] 55%|█████▍    | 725/1319 [00:49<00:39, 15.12it/s] 55%|█████▌    | 727/1319 [00:49<00:38, 15.20it/s] 55%|█████▌    | 729/1319 [00:49<00:38, 15.26it/s] 55%|█████▌    | 731/1319 [00:49<00:38, 15.27it/s] 56%|█████▌    | 733/1319 [00:49<00:38, 15.28it/s] 56%|█████▌    | 735/1319 [00:50<00:38, 15.26it/s] 56%|█████▌    | 737/1319 [00:50<00:38, 15.27it/s] 56%|█████▌    | 739/1319 [00:50<00:38, 15.19it/s] 56%|█████▌    | 741/1319 [00:50<00:37, 15.25it/s] 56%|█████▋    | 743/1319 [00:50<00:37, 15.27it/s] 56%|█████▋    | 745/1319 [00:50<00:37, 15.38it/s] 57%|█████▋    | 747/1319 [00:50<00:37, 15.37it/s] 57%|█████▋    | 749/1319 [00:50<00:37, 15.40it/s] 57%|█████▋    | 751/1319 [00:51<00:36, 15.53it/s] 57%|█████▋    | 753/1319 [00:51<00:35, 15.83it/s] 57%|█████▋    | 755/1319 [00:51<00:34, 16.56it/s] 57%|█████▋    | 758/1319 [00:51<00:31, 18.03it/s] 58%|█████▊    | 761/1319 [00:51<00:29, 19.15it/s] 58%|█████▊    | 764/1319 [00:51<00:27, 19.85it/s] 58%|█████▊    | 767/1319 [00:51<00:27, 20.40it/s] 58%|█████▊    | 770/1319 [00:51<00:26, 20.77it/s] 59%|█████▊    | 773/1319 [00:52<00:26, 20.37it/s] 59%|█████▉    | 776/1319 [00:52<00:26, 20.24it/s] 59%|█████▉    | 779/1319 [00:52<00:26, 20.64it/s] 59%|█████▉    | 782/1319 [00:52<00:25, 20.97it/s] 60%|█████▉    | 785/1319 [00:52<00:26, 19.83it/s] 60%|█████▉    | 787/1319 [00:52<00:26, 19.71it/s] 60%|█████▉    | 790/1319 [00:52<00:26, 20.28it/s] 60%|██████    | 793/1319 [00:53<00:25, 20.50it/s] 60%|██████    | 796/1319 [00:53<00:24, 21.02it/s] 61%|██████    | 799/1319 [00:53<00:24, 21.11it/s] 61%|██████    | 802/1319 [00:53<00:24, 21.25it/s] 61%|██████    | 805/1319 [00:53<00:23, 21.57it/s] 61%|██████▏   | 808/1319 [00:53<00:23, 21.55it/s] 61%|██████▏   | 811/1319 [00:53<00:23, 21.40it/s] 62%|██████▏   | 814/1319 [00:54<00:23, 21.56it/s] 62%|██████▏   | 817/1319 [00:54<00:23, 21.41it/s] 62%|██████▏   | 820/1319 [00:54<00:23, 21.50it/s] 62%|██████▏   | 823/1319 [00:54<00:24, 20.06it/s] 63%|██████▎   | 826/1319 [00:54<00:23, 20.69it/s] 63%|██████▎   | 829/1319 [00:54<00:25, 19.43it/s] 63%|██████▎   | 832/1319 [00:54<00:24, 20.13it/s] 63%|██████▎   | 835/1319 [00:55<00:23, 20.35it/s] 64%|██████▎   | 838/1319 [00:55<00:25, 18.75it/s] 64%|██████▍   | 841/1319 [00:55<00:24, 19.66it/s] 64%|██████▍   | 844/1319 [00:55<00:24, 19.01it/s] 64%|██████▍   | 847/1319 [00:55<00:24, 19.08it/s] 64%|██████▍   | 850/1319 [00:55<00:23, 19.77it/s] 65%|██████▍   | 852/1319 [00:56<00:24, 19.30it/s] 65%|██████▍   | 854/1319 [00:56<00:25, 18.57it/s] 65%|██████▍   | 857/1319 [00:56<00:24, 18.84it/s] 65%|██████▌   | 860/1319 [00:56<00:23, 19.61it/s] 65%|██████▌   | 863/1319 [00:56<00:23, 19.58it/s] 66%|██████▌   | 866/1319 [00:56<00:22, 20.29it/s] 66%|██████▌   | 869/1319 [00:56<00:22, 20.19it/s] 66%|██████▌   | 872/1319 [00:57<00:22, 19.83it/s] 66%|██████▋   | 875/1319 [00:57<00:21, 20.32it/s] 67%|██████▋   | 878/1319 [00:57<00:21, 20.06it/s] 67%|██████▋   | 881/1319 [00:57<00:21, 20.19it/s] 67%|██████▋   | 884/1319 [00:57<00:21, 20.57it/s] 67%|██████▋   | 887/1319 [00:57<00:21, 20.14it/s] 67%|██████▋   | 890/1319 [00:57<00:21, 20.29it/s] 68%|██████▊   | 893/1319 [00:58<00:21, 19.74it/s] 68%|██████▊   | 896/1319 [00:58<00:21, 19.93it/s] 68%|██████▊   | 899/1319 [00:58<00:21, 19.89it/s] 68%|██████▊   | 901/1319 [00:58<00:22, 18.98it/s] 69%|██████▊   | 904/1319 [00:58<00:20, 19.77it/s] 69%|██████▉   | 907/1319 [00:58<00:20, 20.41it/s] 69%|██████▉   | 910/1319 [00:58<00:19, 20.87it/s] 69%|██████▉   | 913/1319 [00:59<00:19, 21.19it/s] 69%|██████▉   | 916/1319 [00:59<00:19, 20.22it/s] 70%|██████▉   | 919/1319 [00:59<00:19, 20.71it/s] 70%|██████▉   | 922/1319 [00:59<00:18, 21.02it/s] 70%|███████   | 925/1319 [00:59<00:19, 20.40it/s] 70%|███████   | 928/1319 [00:59<00:18, 20.80it/s] 71%|███████   | 931/1319 [00:59<00:19, 20.42it/s] 71%|███████   | 934/1319 [01:00<00:19, 19.73it/s] 71%|███████   | 937/1319 [01:00<00:18, 20.24it/s] 71%|███████▏  | 940/1319 [01:00<00:18, 20.58it/s] 71%|███████▏  | 943/1319 [01:00<00:17, 20.96it/s] 72%|███████▏  | 946/1319 [01:00<00:17, 21.09it/s] 72%|███████▏  | 949/1319 [01:00<00:18, 20.51it/s] 72%|███████▏  | 952/1319 [01:00<00:17, 20.95it/s] 72%|███████▏  | 955/1319 [01:01<00:17, 21.20it/s] 73%|███████▎  | 958/1319 [01:01<00:16, 21.40it/s] 73%|███████▎  | 961/1319 [01:01<00:17, 20.70it/s] 73%|███████▎  | 964/1319 [01:01<00:16, 20.99it/s] 73%|███████▎  | 967/1319 [01:01<00:17, 20.48it/s] 74%|███████▎  | 970/1319 [01:01<00:16, 20.87it/s] 74%|███████▍  | 973/1319 [01:01<00:16, 20.36it/s] 74%|███████▍  | 976/1319 [01:02<00:16, 20.64it/s] 74%|███████▍  | 979/1319 [01:02<00:16, 21.01it/s] 74%|███████▍  | 982/1319 [01:02<00:16, 20.19it/s] 75%|███████▍  | 985/1319 [01:02<00:16, 19.79it/s] 75%|███████▍  | 987/1319 [01:02<00:16, 19.58it/s] 75%|███████▌  | 990/1319 [01:02<00:16, 19.69it/s] 75%|███████▌  | 992/1319 [01:02<00:17, 18.99it/s] 75%|███████▌  | 995/1319 [01:03<00:16, 19.89it/s] 76%|███████▌  | 998/1319 [01:03<00:16, 20.05it/s] 76%|███████▌  | 1001/1319 [01:03<00:15, 20.62it/s] 76%|███████▌  | 1004/1319 [01:03<00:15, 20.97it/s] 76%|███████▋  | 1007/1319 [01:03<00:14, 21.24it/s] 77%|███████▋  | 1010/1319 [01:03<00:15, 20.40it/s] 77%|███████▋  | 1013/1319 [01:03<00:14, 20.90it/s] 77%|███████▋  | 1016/1319 [01:04<00:14, 20.90it/s] 77%|███████▋  | 1019/1319 [01:04<00:14, 20.37it/s] 77%|███████▋  | 1022/1319 [01:04<00:14, 20.80it/s] 78%|███████▊  | 1025/1319 [01:04<00:14, 20.71it/s] 78%|███████▊  | 1028/1319 [01:04<00:14, 20.17it/s] 78%|███████▊  | 1031/1319 [01:04<00:14, 20.40it/s] 78%|███████▊  | 1034/1319 [01:04<00:14, 20.15it/s] 79%|███████▊  | 1037/1319 [01:05<00:13, 20.55it/s] 79%|███████▉  | 1040/1319 [01:05<00:13, 20.92it/s] 79%|███████▉  | 1043/1319 [01:05<00:13, 20.99it/s] 79%|███████▉  | 1046/1319 [01:05<00:13, 20.45it/s] 80%|███████▉  | 1049/1319 [01:05<00:12, 20.93it/s] 80%|███████▉  | 1052/1319 [01:05<00:13, 20.34it/s] 80%|███████▉  | 1055/1319 [01:06<00:13, 20.16it/s] 80%|████████  | 1058/1319 [01:06<00:12, 20.40it/s] 80%|████████  | 1061/1319 [01:06<00:12, 20.56it/s] 81%|████████  | 1064/1319 [01:06<00:12, 20.15it/s] 81%|████████  | 1067/1319 [01:06<00:12, 20.64it/s] 81%|████████  | 1070/1319 [01:06<00:12, 20.21it/s] 81%|████████▏ | 1073/1319 [01:06<00:11, 20.61it/s] 82%|████████▏ | 1076/1319 [01:07<00:11, 21.02it/s] 82%|████████▏ | 1079/1319 [01:07<00:11, 20.06it/s] 82%|████████▏ | 1082/1319 [01:07<00:11, 20.47it/s] 82%|████████▏ | 1085/1319 [01:07<00:11, 20.87it/s] 82%|████████▏ | 1088/1319 [01:07<00:10, 21.09it/s] 83%|████████▎ | 1091/1319 [01:07<00:11, 20.53it/s] 83%|████████▎ | 1094/1319 [01:07<00:10, 20.93it/s] 83%|████████▎ | 1097/1319 [01:08<00:10, 20.34it/s] 83%|████████▎ | 1100/1319 [01:08<00:10, 20.74it/s] 84%|████████▎ | 1103/1319 [01:08<00:10, 20.57it/s] 84%|████████▍ | 1106/1319 [01:08<00:10, 20.75it/s] 84%|████████▍ | 1109/1319 [01:08<00:10, 19.98it/s] 84%|████████▍ | 1112/1319 [01:08<00:10, 20.02it/s] 85%|████████▍ | 1115/1319 [01:08<00:10, 20.40it/s] 85%|████████▍ | 1118/1319 [01:09<00:09, 20.75it/s] 85%|████████▍ | 1121/1319 [01:09<00:09, 21.22it/s] 85%|████████▌ | 1124/1319 [01:09<00:09, 20.71it/s] 85%|████████▌ | 1127/1319 [01:09<00:09, 21.15it/s] 86%|████████▌ | 1130/1319 [01:09<00:09, 20.47it/s] 86%|████████▌ | 1133/1319 [01:09<00:08, 20.76it/s] 86%|████████▌ | 1136/1319 [01:09<00:08, 20.86it/s] 86%|████████▋ | 1139/1319 [01:10<00:08, 20.44it/s] 87%|████████▋ | 1142/1319 [01:10<00:08, 20.89it/s] 87%|████████▋ | 1145/1319 [01:10<00:08, 21.33it/s] 87%|████████▋ | 1148/1319 [01:10<00:08, 20.74it/s] 87%|████████▋ | 1151/1319 [01:10<00:07, 21.12it/s] 87%|████████▋ | 1154/1319 [01:10<00:07, 21.47it/s] 88%|████████▊ | 1157/1319 [01:10<00:07, 20.90it/s] 88%|████████▊ | 1160/1319 [01:11<00:07, 21.19it/s] 88%|████████▊ | 1163/1319 [01:11<00:07, 21.39it/s] 88%|████████▊ | 1166/1319 [01:11<00:07, 20.83it/s] 89%|████████▊ | 1169/1319 [01:11<00:07, 20.11it/s] 89%|████████▉ | 1172/1319 [01:11<00:07, 20.40it/s] 89%|████████▉ | 1175/1319 [01:11<00:06, 20.85it/s] 89%|████████▉ | 1178/1319 [01:11<00:06, 21.16it/s] 90%|████████▉ | 1181/1319 [01:12<00:06, 21.41it/s] 90%|████████▉ | 1184/1319 [01:12<00:06, 20.72it/s] 90%|████████▉ | 1187/1319 [01:12<00:06, 21.10it/s] 90%|█████████ | 1190/1319 [01:12<00:06, 21.34it/s] 90%|█████████ | 1193/1319 [01:12<00:05, 21.53it/s] 91%|█████████ | 1196/1319 [01:12<00:05, 20.82it/s] 91%|█████████ | 1199/1319 [01:12<00:05, 21.07it/s] 91%|█████████ | 1202/1319 [01:13<00:05, 21.24it/s] 91%|█████████▏| 1205/1319 [01:13<00:05, 20.64it/s] 92%|█████████▏| 1208/1319 [01:13<00:05, 20.14it/s] 92%|█████████▏| 1211/1319 [01:13<00:05, 20.56it/s] 92%|█████████▏| 1214/1319 [01:13<00:05, 20.95it/s] 92%|█████████▏| 1217/1319 [01:13<00:04, 21.29it/s] 92%|█████████▏| 1220/1319 [01:13<00:04, 20.32it/s] 93%|█████████▎| 1223/1319 [01:14<00:04, 20.78it/s] 93%|█████████▎| 1226/1319 [01:14<00:04, 21.08it/s] 93%|█████████▎| 1229/1319 [01:14<00:04, 21.40it/s] 93%|█████████▎| 1232/1319 [01:14<00:04, 20.71it/s] 94%|█████████▎| 1235/1319 [01:14<00:03, 21.11it/s] 94%|█████████▍| 1238/1319 [01:14<00:03, 20.72it/s] 94%|█████████▍| 1241/1319 [01:14<00:03, 19.98it/s] 94%|█████████▍| 1244/1319 [01:15<00:03, 20.38it/s] 95%|█████████▍| 1247/1319 [01:15<00:03, 19.57it/s] 95%|█████████▍| 1250/1319 [01:15<00:03, 19.99it/s] 95%|█████████▍| 1253/1319 [01:15<00:03, 19.78it/s] 95%|█████████▌| 1255/1319 [01:15<00:03, 19.01it/s] 95%|█████████▌| 1257/1319 [01:15<00:03, 18.41it/s] 96%|█████████▌| 1260/1319 [01:15<00:03, 19.25it/s] 96%|█████████▌| 1262/1319 [01:16<00:03, 18.78it/s] 96%|█████████▌| 1265/1319 [01:16<00:02, 19.02it/s] 96%|█████████▌| 1268/1319 [01:16<00:02, 19.27it/s] 96%|█████████▋| 1270/1319 [01:16<00:02, 18.38it/s] 97%|█████████▋| 1273/1319 [01:16<00:02, 19.53it/s] 97%|█████████▋| 1276/1319 [01:16<00:02, 19.64it/s] 97%|█████████▋| 1279/1319 [01:16<00:01, 20.30it/s] 97%|█████████▋| 1282/1319 [01:17<00:01, 19.34it/s] 97%|█████████▋| 1284/1319 [01:17<00:01, 18.29it/s] 97%|█████████▋| 1286/1319 [01:17<00:01, 18.28it/s] 98%|█████████▊| 1289/1319 [01:17<00:01, 18.67it/s] 98%|█████████▊| 1291/1319 [01:17<00:01, 18.19it/s] 98%|█████████▊| 1294/1319 [01:17<00:01, 19.25it/s] 98%|█████████▊| 1296/1319 [01:17<00:01, 18.90it/s] 98%|█████████▊| 1299/1319 [01:18<00:01, 19.02it/s] 99%|█████████▊| 1301/1319 [01:18<00:00, 18.78it/s] 99%|█████████▉| 1303/1319 [01:18<00:00, 18.58it/s] 99%|█████████▉| 1306/1319 [01:18<00:00, 19.56it/s] 99%|█████████▉| 1308/1319 [01:18<00:00, 19.16it/s] 99%|█████████▉| 1311/1319 [01:18<00:00, 19.13it/s]100%|█████████▉| 1313/1319 [01:18<00:00, 18.56it/s]100%|█████████▉| 1315/1319 [01:18<00:00, 17.77it/s]100%|█████████▉| 1318/1319 [01:19<00:00, 18.14it/s]100%|██████████| 1319/1319 [01:19<00:00, 16.68it/s]
+STDOUT: {'results': {'hendrycksTest-elementary_mathematics': {'acc': 0.2698412698412698, 'acc_stderr': 0.03237307120120853, 'acc_norm': 0.2698412698412698, 'acc_norm_stderr': 0.03237307120120853}, 'bigbench_logical_deduction_three_objects': {'multiple_choice_grade': 0.35978835978835977, 'multiple_choice_grade_stderr': 0.035003092260751656}}}
+STDOUT: Finetuning the Model:  False
