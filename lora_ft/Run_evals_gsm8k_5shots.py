@@ -1,3 +1,6 @@
+## prune_target_epoch to get stats per epoch, other suppors to get get intermediate stats
+
+
 #!/usr/bin/env python
 # coding=utf-8
 # Copyright 2020 The HuggingFace Inc. team. All rights reserved.
@@ -182,10 +185,30 @@ class ModelArguments:
             )
         },
     )
+    
+    add_finetuned_adapter: bool = field(
+        default=False,
+        metadata={"help": "Whether to add a finetuned adapter to the model"},
+    )
+    
+    finetune_adapter_dataset: Optional[str] = field(
+        default=None,
+        metadata={"help": "The dataset on which the adapter is finetuned"},
+    )
+    
+    prune_target_epoch : Optional[int] = field(
+        default=3,
+        metadata={"help": "The number of masks we have for the model in the prune_info_path"},
+    )
+        
     do_eleuther_eval: bool = field(
         default=True, metadata={"help": "Whether to run the Eleuther Evaluation Harness"}
     )
 
+    do_eleuther_eval_og_model: bool = field(
+        default=False, metadata={"help": "Whether to run the Eleuther Evaluation Harness for the original model"}
+    )
+    
     full_ft: bool = field(
         default=False, metadata={"help": "Whether to perform full fine-tuning on the model"}
     )
@@ -216,7 +239,6 @@ class DataTrainingArguments:
     """
     Arguments pertaining to what data we are going to input our model for training and eval.
     """
-
     dataset_name: Optional[str] = field(
         default="wikitext", metadata={"help": "The name of the dataset to use (via the datasets library)."}
     )
@@ -332,7 +354,7 @@ class CustomTrainer(Trainer):
 
 
 # Prune the model according to the saved information
-def prune_model(model, tokenizer, prune_info_path):
+def prune_model(model, tokenizer, prune_info_path, target_epoch=3):
 
     def get_param_count(model, exclude=['embed', 'head']):
         return sum([p.numel() for n, p in model.named_parameters() if not any(x in n for x in exclude)])
@@ -340,8 +362,10 @@ def prune_model(model, tokenizer, prune_info_path):
     epoch_ = 1
     mask_info_loc = os.path.join(prune_info_path, 'mask_info_{}.pkl'.format(epoch_))
     original_param_count = get_param_count(model)
-    print('original model param count : {}'.format(original_param_count))
-    while os.path.exists(mask_info_loc):
+    print('STDOUT: original model param count : {}'.format(original_param_count))
+    
+    while (os.path.exists(mask_info_loc)) and (epoch_ <= target_epoch):
+        print('STDOUT: Pruning for epoch : {}'.format(epoch_) )
         with open(mask_info_loc, 'rb') as handle:
             mask_info = pkl.load(handle)
 
@@ -358,12 +382,12 @@ def prune_model(model, tokenizer, prune_info_path):
 
         gc.collect()
         torch.cuda.empty_cache() 
-        print(f'epoch {epoch_}, param count is {get_param_count(model)}')
+        print(f'STDOUT: epoch {epoch_}, param count is {get_param_count(model)}')
         epoch_ += 1
         mask_info_loc = os.path.join(prune_info_path, 'mask_info_{}.pkl'.format(epoch_))
     final_param_count = get_param_count(model)
-    print('Final model sparsity is : {:.3f} '.format(1.0 - final_param_count/original_param_count))
-    print('Final model param count : {}'.format(final_param_count))
+    print('STDOUT: Final model sparsity is : {:.3f} '.format(1.0 - final_param_count/original_param_count))
+    print('STDOUT: Final model param count : {}'.format(final_param_count))
     gc.collect()
     torch.cuda.empty_cache() 
 
@@ -470,54 +494,28 @@ def main():
     )
     logger.info(f"Training/evaluation parameters {training_args}")
 
-    # # Detecting last checkpoint.
-    # last_checkpoint = None
-    # if os.path.isdir(training_args.output_dir) and training_args.do_train and not training_args.overwrite_output_dir:
-    # 	last_checkpoint = get_last_checkpoint(training_args.output_dir)
-    # 	if last_checkpoint is None and len(os.listdir(training_args.output_dir)) > 0:
-    # 		raise ValueError(
-    # 			f"Output directory ({training_args.output_dir}) already exists and is not empty. "
-    # 			"Use --overwrite_output_dir to overcome."
-    # 		)
-    # 	elif last_checkpoint is not None and training_args.resume_from_checkpoint is None:
-    # 		logger.info(
-    # 			f"Checkpoint detected, resuming training at {last_checkpoint}. To avoid this behavior, change "
-    # 			"the `--output_dir` or add `--overwrite_output_dir` to train from scratch."
-    # 		)
-
-    # Set seed before initializing model.
     set_seed(training_args.seed)
 
-    # Get the datasets: you can either provide your own CSV/JSON/TXT training and evaluation files (see below)
-    # or just provide the name of one of the public datasets available on the hub at https://huggingface.co/datasets/
-    # (the dataset will be downloaded automatically from the datasets Hub).
-    #
-    # For CSV/JSON files, this script will use the column called 'text' or the first column if no column called
-    # 'text' is found. You can easily tweak this behavior (see below).
-    #
-    # In distributed training, the load_dataset function guarantee that only one local process can concurrently
-    # download the dataset.
-
     # TODO[ldery] -- we need to change this to account for fine-tuning on the right dataset
-    raw_datasets = load_dataset(
-        'allenai/c4', data_files={'train': 'en/c4-train.00000-of-01024.json.gz', 'validation': 'en/c4-validation.00000-of-00008.json.gz'}
-    )
+    # raw_datasets = load_dataset(
+    #     'allenai/c4', data_files={'train': 'en/c4-train.00000-of-01024.json.gz', 'validation': 'en/c4-validation.00000-of-00008.json.gz'}
+    # )
 
-    if "c4" not in data_args.dataset_name:
-        raw_datasets["validation"] = load_dataset(
-            data_args.dataset_name,
-            data_args.dataset_config_name,
-            split=f"train[:{data_args.validation_split_percentage}%]",
-            use_auth_token=True if model_args.use_auth_token else None,
-            streaming=data_args.streaming,
-        )
-        raw_datasets["train"] = load_dataset(
-            data_args.dataset_name,
-            data_args.dataset_config_name,
-            split=f"train[{data_args.validation_split_percentage}%:]",
-            use_auth_token=True if model_args.use_auth_token else None,
-            streaming=data_args.streaming,
-        )
+    # if "c4" not in data_args.dataset_name:
+    #     raw_datasets["validation"] = load_dataset(
+    #         data_args.dataset_name,
+    #         data_args.dataset_config_name,
+    #         split=f"train[:{data_args.validation_split_percentage}%]",
+    #         use_auth_token=True if model_args.use_auth_token else None,
+    #         streaming=data_args.streaming,
+    #     )
+    #     raw_datasets["train"] = load_dataset(
+    #         data_args.dataset_name,
+    #         data_args.dataset_config_name,
+    #         split=f"train[{data_args.validation_split_percentage}%:]",
+    #         use_auth_token=True if model_args.use_auth_token else None,
+    #         streaming=data_args.streaming,
+    #     )
 
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
@@ -547,6 +545,8 @@ def main():
     model = AutoModelForCausalLM.from_pretrained(model_args.model_name_or_path, torch_dtype=torch.float16, cache_dir=model_args.cache_dir, low_cpu_mem_usage=True, device_map="auto", trust_remote_code=True)
     model.seqlen = model.config.max_position_embeddings
 
+    '''
+    # outout_txt
     output_dir = training_args.output_dir
     os.makedirs(output_dir, exist_ok=True)
     file_path = os.path.join(output_dir, "output_gsm8k_5shot.txt")
@@ -560,23 +560,21 @@ def main():
         print("File created successfully.")
     except IOError as e:
         print("Error creating the file:", e)
+        
+    '''
     # Do the pre-training evaluation
     # Evaluation
-    if training_args.do_eval:
+    
+    if (training_args.do_eval) and (model_args.do_eleuther_eval_og_model):
         logger.info("*** Evaluate ***")
         model.eval()
-        # og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-        # out_str = "Original perplexity on wikitext = {:.3f}".format(og_ppl)
-        # print(out_str)
-
-    # Preprocessing the datasets.
-    # First we tokenize all the texts.
-    # if training_args.do_train:
-    # 	column_names = list(raw_datasets["train"].features)
-    # else:
-    # 	column_names = list(raw_datasets["validation"].features)
-    # text_column_name = "text" if "text" in column_names else column_names[0]
-
+        print(f'STDOUT: Evaluating on {data_args.dataset_name}')
+        og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+        out_str = "STDOUT: Original perplexity on {} = {:.3f}".format(data_args.dataset_name, og_ppl)
+        print(out_str)
+    else:
+        print('STDOUT: Not evaluating the og ppl')
+    
     # since this will be pickled to avoid _LazyModule error in Hasher force logger loading before tokenize_function
     tok_logger = transformers.utils.logging.get_logger("transformers.tokenization_utils_base")
 
@@ -616,83 +614,121 @@ def main():
         result["labels"] = result["input_ids"].copy()
         return result
 
+    should_i_do_eleuther_eval_og = model_args.do_eleuther_eval_og_model
+    print('STDOUT: Eleuther eval for og model: ', should_i_do_eleuther_eval_og)
+    og_params = get_param_count(model)
+    print("STDOUT: Num params = : ",  get_param_count(model))
 
-    should_i_do_eleuther_eval = True
-    print("Num params = : ", get_param_count(model) )
-    # if training_args.do_eleuther_eval:
-    if should_i_do_eleuther_eval:
-        print('eleuther eval for original model')
+    if should_i_do_eleuther_eval_og:
+        print('STDOUT: eleuther eval for original model')
     # 	# transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
-        # results = evaluator.simple_evaluate(
-        # 	model="hf-causal-experimental",
-        # 	model_args="pretrained={}".format(model_args.model_name_or_path),
-        # 	# tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
-           # 	tasks=["gsm8k"],
-        # 	num_fewshot=5,
-        # 	no_cache=True,
-        # 	pretrained_model=model,
-        # )
-
-    # updated_results = {'results': results['results']}
-    # print(updated_results)
-    # results_str = 'orginal-model \n' + str(updated_results)
-    # out_file.write(results_str + "\n")
-
-    if model_args.prune_info_path is not None:
-        prune_model(model, tokenizer, model_args.prune_info_path)
-        print("Num params = : ", get_param_count(model))
-        gc.collect()
-        torch.cuda.empty_cache()
-        # logger.info("*** Evaluate ***")
-        model.eval()
-        # start_time = time.time()
-        # import pdb
-        # pdb.set_trace()
-        # before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-        # speedup = og_runtime / final_runtime
-        # out_str = "[SpeedUp={:.3f}] Original perplexity on wikitext = {:.3f} | Before Training perplexity on wikitext = {:.3f}".format(speedup, og_ppl, before_train_ppl, speedup)
-        # out_file.write(out_str + "\n")
-        # print(out_str)
-    
-    finetuned_model = False
-    if finetuned_model:
-        
-        adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_c4_ft_wiki/'
-        # model.load_adapter(adapter_name)
-        # model.set_active_adapters('prune-c4_ft_wiki_adapter')
-
-        model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_c4_ft_wiki_adapter")
-
-
-    if should_i_do_eleuther_eval:
-        #transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
         results = evaluator.simple_evaluate(
             model="hf-causal-experimental",
             model_args="pretrained={}".format(model_args.model_name_or_path),
-            # tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag", "mmlu", "gsm8k"],
-            #    tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
-            tasks = ['gsm8k'],
-            num_fewshot=3,
-            limit = .005, # how much of the original dataset to test on 
-               # tasks=["hellaswag"],
-            # num_fewshot={"hellaswag": 0, "arc_challenge":0}
+            tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
+            # tasks = ['gsm8k'],
+            num_fewshot=5,
+            limit = .5, # how much of the original dataset to test on 
             no_cache=True,
             pretrained_model=model,
             write_out=True, 
-	        output_base_path=None, # writes to the current dir
+            output_base_path='original-model_gsm8k_5shots',  # writes to the current dir if commented out 
         )
-    updated_results = {'results': results['results']}
-    print(updated_results)
-    results_str = "prune_model\n" + str(updated_results)
-    with open(file_path, 'w') as out_file:
-        out_file.write("\n")
-        out_file.write(results_str + "\n")
-        out_file.flush()
+        updated_results = {'results': results['results']}
+        print('STDOUT:', updated_results)
+        results_str = 'orginal-model \n' + str(updated_results)
+        # out_file.write(results_str + "\n")
+
+    
+    
+    
+    if model_args.prune_info_path is not None:
+        prune_model(model, tokenizer, model_args.prune_info_path, target_epoch= model_args.prune_target_epoch)
+        print("STDOUT: Num params = : ", get_param_count(model))
+        final_sparsity = 1.0 - get_param_count(model)/og_params
+        print('STDOUT: Final sparsity is : {:.3f}'.format(final_sparsity))
+        
+        gc.collect()
+        torch.cuda.empty_cache()
+        logger.info("*** Evaluate ***")
+        model.eval()
+        if training_args.do_eval:
+            start_time = time.time()
+            before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+            speedup = og_runtime / final_runtime
+            out_str = "STDOUT: [Dataset: {}| SpeedUp={:.3f}] Original perplexity = {:.3f} | Before Training perplexity = {:.3f}".format(data_args.dataset_name,speedup, og_ppl, before_train_ppl, speedup)
+            print('STDOUT: ', out_str)
+
+        else:
+            print('STDOUT: Not evaluating the ppl')
+        # out_file.write(out_str + "\n")
+
+        should_i_do_eleuther_eval = model_args.do_eleuther_eval
+        print(f'STDOUT: Eleuther eval for pruned model (no finetuning): {should_i_do_eleuther_eval}')
+        
+        if should_i_do_eleuther_eval:
+            #transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
+            results = evaluator.simple_evaluate(
+                model="hf-causal-experimental",
+                model_args="pretrained={}".format(model_args.model_name_or_path),
+                # tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
+                tasks = ['gsm8k'],
+                num_fewshot=5,
+                limit = .5, # how much of the original dataset to test on 
+                # num_fewshot={"hellaswag": 0, "arc_challenge":0}
+                no_cache=True,
+                pretrained_model=model,
+                write_out=True, 
+                output_base_path=f'pruned_sparsity-{final_sparsity:.3f}_gsm8k_5shots', # writes to the current dir
+            )
+            updated_results = {'results': results['results']}
+            print('STDOUT:', updated_results)
+    
+    
+    finetuned_model = model_args.add_finetuned_adapter
+    print('STDOUT: Finetuning the Model: ', finetuned_model)
+    # if model_args.add_finetuned_adapter, meaning the adapters for finetuning are there and we want to finetune
+    if finetuned_model:
+        if model_args.finetune_ft_dataset == 'wiki' or model_args.finetune_adapter_dataset == None:
+            adapter_name = '/home/vash==tt/Desktop/anlp-project/finetuned_model_prune_c4_ft_wiki/'
+            model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_c4_ft_wiki_adapter")
+        elif model_args.finetune_adapter_dataset == 'c4':
+            adapter_name = '/home/vash==tt/Desktop/anlp-project/finetuned_model_prune_gsm8k_ft_c4/'
+            model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_wiki_ft_wiki_adapter")
+        elif model_args.finetune_adapter_dataset == 'gsm8k':
+            adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_gsm8k_ft_gsm8k/'
+            model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_gsm8k_ft_gsm8k_adapter")
+        else:
+            raise ValueError("Invalid adapter dataset name")
+
+        # eleuther eval for finetuned model
+        if should_i_do_eleuther_eval:
+            #transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
+            print('STDOUT: Eleuther eval for pruned model + finetuning')
+            results = evaluator.simple_evaluate(
+                model="hf-causal-experimental",
+                model_args="pretrained={}".format(model_args.model_name_or_path),
+                # tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
+                tasks = ['gsm8k'],
+                num_fewshot=5,
+                limit = .5, # how much of the original dataset to test on 
+                # num_fewshot={"hellaswag": 0, "arc_challenge":0}
+                no_cache=True,
+                pretrained_model=model,
+                write_out=True, 
+                output_base_path=f'finetuned_sparsity-{final_sparsity:.3f}_gsm8k_5shots', # writes to the current dir
+            )
+            
+            updated_results = {'results': results['results']}
+            print('STDOUT:', updated_results)
+    # with open(file_path, 'w') as out_file:
+    #     out_file.write("\n")
+    #     out_file.write(results_str + "\n")
+    #     out_file.flush()
 
 def _mp_fn(index):
     # For xla_spawn (TPUs)
     main()
-
 
 if __name__ == "__main__":
     main()
