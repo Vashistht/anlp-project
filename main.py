@@ -654,13 +654,13 @@ def main():
         print(model)
 
         # Evaluate the performance of the pruned model
-        ppl_train, ppl_test = eval_combined(model, tokenizer, trainloader, testloader, metric_weights, model.device, dataset=args.dataset, bsz=args.bsz)
+        # ppl_train, ppl_test = eval_combined(model, tokenizer, trainloader, testloader[], metric_weights, model.device, dataset=args.dataset, bsz=args.bsz)
         # acc_train, acc_test = eval_acc(model, tokenizer, model.device, dataset=args.dataset)
 
-        wandb_run.log({'Sparsity': cur_sparsity, 'TrainCombinedMetric': ppl_train, 'TestCombinedMetric': ppl_test})
+        # wandb_run.log({'Sparsity': cur_sparsity, 'TrainCombinedMetric': ppl_train, 'TestCombinedMetric': ppl_test})
           # wandb_run.log({'Sparsity': cur_sparsity, 'TrainACC': acc_train, 'TestACC': acc_test})
 
-        print('Sparsity = {:.3f}| Train Combined Metric = {:.3f} | Test Combined Metric = {:.3f}'.format(cur_sparsity, ppl_train, ppl_test))
+        # print('Sparsity = {:.3f}| Train Combined Metric = {:.3f} | Test Combined Metric = {:.3f}'.format(cur_sparsity, ppl_train, ppl_test))
         epoch_ += 1
 
     wandb_run.log({'sparsity': cur_sparsity})
