@@ -551,7 +551,8 @@ def main():
     else:
         print('STDOUT: Not evaluating the og ppl')
         tok_logger = transformers.utils.logging.get_logger("transformers.tokenization_utils_base")
-
+        speedup = 1.0
+        og_ppl = 0.0
 
     if data_args.block_size is None:
         block_size = tokenizer.model_max_length
@@ -626,7 +627,9 @@ def main():
         if training_args.do_eval:
             start_time = time.time()
             before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-            speedup = og_runtime / final_runtime
+            print(f'evaluating ppl on {data_args.dataset_name}, information: {str(model_args.save_info)}')
+            # speedup = og_runtime / final_runtime
+            print('STDOUT: Speedup = ', speedup)
             out_str = "STDOUT: [Dataset: {}| SpeedUp={:.3f}] Original perplexity = {:.3f} | Before Training perplexity = {:.3f}".format(data_args.dataset_name,speedup, og_ppl, before_train_ppl, speedup)
             print('STDOUT: ', out_str)
 

@@ -1,0 +1,1938 @@
+05/02/2024 16:27:35 - WARNING - __main__ - Process rank: -1, device: cuda:0, n_gpu: 1distributed training: False, 16-bits training: False
+05/02/2024 16:27:35 - INFO - __main__ - Training/evaluation parameters TrainingArguments(
+_n_gpu=1,
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_pin_memory=True,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+do_eval=False,
+do_predict=False,
+do_train=False,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_steps=None,
+evaluation_strategy=no,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'fsdp_min_num_params': 0, 'xla': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=0.0001,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=-1,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=/home/vashistt/Desktop/anlp-project/finetuned_model/ppl_gsm8k-200-mask/runs/May02_16-27-35_lovelace.ece.local.cmu.edu,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+no_cuda=False,
+num_train_epochs=1.0,
+optim=adamw_hf,
+optim_args=None,
+output_dir=/home/vashistt/Desktop/anlp-project/finetuned_model/ppl_gsm8k-200-mask,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=1,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['wandb'],
+resume_from_checkpoint=None,
+run_name=/home/vashistt/Desktop/anlp-project/finetuned_model/ppl_gsm8k-200-mask,
+save_on_each_node=False,
+save_safetensors=False,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+sharded_ddp=[],
+skip_memory_metrics=True,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+xpu_backend=None,
+)
+[INFO|configuration_utils.py:668] 2024-05-02 16:27:35,792 >> loading configuration file config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/config.json
+[INFO|configuration_utils.py:720] 2024-05-02 16:27:35,793 >> Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-2-7b-hf",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 11008,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 32,
+  "pad_token_id": 0,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.28.0",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 16:27:35,831 >> loading file tokenizer.model from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/tokenizer.model
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 16:27:35,831 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 16:27:35,831 >> loading file special_tokens_map.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/special_tokens_map.json
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 16:27:35,831 >> loading file tokenizer_config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/tokenizer_config.json
+[INFO|configuration_utils.py:668] 2024-05-02 16:27:35,878 >> loading configuration file config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/config.json
+[INFO|configuration_utils.py:720] 2024-05-02 16:27:35,878 >> Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-2-7b-hf",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 11008,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 32,
+  "pad_token_id": 0,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.28.0",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|modeling_utils.py:2534] 2024-05-02 16:27:35,881 >> loading weights file model.safetensors from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/model.safetensors.index.json
+[INFO|modeling_utils.py:1176] 2024-05-02 16:27:35,883 >> Instantiating LlamaForCausalLM model under default dtype torch.float16.
+[INFO|configuration_utils.py:575] 2024-05-02 16:27:35,884 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.96s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.26s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.37s/it]
+[INFO|modeling_utils.py:3190] 2024-05-02 16:27:40,649 >> All model checkpoint weights were used when initializing LlamaForCausalLM.
+
+[INFO|modeling_utils.py:3198] 2024-05-02 16:27:40,649 >> All the weights of LlamaForCausalLM were initialized from the model checkpoint at meta-llama/Llama-2-7b-hf.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use LlamaForCausalLM for predictions without further training.
+[INFO|configuration_utils.py:537] 2024-05-02 16:27:40,714 >> loading configuration file generation_config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/generation_config.json
+[INFO|modeling_utils.py:2839] 2024-05-02 16:27:40,715 >> Generation config file not found, using a generation config created from the model config.
+STDOUT: Not evaluating the og ppl
+STDOUT: Eleuther eval for og model:  False
+STDOUT: Num params = :  6476271616
+STDOUT: original model param count : 6476271616
+STDOUT: Pruning for epoch : 1
+STDOUT: epoch 1, param count is 5181018112
+STDOUT: Pruning for epoch : 2
+STDOUT: epoch 2, param count is 3887648768
+STDOUT: Pruning for epoch : 3
+STDOUT: epoch 3, param count is 3238146048
+STDOUT: Final model sparsity is : 0.500 
+STDOUT: Final model param count : 3238146048
+STDOUT: Num params = :  3238146048
+STDOUT: Final sparsity is : 0.500
+05/02/2024 16:29:27 - INFO - __main__ - *** Evaluate ***
+[INFO|configuration_utils.py:668] 2024-05-02 16:29:27,854 >> loading configuration file config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/config.json
+[INFO|configuration_utils.py:720] 2024-05-02 16:29:27,855 >> Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-2-7b-hf",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 11008,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 32,
+  "pad_token_id": 0,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.28.0",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 16:29:27,898 >> loading file tokenizer.model from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/tokenizer.model
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 16:29:27,898 >> loading file tokenizer.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/tokenizer.json
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 16:29:27,898 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 16:29:27,898 >> loading file special_tokens_map.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/special_tokens_map.json
+[INFO|tokenization_utils_base.py:1809] 2024-05-02 16:29:27,898 >> loading file tokenizer_config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/tokenizer_config.json
+[INFO|configuration_utils.py:668] 2024-05-02 16:29:28,029 >> loading configuration file config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/config.json
+[INFO|configuration_utils.py:720] 2024-05-02 16:29:28,030 >> Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-2-7b-hf",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 11008,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 32,
+  "pad_token_id": 0,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.28.0",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+
+[INFO|modeling_utils.py:2534] 2024-05-02 16:29:28,031 >> loading weights file model.safetensors from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/model.safetensors.index.json
+[INFO|modeling_utils.py:1176] 2024-05-02 16:29:28,031 >> Instantiating LlamaForCausalLM model under default dtype torch.float16.
+[INFO|configuration_utils.py:575] 2024-05-02 16:29:28,032 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+STDOUT: Not evaluating the ppl
+STDOUT: Eleuther eval for pruned model (no finetuning): True
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:02<00:02,  2.79s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:03<00:00,  1.72s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:03<00:00,  1.88s/it]
+[INFO|modeling_utils.py:3190] 2024-05-02 16:30:40,249 >> All model checkpoint weights were used when initializing LlamaForCausalLM.
+
+[INFO|modeling_utils.py:3198] 2024-05-02 16:30:40,249 >> All the weights of LlamaForCausalLM were initialized from the model checkpoint at meta-llama/Llama-2-7b-hf.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use LlamaForCausalLM for predictions without further training.
+[INFO|configuration_utils.py:537] 2024-05-02 16:30:40,357 >> loading configuration file generation_config.json from cache at /home/vashistt/.cache/huggingface/hub/models--meta-llama--Llama-2-7b-hf/snapshots/01c7f73d771dfac7d292323805ebc428287df4f9/generation_config.json
+[INFO|configuration_utils.py:575] 2024-05-02 16:30:40,357 >> Generate config GenerationConfig {
+  "bos_token_id": 1,
+  "do_sample": true,
+  "eos_token_id": 2,
+  "max_length": 4096,
+  "pad_token_id": 0,
+  "temperature": 0.6,
+  "top_p": 0.9,
+  "transformers_version": "4.28.0"
+}
+
+Overwrite dataset info from restored data version if exists.
+We have loaded the new model !
+05/02/2024 16:30:43 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe
+05/02/2024 16:30:43 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe
+Found cached dataset mmlu (/home/vashistt/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe)
+05/02/2024 16:30:43 - INFO - datasets.builder - Found cached dataset mmlu (/home/vashistt/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe)
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe
+05/02/2024 16:30:43 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/cais___mmlu/elementary_mathematics/0.0.0/c30699e8356da336a370243923dbaf21066bb9fe
+Overwrite dataset info from restored data version if exists.
+05/02/2024 16:30:45 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/gsm8k/main/0.0.0/e53f048856ff4f594e959d75785d2c2d37b678ee
+05/02/2024 16:30:45 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/gsm8k/main/0.0.0/e53f048856ff4f594e959d75785d2c2d37b678ee
+Found cached dataset gsm8k (/home/vashistt/.cache/huggingface/datasets/gsm8k/main/0.0.0/e53f048856ff4f594e959d75785d2c2d37b678ee)
+05/02/2024 16:30:45 - INFO - datasets.builder - Found cached dataset gsm8k (/home/vashistt/.cache/huggingface/datasets/gsm8k/main/0.0.0/e53f048856ff4f594e959d75785d2c2d37b678ee)
+Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/gsm8k/main/0.0.0/e53f048856ff4f594e959d75785d2c2d37b678ee
+05/02/2024 16:30:45 - INFO - datasets.info - Loading Dataset info from /home/vashistt/.cache/huggingface/datasets/gsm8k/main/0.0.0/e53f048856ff4f594e959d75785d2c2d37b678ee
+Task: hendrycksTest-elementary_mathematics; number of docs: 378
+Task: hendrycksTest-elementary_mathematics; document 0; context prompt (starting on next line):
+The following are multiple choice questions (with answers) about elementary mathematics.
+
+The population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?
+A. 5 thousands
+B. 5 hundreds
+C. 5 tens
+D. 5 ones
+Answer: A
+
+Olivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?
+A. The 10th number in the pattern will be an even number.
+B. The number pattern will never have two even numbers next to each other.
+C. The next two numbers in the pattern will be an even number then an odd number.
+D. If the number pattern started with an odd number then the pattern would have only odd numbers in it.
+Answer: B
+
+A total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?
+A. Add 5 to 30 to find 35 teams.
+B. Divide 30 by 5 to find 6 teams.
+C. Multiply 30 and 5 to find 150 teams.
+D. Subtract 5 from 30 to find 25 teams.
+Answer: B
+
+A store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?
+A. 749
+B. 2,675
+C. 2,945
+D. 4,250
+Answer: B
+
+Which expression is equivalent to 5 x 9?
+A. (5 x 4) x (6 x 5)
+B. (5 x 5) + (5 x 4)
+C. (5 x 5) + (5 x 9)
+D. (5 x 9) x (6 x 9)
+Answer: B
+
+Find 13 over 14 + 7 over 14.
+A. 1 and 4 over 7
+B. 1 and 3 over 7
+C. 1 and 5 over 14
+D. 20 over 28
+Answer:
+(end of prompt on previous line)
+Requests: [Req_loglikelihood('The following are multiple choice questions (with answers) about elementary mathematics.\n\nThe population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?\nA. 5 thousands\nB. 5 hundreds\nC. 5 tens\nD. 5 ones\nAnswer: A\n\nOlivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?\nA. The 10th number in the pattern will be an even number.\nB. The number pattern will never have two even numbers next to each other.\nC. The next two numbers in the pattern will be an even number then an odd number.\nD. If the number pattern started with an odd number then the pattern would have only odd numbers in it.\nAnswer: B\n\nA total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?\nA. Add 5 to 30 to find 35 teams.\nB. Divide 30 by 5 to find 6 teams.\nC. Multiply 30 and 5 to find 150 teams.\nD. Subtract 5 from 30 to find 25 teams.\nAnswer: B\n\nA store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?\nA. 749\nB. 2,675\nC. 2,945\nD. 4,250\nAnswer: B\n\nWhich expression is equivalent to 5 x 9?\nA. (5 x 4) x (6 x 5)\nB. (5 x 5) + (5 x 4)\nC. (5 x 5) + (5 x 9)\nD. (5 x 9) x (6 x 9)\nAnswer: B\n\nFind 13 over 14 + 7 over 14.\nA. 1 and 4 over 7\nB. 1 and 3 over 7\nC. 1 and 5 over 14\nD. 20 over 28\nAnswer:', ' A')[0]
+, Req_loglikelihood('The following are multiple choice questions (with answers) about elementary mathematics.\n\nThe population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?\nA. 5 thousands\nB. 5 hundreds\nC. 5 tens\nD. 5 ones\nAnswer: A\n\nOlivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?\nA. The 10th number in the pattern will be an even number.\nB. The number pattern will never have two even numbers next to each other.\nC. The next two numbers in the pattern will be an even number then an odd number.\nD. If the number pattern started with an odd number then the pattern would have only odd numbers in it.\nAnswer: B\n\nA total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?\nA. Add 5 to 30 to find 35 teams.\nB. Divide 30 by 5 to find 6 teams.\nC. Multiply 30 and 5 to find 150 teams.\nD. Subtract 5 from 30 to find 25 teams.\nAnswer: B\n\nA store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?\nA. 749\nB. 2,675\nC. 2,945\nD. 4,250\nAnswer: B\n\nWhich expression is equivalent to 5 x 9?\nA. (5 x 4) x (6 x 5)\nB. (5 x 5) + (5 x 4)\nC. (5 x 5) + (5 x 9)\nD. (5 x 9) x (6 x 9)\nAnswer: B\n\nFind 13 over 14 + 7 over 14.\nA. 1 and 4 over 7\nB. 1 and 3 over 7\nC. 1 and 5 over 14\nD. 20 over 28\nAnswer:', ' B')[0]
+, Req_loglikelihood('The following are multiple choice questions (with answers) about elementary mathematics.\n\nThe population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?\nA. 5 thousands\nB. 5 hundreds\nC. 5 tens\nD. 5 ones\nAnswer: A\n\nOlivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?\nA. The 10th number in the pattern will be an even number.\nB. The number pattern will never have two even numbers next to each other.\nC. The next two numbers in the pattern will be an even number then an odd number.\nD. If the number pattern started with an odd number then the pattern would have only odd numbers in it.\nAnswer: B\n\nA total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?\nA. Add 5 to 30 to find 35 teams.\nB. Divide 30 by 5 to find 6 teams.\nC. Multiply 30 and 5 to find 150 teams.\nD. Subtract 5 from 30 to find 25 teams.\nAnswer: B\n\nA store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?\nA. 749\nB. 2,675\nC. 2,945\nD. 4,250\nAnswer: B\n\nWhich expression is equivalent to 5 x 9?\nA. (5 x 4) x (6 x 5)\nB. (5 x 5) + (5 x 4)\nC. (5 x 5) + (5 x 9)\nD. (5 x 9) x (6 x 9)\nAnswer: B\n\nFind 13 over 14 + 7 over 14.\nA. 1 and 4 over 7\nB. 1 and 3 over 7\nC. 1 and 5 over 14\nD. 20 over 28\nAnswer:', ' C')[0]
+, Req_loglikelihood('The following are multiple choice questions (with answers) about elementary mathematics.\n\nThe population of the city where Michelle was born is 145,826. What is the value of the 5 in the number 145,826?\nA. 5 thousands\nB. 5 hundreds\nC. 5 tens\nD. 5 ones\nAnswer: A\n\nOlivia used the rule "Add 11" to create the number pattern shown below. 10, 21, 32, 43, 54 Which statement about the number pattern is true?\nA. The 10th number in the pattern will be an even number.\nB. The number pattern will never have two even numbers next to each other.\nC. The next two numbers in the pattern will be an even number then an odd number.\nD. If the number pattern started with an odd number then the pattern would have only odd numbers in it.\nAnswer: B\n\nA total of 30 players will play basketball at a park. There will be exactly 5 players on each team. Which statement correctly explains how to find the number of teams needed?\nA. Add 5 to 30 to find 35 teams.\nB. Divide 30 by 5 to find 6 teams.\nC. Multiply 30 and 5 to find 150 teams.\nD. Subtract 5 from 30 to find 25 teams.\nAnswer: B\n\nA store sells 107 different colors of paint. They have 25 cans of each color in storage. The number of cans of paint the store has in storage can be found using the expression below. 107 × 25. How many cans of paint does the store have in storage?\nA. 749\nB. 2,675\nC. 2,945\nD. 4,250\nAnswer: B\n\nWhich expression is equivalent to 5 x 9?\nA. (5 x 4) x (6 x 5)\nB. (5 x 5) + (5 x 4)\nC. (5 x 5) + (5 x 9)\nD. (5 x 9) x (6 x 9)\nAnswer: B\n\nFind 13 over 14 + 7 over 14.\nA. 1 and 4 over 7\nB. 1 and 3 over 7\nC. 1 and 5 over 14\nD. 20 over 28\nAnswer:', ' D')[0]
+]
+Task: bigbench_logical_deduction_three_objects; number of docs: 300
+Task: bigbench_logical_deduction_three_objects; document 0; context prompt (starting on next line):
+The following paragraphs each describe a set of three objects arranged in a fixed order. The statements are logically consistent within each paragraph.
+
+On a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. The quail is the leftmost.
+
+On a shelf, there are three books: a purple book, a black book, and a blue book. The purple book is to the right of the blue book. The black book is the second from the left. The blue book is the leftmost.
+
+In a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Ana finished last.
+
+On a branch, there are three birds: a blue jay, a falcon, and a hummingbird. The blue jay is to the right of the falcon. The hummingbird is to the left of the falcon. The blue jay is the rightmost.
+
+In a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Joe finished first.
+
+On a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. 
+(end of prompt on previous line)
+Requests: [Req_loglikelihood('The following paragraphs each describe a set of three objects arranged in a fixed order. The statements are logically consistent within each paragraph.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. The quail is the leftmost.\n\nOn a shelf, there are three books: a purple book, a black book, and a blue book. The purple book is to the right of the blue book. The black book is the second from the left. The blue book is the leftmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Ana finished last.\n\nOn a branch, there are three birds: a blue jay, a falcon, and a hummingbird. The blue jay is to the right of the falcon. The hummingbird is to the left of the falcon. The blue jay is the rightmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Joe finished first.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. ', 'The blue jay is the second from the left.')[0]
+, Req_loglikelihood('The following paragraphs each describe a set of three objects arranged in a fixed order. The statements are logically consistent within each paragraph.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. The quail is the leftmost.\n\nOn a shelf, there are three books: a purple book, a black book, and a blue book. The purple book is to the right of the blue book. The black book is the second from the left. The blue book is the leftmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Ana finished last.\n\nOn a branch, there are three birds: a blue jay, a falcon, and a hummingbird. The blue jay is to the right of the falcon. The hummingbird is to the left of the falcon. The blue jay is the rightmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Joe finished first.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. ', 'The quail is the second from the left.')[0]
+, Req_loglikelihood('The following paragraphs each describe a set of three objects arranged in a fixed order. The statements are logically consistent within each paragraph.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. The quail is the leftmost.\n\nOn a shelf, there are three books: a purple book, a black book, and a blue book. The purple book is to the right of the blue book. The black book is the second from the left. The blue book is the leftmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Ana finished last.\n\nOn a branch, there are three birds: a blue jay, a falcon, and a hummingbird. The blue jay is to the right of the falcon. The hummingbird is to the left of the falcon. The blue jay is the rightmost.\n\nIn a golf tournament, there were three golfers: Ana, Rob, and Joe. Joe finished above Ana. Rob finished second. Joe finished first.\n\nOn a branch, there are three birds: a blue jay, a quail, and a falcon. The falcon is to the right of the blue jay. The blue jay is to the right of the quail. ', 'The falcon is the second from the left.')[0]
+]
+Task: gsm8k; number of docs: 1319
+Task: gsm8k; document 0; context prompt (starting on next line):
+Question: Mr. Bodhi is transporting some animals using a yacht across a river. He has 20 cows, 15 foxes and three times as many zebras as foxes. To balance the yacht to ensure a smooth sail across the river, the total number of animals in the yacht needs to be 100. If he decides to add sheep to the yacht to make the yacht sail-worthy, how many sheep did he add to the yacht?
+Answer: The number of cows and foxes in the yacht is 20+15 = <<20+15=35>>35
+Mr. Bodhi also has three times as many zebras as foxes in the yacht, equal to 3*15 = <<3*15=45>>45 zebras.
+The number of animals in the yacht so far is 35+45 = <<35+45=80>>80
+To balance the yacht, Mr. Bodhi needs to add 100-80= <<100-80=20>>20 sheep
+#### 20
+
+Question: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn't like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into?
+Answer: Manny will eat 1 piece.
+Aaron will eat 0 pieces.
+Kai will eat twice as much as Manny, so he will eat 2 * 1 = <<2*1=2>>2 pieces.
+Raphael will eat half as much as Manny, so he will eat 1 * 1/2 = 1/2 piece.
+Lisa will eat 2 pieces plus the remainder of Raphael’s piece, so she will eat 2 + 1/2 = 2 1/2 pieces.
+Together, they will eat 1 + 0 + 2 + 1/2 + 2 1/2 = 1 + 2 + 3 = 6 pieces.
+Thus, Manny should cut his lasagna into 6 pieces.
+#### 6
+
+Question: Barbara asked the butcher for 4 1/2 pound steaks that cost $15.00/pound.  She also asked for a pound and half of chicken breasts that were $8.00 a pound.  How much did she spend at the butchers?
+Answer: She ordered 4 1/2 pound steaks so that's 4*.5 = <<4*.5=2>>2 pounds of steak.
+The steak cost $15.00 a pound and she bought 2 pounds so that's 15*2 = $<<15*2=30.00>>30.00 for 4 steaks.
+She also needed 1.5 pounds of chicken breasts at $8.00 a pound so that's 1.5*8 = $<<1.5*8=12.00>>12.00 for chicken.
+The steaks cost $30.00 and the chicken cost $12.00 for a total of 30+12 = $<<30+12=42.00>>42.00 spent at the butchers.
+#### 42
+
+Question: There are 400 students. 120 students take dance as their elective. 200 students take art as their elective. The rest take music. What percentage of students take music?
+Answer: There are 400-120-200=<<400-120-200=80>>80 students in music.
+Thus, students in music make up (80/400)*100=<<80/400*100=20>>20% of the students.
+#### 20
+
+Question: John starts at an elevation of 400 feet.  He travels downward at a rate of 10 feet down per minute for 5 minutes.  What is his elevation now?
+Answer: He traveled down 10*5=<<10*5=50>>50 feet.
+So he is at an elevation of 400-50=<<400-50=350>>350 feet.
+#### 350
+
+Question: Jared is trying to increase his typing speed. He starts with 47 words per minute (WPM). After some lessons the next time he tests his typing speed it has increased to 52 WPM. If he continues to increase his typing speed once more by 5 words, what will be the average of the three measurements?
+Answer:
+(end of prompt on previous line)
+Requests: Req_greedy_until("Question: Mr. Bodhi is transporting some animals using a yacht across a river. He has 20 cows, 15 foxes and three times as many zebras as foxes. To balance the yacht to ensure a smooth sail across the river, the total number of animals in the yacht needs to be 100. If he decides to add sheep to the yacht to make the yacht sail-worthy, how many sheep did he add to the yacht?\nAnswer: The number of cows and foxes in the yacht is 20+15 = <<20+15=35>>35\nMr. Bodhi also has three times as many zebras as foxes in the yacht, equal to 3*15 = <<3*15=45>>45 zebras.\nThe number of animals in the yacht so far is 35+45 = <<35+45=80>>80\nTo balance the yacht, Mr. Bodhi needs to add 100-80= <<100-80=20>>20 sheep\n#### 20\n\nQuestion: Manny is making lasagna for dinner with his four friends, Lisa, Raphael, Aaron, and Kai. He needs to know how many pieces to cut the lasagna into to serve it. Manny only wants one piece. Aaron doesn't like lasagna much and will probably only eat garlic bread and salad. Kai is always hungry and will eat twice as much as Manny. Raphael always eats half the amount Manny does, but his sister Lisa loves lasagna and will eat two pieces, plus any Raphael has left of his piece. How many pieces should Manny cut his lasagna into?\nAnswer: Manny will eat 1 piece.\nAaron will eat 0 pieces.\nKai will eat twice as much as Manny, so he will eat 2 * 1 = <<2*1=2>>2 pieces.\nRaphael will eat half as much as Manny, so he will eat 1 * 1/2 = 1/2 piece.\nLisa will eat 2 pieces plus the remainder of Raphael’s piece, so she will eat 2 + 1/2 = 2 1/2 pieces.\nTogether, they will eat 1 + 0 + 2 + 1/2 + 2 1/2 = 1 + 2 + 3 = 6 pieces.\nThus, Manny should cut his lasagna into 6 pieces.\n#### 6\n\nQuestion: Barbara asked the butcher for 4 1/2 pound steaks that cost $15.00/pound.  She also asked for a pound and half of chicken breasts that were $8.00 a pound.  How much did she spend at the butchers?\nAnswer: She ordered 4 1/2 pound steaks so that's 4*.5 = <<4*.5=2>>2 pounds of steak.\nThe steak cost $15.00 a pound and she bought 2 pounds so that's 15*2 = $<<15*2=30.00>>30.00 for 4 steaks.\nShe also needed 1.5 pounds of chicken breasts at $8.00 a pound so that's 1.5*8 = $<<1.5*8=12.00>>12.00 for chicken.\nThe steaks cost $30.00 and the chicken cost $12.00 for a total of 30+12 = $<<30+12=42.00>>42.00 spent at the butchers.\n#### 42\n\nQuestion: There are 400 students. 120 students take dance as their elective. 200 students take art as their elective. The rest take music. What percentage of students take music?\nAnswer: There are 400-120-200=<<400-120-200=80>>80 students in music.\nThus, students in music make up (80/400)*100=<<80/400*100=20>>20% of the students.\n#### 20\n\nQuestion: John starts at an elevation of 400 feet.  He travels downward at a rate of 10 feet down per minute for 5 minutes.  What is his elevation now?\nAnswer: He traveled down 10*5=<<10*5=50>>50 feet.\nSo he is at an elevation of 400-50=<<400-50=350>>350 feet.\n#### 350\n\nQuestion: Jared is trying to increase his typing speed. He starts with 47 words per minute (WPM). After some lessons the next time he tests his typing speed it has increased to 52 WPM. If he continues to increase his typing speed once more by 5 words, what will be the average of the three measurements?\nAnswer:", {'until': [':', 'Question:', 'Question']})[None]
+
+Running loglikelihood requests
+  0%|          | 0/1319 [00:00<?, ?it/s]  0%|          | 1/1319 [00:00<05:30,  3.99it/s]  0%|          | 3/1319 [00:00<02:39,  8.27it/s]  0%|          | 5/1319 [00:00<02:09, 10.13it/s]  1%|          | 7/1319 [00:00<01:56, 11.25it/s]  1%|          | 9/1319 [00:00<01:51, 11.77it/s]  1%|          | 11/1319 [00:01<01:46, 12.27it/s]  1%|          | 13/1319 [00:01<01:44, 12.45it/s]  1%|          | 15/1319 [00:01<01:42, 12.73it/s]  1%|▏         | 17/1319 [00:01<01:41, 12.82it/s]  1%|▏         | 19/1319 [00:01<01:40, 12.99it/s]  2%|▏         | 21/1319 [00:01<01:39, 13.09it/s]  2%|▏         | 23/1319 [00:01<01:38, 13.20it/s]  2%|▏         | 25/1319 [00:02<01:37, 13.23it/s]  2%|▏         | 27/1319 [00:02<01:37, 13.28it/s]  2%|▏         | 29/1319 [00:02<01:37, 13.29it/s]  2%|▏         | 31/1319 [00:02<01:36, 13.31it/s]  3%|▎         | 33/1319 [00:02<01:36, 13.27it/s]  3%|▎         | 35/1319 [00:02<01:36, 13.27it/s]  3%|▎         | 37/1319 [00:02<01:36, 13.24it/s]  3%|▎         | 39/1319 [00:03<01:36, 13.33it/s]  3%|▎         | 41/1319 [00:03<01:35, 13.34it/s]  3%|▎         | 43/1319 [00:03<01:35, 13.38it/s]  3%|▎         | 45/1319 [00:03<01:34, 13.41it/s]  4%|▎         | 47/1319 [00:03<01:34, 13.49it/s]  4%|▎         | 49/1319 [00:03<01:33, 13.52it/s]  4%|▍         | 51/1319 [00:04<01:33, 13.53it/s]  4%|▍         | 53/1319 [00:04<01:33, 13.55it/s]  4%|▍         | 55/1319 [00:04<01:33, 13.49it/s]  4%|▍         | 57/1319 [00:04<01:32, 13.62it/s]  4%|▍         | 59/1319 [00:04<01:31, 13.76it/s]  5%|▍         | 61/1319 [00:04<01:30, 13.88it/s]  5%|▍         | 63/1319 [00:04<01:30, 13.93it/s]  5%|▍         | 65/1319 [00:05<01:30, 13.90it/s]  5%|▌         | 67/1319 [00:05<01:29, 13.96it/s]  5%|▌         | 69/1319 [00:05<01:29, 13.93it/s]  5%|▌         | 71/1319 [00:05<01:29, 13.96it/s]  6%|▌         | 73/1319 [00:05<01:29, 13.95it/s]  6%|▌         | 75/1319 [00:05<01:29, 13.97it/s]  6%|▌         | 77/1319 [00:05<01:29, 13.87it/s]  6%|▌         | 79/1319 [00:06<01:29, 13.91it/s]  6%|▌         | 81/1319 [00:06<01:28, 13.98it/s]  6%|▋         | 83/1319 [00:06<01:28, 14.03it/s]  6%|▋         | 85/1319 [00:06<01:28, 13.98it/s]  7%|▋         | 87/1319 [00:06<01:27, 14.02it/s]  7%|▋         | 89/1319 [00:06<01:27, 14.04it/s]  7%|▋         | 91/1319 [00:06<01:27, 14.07it/s]  7%|▋         | 93/1319 [00:07<01:27, 14.03it/s]  7%|▋         | 95/1319 [00:07<01:27, 14.00it/s]  7%|▋         | 97/1319 [00:07<01:26, 14.08it/s]  8%|▊         | 99/1319 [00:07<01:26, 14.17it/s]  8%|▊         | 101/1319 [00:07<01:26, 14.11it/s]  8%|▊         | 103/1319 [00:07<01:26, 14.14it/s]  8%|▊         | 105/1319 [00:07<01:25, 14.15it/s]  8%|▊         | 107/1319 [00:08<01:25, 14.13it/s]  8%|▊         | 109/1319 [00:08<01:25, 14.11it/s]  8%|▊         | 111/1319 [00:08<01:25, 14.14it/s]  9%|▊         | 113/1319 [00:08<01:25, 14.03it/s]  9%|▊         | 115/1319 [00:08<01:25, 14.09it/s]  9%|▉         | 117/1319 [00:08<01:25, 14.11it/s]  9%|▉         | 119/1319 [00:08<01:24, 14.14it/s]  9%|▉         | 121/1319 [00:09<01:25, 14.03it/s]  9%|▉         | 123/1319 [00:09<01:24, 14.16it/s]  9%|▉         | 125/1319 [00:09<01:24, 14.16it/s] 10%|▉         | 127/1319 [00:09<01:23, 14.20it/s] 10%|▉         | 129/1319 [00:09<01:23, 14.19it/s] 10%|▉         | 131/1319 [00:09<01:23, 14.24it/s] 10%|█         | 133/1319 [00:09<01:23, 14.25it/s] 10%|█         | 135/1319 [00:09<01:22, 14.30it/s] 10%|█         | 137/1319 [00:10<01:23, 14.18it/s] 11%|█         | 139/1319 [00:10<01:23, 14.21it/s] 11%|█         | 141/1319 [00:10<01:24, 14.02it/s] 11%|█         | 143/1319 [00:10<01:23, 14.06it/s] 11%|█         | 145/1319 [00:10<01:23, 14.02it/s] 11%|█         | 147/1319 [00:10<01:22, 14.13it/s] 11%|█▏        | 149/1319 [00:10<01:23, 14.06it/s] 11%|█▏        | 151/1319 [00:11<01:22, 14.18it/s] 12%|█▏        | 153/1319 [00:11<01:22, 14.12it/s] 12%|█▏        | 155/1319 [00:11<01:22, 14.17it/s] 12%|█▏        | 157/1319 [00:11<01:21, 14.18it/s] 12%|█▏        | 159/1319 [00:11<01:21, 14.24it/s] 12%|█▏        | 161/1319 [00:11<01:21, 14.17it/s] 12%|█▏        | 163/1319 [00:11<01:21, 14.19it/s] 13%|█▎        | 165/1319 [00:12<01:21, 14.08it/s] 13%|█▎        | 167/1319 [00:12<01:21, 14.07it/s] 13%|█▎        | 169/1319 [00:12<01:21, 14.06it/s] 13%|█▎        | 171/1319 [00:12<01:21, 14.14it/s] 13%|█▎        | 173/1319 [00:12<01:21, 14.06it/s] 13%|█▎        | 175/1319 [00:12<01:21, 14.08it/s] 13%|█▎        | 177/1319 [00:12<01:21, 14.09it/s] 14%|█▎        | 179/1319 [00:13<01:20, 14.24it/s] 14%|█▎        | 181/1319 [00:13<01:20, 14.18it/s] 14%|█▍        | 183/1319 [00:13<01:19, 14.29it/s] 14%|█▍        | 185/1319 [00:13<01:19, 14.26it/s] 14%|█▍        | 187/1319 [00:13<01:19, 14.32it/s] 14%|█▍        | 189/1319 [00:13<01:19, 14.29it/s] 14%|█▍        | 191/1319 [00:13<01:18, 14.31it/s] 15%|█▍        | 193/1319 [00:14<01:18, 14.33it/s] 15%|█▍        | 195/1319 [00:14<01:18, 14.37it/s] 15%|█▍        | 197/1319 [00:14<01:18, 14.29it/s] 15%|█▌        | 199/1319 [00:14<01:18, 14.33it/s] 15%|█▌        | 201/1319 [00:14<01:18, 14.27it/s] 15%|█▌        | 203/1319 [00:14<01:18, 14.30it/s] 16%|█▌        | 205/1319 [00:14<01:18, 14.26it/s] 16%|█▌        | 207/1319 [00:15<01:17, 14.34it/s] 16%|█▌        | 209/1319 [00:15<01:17, 14.35it/s] 16%|█▌        | 211/1319 [00:15<01:16, 14.46it/s] 16%|█▌        | 213/1319 [00:15<01:16, 14.54it/s] 16%|█▋        | 215/1319 [00:15<01:16, 14.51it/s] 16%|█▋        | 217/1319 [00:15<01:16, 14.48it/s] 17%|█▋        | 219/1319 [00:15<01:16, 14.38it/s] 17%|█▋        | 221/1319 [00:16<01:16, 14.44it/s] 17%|█▋        | 223/1319 [00:16<01:16, 14.38it/s] 17%|█▋        | 225/1319 [00:16<01:15, 14.45it/s] 17%|█▋        | 227/1319 [00:16<01:15, 14.49it/s] 17%|█▋        | 229/1319 [00:16<01:15, 14.46it/s] 18%|█▊        | 231/1319 [00:16<01:15, 14.48it/s] 18%|█▊        | 233/1319 [00:16<01:14, 14.52it/s] 18%|█▊        | 235/1319 [00:16<01:15, 14.38it/s] 18%|█▊        | 237/1319 [00:17<01:15, 14.39it/s] 18%|█▊        | 239/1319 [00:17<01:15, 14.32it/s] 18%|█▊        | 241/1319 [00:17<01:14, 14.39it/s] 18%|█▊        | 243/1319 [00:17<01:14, 14.39it/s] 19%|█▊        | 245/1319 [00:17<01:14, 14.42it/s] 19%|█▊        | 247/1319 [00:17<01:14, 14.45it/s] 19%|█▉        | 249/1319 [00:17<01:14, 14.40it/s] 19%|█▉        | 251/1319 [00:18<01:14, 14.36it/s] 19%|█▉        | 253/1319 [00:18<01:14, 14.28it/s] 19%|█▉        | 255/1319 [00:18<01:14, 14.31it/s] 19%|█▉        | 257/1319 [00:18<01:15, 14.12it/s] 20%|█▉        | 259/1319 [00:18<01:14, 14.19it/s] 20%|█▉        | 261/1319 [00:18<01:14, 14.18it/s] 20%|█▉        | 263/1319 [00:18<01:13, 14.32it/s] 20%|██        | 265/1319 [00:19<01:13, 14.27it/s] 20%|██        | 267/1319 [00:19<01:13, 14.37it/s] 20%|██        | 269/1319 [00:19<01:13, 14.32it/s] 21%|██        | 271/1319 [00:19<01:12, 14.43it/s] 21%|██        | 273/1319 [00:19<01:12, 14.37it/s] 21%|██        | 275/1319 [00:19<01:12, 14.39it/s] 21%|██        | 277/1319 [00:19<01:11, 14.54it/s] 21%|██        | 279/1319 [00:20<01:10, 14.73it/s] 21%|██▏       | 281/1319 [00:20<01:09, 14.97it/s] 21%|██▏       | 283/1319 [00:20<01:08, 15.05it/s] 22%|██▏       | 285/1319 [00:20<01:09, 14.96it/s] 22%|██▏       | 287/1319 [00:20<01:08, 15.09it/s] 22%|██▏       | 289/1319 [00:20<01:07, 15.15it/s] 22%|██▏       | 291/1319 [00:20<01:08, 15.06it/s] 22%|██▏       | 293/1319 [00:20<01:07, 15.10it/s] 22%|██▏       | 295/1319 [00:21<01:07, 15.24it/s] 23%|██▎       | 297/1319 [00:21<01:07, 15.18it/s] 23%|██▎       | 299/1319 [00:21<01:07, 15.15it/s] 23%|██▎       | 301/1319 [00:21<01:06, 15.25it/s] 23%|██▎       | 303/1319 [00:21<01:06, 15.22it/s] 23%|██▎       | 305/1319 [00:21<01:07, 15.08it/s] 23%|██▎       | 307/1319 [00:21<01:06, 15.31it/s] 23%|██▎       | 309/1319 [00:22<01:06, 15.25it/s] 24%|██▎       | 311/1319 [00:22<01:05, 15.30it/s] 24%|██▎       | 313/1319 [00:22<01:05, 15.37it/s] 24%|██▍       | 315/1319 [00:22<01:05, 15.29it/s] 24%|██▍       | 317/1319 [00:22<01:05, 15.19it/s] 24%|██▍       | 319/1319 [00:22<01:06, 15.00it/s] 24%|██▍       | 321/1319 [00:22<01:05, 15.16it/s] 24%|██▍       | 323/1319 [00:22<01:05, 15.12it/s] 25%|██▍       | 325/1319 [00:23<01:05, 15.07it/s] 25%|██▍       | 327/1319 [00:23<01:04, 15.30it/s] 25%|██▍       | 329/1319 [00:23<01:05, 15.23it/s] 25%|██▌       | 331/1319 [00:23<01:05, 15.15it/s] 25%|██▌       | 333/1319 [00:23<01:05, 15.10it/s] 25%|██▌       | 335/1319 [00:23<01:04, 15.22it/s] 26%|██▌       | 337/1319 [00:23<01:04, 15.19it/s] 26%|██▌       | 339/1319 [00:24<01:04, 15.09it/s] 26%|██▌       | 341/1319 [00:24<01:03, 15.32it/s] 26%|██▌       | 343/1319 [00:24<01:04, 15.18it/s] 26%|██▌       | 345/1319 [00:24<01:04, 15.17it/s] 26%|██▋       | 347/1319 [00:24<01:04, 15.13it/s] 26%|██▋       | 349/1319 [00:24<01:03, 15.19it/s] 27%|██▋       | 351/1319 [00:24<01:03, 15.18it/s] 27%|██▋       | 353/1319 [00:24<01:04, 15.05it/s] 27%|██▋       | 355/1319 [00:25<01:03, 15.17it/s] 27%|██▋       | 357/1319 [00:25<01:03, 15.17it/s] 27%|██▋       | 359/1319 [00:25<01:03, 15.06it/s] 27%|██▋       | 361/1319 [00:25<01:02, 15.26it/s] 28%|██▊       | 363/1319 [00:25<01:03, 15.13it/s] 28%|██▊       | 365/1319 [00:25<01:03, 15.12it/s] 28%|██▊       | 367/1319 [00:25<01:02, 15.30it/s] 28%|██▊       | 369/1319 [00:25<01:05, 14.58it/s] 28%|██▊       | 371/1319 [00:26<01:05, 14.55it/s] 28%|██▊       | 373/1319 [00:26<01:05, 14.40it/s] 28%|██▊       | 375/1319 [00:26<01:05, 14.42it/s] 29%|██▊       | 377/1319 [00:26<01:05, 14.41it/s] 29%|██▊       | 379/1319 [00:26<01:04, 14.48it/s] 29%|██▉       | 381/1319 [00:26<01:04, 14.45it/s] 29%|██▉       | 383/1319 [00:26<01:04, 14.48it/s] 29%|██▉       | 385/1319 [00:27<01:04, 14.42it/s] 29%|██▉       | 387/1319 [00:27<01:04, 14.47it/s] 29%|██▉       | 389/1319 [00:27<01:04, 14.37it/s] 30%|██▉       | 391/1319 [00:27<01:04, 14.47it/s] 30%|██▉       | 393/1319 [00:27<01:03, 14.54it/s] 30%|██▉       | 395/1319 [00:27<01:03, 14.47it/s] 30%|███       | 397/1319 [00:27<01:03, 14.53it/s] 30%|███       | 399/1319 [00:28<01:03, 14.48it/s] 30%|███       | 401/1319 [00:28<01:03, 14.52it/s] 31%|███       | 403/1319 [00:28<01:03, 14.50it/s] 31%|███       | 405/1319 [00:28<01:03, 14.49it/s] 31%|███       | 407/1319 [00:28<01:03, 14.41it/s] 31%|███       | 409/1319 [00:28<01:03, 14.43it/s] 31%|███       | 411/1319 [00:28<01:03, 14.41it/s] 31%|███▏      | 413/1319 [00:29<01:02, 14.41it/s] 31%|███▏      | 415/1319 [00:29<01:02, 14.47it/s] 32%|███▏      | 417/1319 [00:29<01:02, 14.40it/s] 32%|███▏      | 419/1319 [00:29<01:02, 14.47it/s] 32%|███▏      | 421/1319 [00:29<01:02, 14.34it/s] 32%|███▏      | 423/1319 [00:29<01:02, 14.40it/s] 32%|███▏      | 425/1319 [00:29<01:02, 14.36it/s] 32%|███▏      | 427/1319 [00:30<01:01, 14.44it/s] 33%|███▎      | 429/1319 [00:30<01:01, 14.47it/s] 33%|███▎      | 431/1319 [00:30<01:01, 14.49it/s] 33%|███▎      | 433/1319 [00:30<01:01, 14.45it/s] 33%|███▎      | 435/1319 [00:30<01:00, 14.53it/s] 33%|███▎      | 437/1319 [00:30<01:01, 14.40it/s] 33%|███▎      | 439/1319 [00:30<01:00, 14.46it/s] 33%|███▎      | 441/1319 [00:30<01:01, 14.38it/s] 34%|███▎      | 443/1319 [00:31<01:00, 14.47it/s] 34%|███▎      | 445/1319 [00:31<01:00, 14.39it/s] 34%|███▍      | 447/1319 [00:31<01:00, 14.49it/s] 34%|███▍      | 449/1319 [00:31<01:00, 14.37it/s] 34%|███▍      | 451/1319 [00:31<01:00, 14.45it/s] 34%|███▍      | 453/1319 [00:31<01:00, 14.40it/s] 34%|███▍      | 455/1319 [00:31<00:59, 14.54it/s] 35%|███▍      | 457/1319 [00:32<00:59, 14.52it/s] 35%|███▍      | 459/1319 [00:32<00:59, 14.53it/s] 35%|███▍      | 461/1319 [00:32<00:59, 14.50it/s] 35%|███▌      | 463/1319 [00:32<00:59, 14.50it/s] 35%|███▌      | 465/1319 [00:32<00:58, 14.54it/s] 35%|███▌      | 467/1319 [00:32<00:58, 14.48it/s] 36%|███▌      | 469/1319 [00:32<00:58, 14.51it/s] 36%|███▌      | 471/1319 [00:33<00:58, 14.41it/s] 36%|███▌      | 473/1319 [00:33<00:58, 14.42it/s] 36%|███▌      | 475/1319 [00:33<00:58, 14.37it/s] 36%|███▌      | 477/1319 [00:33<00:58, 14.42it/s] 36%|███▋      | 479/1319 [00:33<00:58, 14.44it/s] 36%|███▋      | 481/1319 [00:33<00:57, 14.54it/s] 37%|███▋      | 483/1319 [00:33<00:57, 14.47it/s] 37%|███▋      | 485/1319 [00:34<00:57, 14.50it/s] 37%|███▋      | 487/1319 [00:34<00:57, 14.44it/s] 37%|███▋      | 489/1319 [00:34<00:57, 14.41it/s] 37%|███▋      | 491/1319 [00:34<00:57, 14.32it/s] 37%|███▋      | 493/1319 [00:34<00:57, 14.32it/s] 38%|███▊      | 495/1319 [00:34<00:57, 14.28it/s] 38%|███▊      | 497/1319 [00:34<00:57, 14.34it/s] 38%|███▊      | 499/1319 [00:35<00:57, 14.29it/s] 38%|███▊      | 501/1319 [00:35<00:56, 14.36it/s] 38%|███▊      | 503/1319 [00:35<00:56, 14.38it/s] 38%|███▊      | 505/1319 [00:35<00:56, 14.48it/s] 38%|███▊      | 507/1319 [00:35<00:56, 14.45it/s] 39%|███▊      | 509/1319 [00:35<00:55, 14.52it/s] 39%|███▊      | 511/1319 [00:35<00:55, 14.47it/s] 39%|███▉      | 513/1319 [00:35<00:55, 14.56it/s] 39%|███▉      | 515/1319 [00:36<00:55, 14.51it/s] 39%|███▉      | 517/1319 [00:36<00:55, 14.52it/s] 39%|███▉      | 519/1319 [00:36<00:55, 14.48it/s] 39%|███▉      | 521/1319 [00:36<00:54, 14.53it/s] 40%|███▉      | 523/1319 [00:36<00:54, 14.49it/s] 40%|███▉      | 525/1319 [00:36<00:54, 14.56it/s] 40%|███▉      | 527/1319 [00:36<00:54, 14.45it/s] 40%|████      | 529/1319 [00:37<00:54, 14.55it/s] 40%|████      | 531/1319 [00:37<00:54, 14.54it/s] 40%|████      | 533/1319 [00:37<00:53, 14.60it/s] 41%|████      | 535/1319 [00:37<00:53, 14.66it/s] 41%|████      | 537/1319 [00:37<00:53, 14.64it/s] 41%|████      | 539/1319 [00:37<00:53, 14.66it/s] 41%|████      | 541/1319 [00:37<00:53, 14.52it/s] 41%|████      | 543/1319 [00:38<00:53, 14.62it/s] 41%|████▏     | 545/1319 [00:38<00:53, 14.53it/s] 41%|████▏     | 547/1319 [00:38<00:52, 14.58it/s] 42%|████▏     | 549/1319 [00:38<00:52, 14.53it/s] 42%|████▏     | 551/1319 [00:38<00:52, 14.60it/s] 42%|████▏     | 553/1319 [00:38<00:52, 14.60it/s] 42%|████▏     | 555/1319 [00:38<00:52, 14.68it/s] 42%|████▏     | 557/1319 [00:38<00:52, 14.65it/s] 42%|████▏     | 559/1319 [00:39<00:51, 14.63it/s] 43%|████▎     | 561/1319 [00:39<00:51, 14.59it/s] 43%|████▎     | 563/1319 [00:39<00:51, 14.78it/s] 43%|████▎     | 565/1319 [00:39<00:51, 14.77it/s] 43%|████▎     | 567/1319 [00:39<00:50, 14.93it/s] 43%|████▎     | 569/1319 [00:39<00:50, 14.97it/s] 43%|████▎     | 571/1319 [00:39<00:49, 15.07it/s] 43%|████▎     | 573/1319 [00:40<00:49, 15.06it/s] 44%|████▎     | 575/1319 [00:40<00:49, 14.99it/s] 44%|████▎     | 577/1319 [00:40<00:49, 15.04it/s] 44%|████▍     | 579/1319 [00:40<00:49, 14.90it/s] 44%|████▍     | 581/1319 [00:40<00:49, 14.89it/s] 44%|████▍     | 583/1319 [00:40<00:49, 14.73it/s] 44%|████▍     | 585/1319 [00:40<00:49, 14.82it/s] 45%|████▍     | 587/1319 [00:40<00:49, 14.83it/s] 45%|████▍     | 589/1319 [00:41<00:49, 14.85it/s] 45%|████▍     | 591/1319 [00:41<00:49, 14.86it/s] 45%|████▍     | 593/1319 [00:41<00:48, 14.92it/s] 45%|████▌     | 595/1319 [00:41<00:48, 14.84it/s] 45%|████▌     | 597/1319 [00:41<00:48, 14.92it/s] 45%|████▌     | 599/1319 [00:41<00:48, 14.84it/s] 46%|████▌     | 601/1319 [00:41<00:47, 14.98it/s] 46%|████▌     | 603/1319 [00:42<00:47, 14.95it/s] 46%|████▌     | 605/1319 [00:42<00:47, 15.06it/s] 46%|████▌     | 607/1319 [00:42<00:47, 15.00it/s] 46%|████▌     | 609/1319 [00:42<00:47, 14.92it/s] 46%|████▋     | 611/1319 [00:42<00:47, 15.02it/s] 46%|████▋     | 613/1319 [00:42<00:47, 14.91it/s] 47%|████▋     | 615/1319 [00:42<00:47, 14.93it/s] 47%|████▋     | 617/1319 [00:43<00:47, 14.86it/s] 47%|████▋     | 619/1319 [00:43<00:46, 14.96it/s] 47%|████▋     | 621/1319 [00:43<00:46, 14.90it/s] 47%|████▋     | 623/1319 [00:43<00:46, 14.92it/s] 47%|████▋     | 625/1319 [00:43<00:46, 14.97it/s] 48%|████▊     | 627/1319 [00:43<00:46, 14.97it/s] 48%|████▊     | 629/1319 [00:43<00:46, 14.98it/s] 48%|████▊     | 631/1319 [00:43<00:45, 15.04it/s] 48%|████▊     | 633/1319 [00:44<00:46, 14.90it/s] 48%|████▊     | 635/1319 [00:44<00:45, 14.95it/s] 48%|████▊     | 637/1319 [00:44<00:45, 14.95it/s] 48%|████▊     | 639/1319 [00:44<00:45, 15.00it/s] 49%|████▊     | 641/1319 [00:44<00:45, 15.03it/s] 49%|████▊     | 643/1319 [00:44<00:45, 15.02it/s] 49%|████▉     | 645/1319 [00:44<00:44, 15.02it/s] 49%|████▉     | 647/1319 [00:45<00:44, 14.97it/s] 49%|████▉     | 649/1319 [00:45<00:44, 15.08it/s] 49%|████▉     | 651/1319 [00:45<00:44, 14.98it/s] 50%|████▉     | 653/1319 [00:45<00:44, 15.04it/s] 50%|████▉     | 655/1319 [00:45<00:44, 15.02it/s] 50%|████▉     | 657/1319 [00:45<00:43, 15.05it/s] 50%|████▉     | 659/1319 [00:45<00:44, 15.00it/s] 50%|█████     | 661/1319 [00:45<00:43, 15.03it/s] 50%|█████     | 663/1319 [00:46<00:44, 14.87it/s] 50%|█████     | 665/1319 [00:46<00:43, 14.95it/s] 51%|█████     | 667/1319 [00:46<00:43, 14.97it/s] 51%|█████     | 669/1319 [00:46<00:43, 15.03it/s] 51%|█████     | 671/1319 [00:46<00:43, 15.01it/s] 51%|█████     | 673/1319 [00:46<00:42, 15.05it/s] 51%|█████     | 675/1319 [00:46<00:42, 15.03it/s] 51%|█████▏    | 677/1319 [00:47<00:42, 14.96it/s] 51%|█████▏    | 679/1319 [00:47<00:42, 15.03it/s] 52%|█████▏    | 681/1319 [00:47<00:42, 14.95it/s] 52%|█████▏    | 683/1319 [00:47<00:42, 15.01it/s] 52%|█████▏    | 685/1319 [00:47<00:42, 15.02it/s] 52%|█████▏    | 687/1319 [00:47<00:42, 15.04it/s] 52%|█████▏    | 689/1319 [00:47<00:41, 15.04it/s] 52%|█████▏    | 691/1319 [00:47<00:41, 15.10it/s] 53%|█████▎    | 693/1319 [00:48<00:41, 14.95it/s] 53%|█████▎    | 695/1319 [00:48<00:41, 15.01it/s] 53%|█████▎    | 697/1319 [00:48<00:41, 14.92it/s] 53%|█████▎    | 699/1319 [00:48<00:41, 14.98it/s] 53%|█████▎    | 701/1319 [00:48<00:41, 14.96it/s] 53%|█████▎    | 703/1319 [00:48<00:40, 15.08it/s] 53%|█████▎    | 705/1319 [00:48<00:40, 15.06it/s] 54%|█████▎    | 707/1319 [00:49<00:40, 15.03it/s] 54%|█████▍    | 709/1319 [00:49<00:40, 15.06it/s] 54%|█████▍    | 711/1319 [00:49<00:40, 15.20it/s] 54%|█████▍    | 713/1319 [00:49<00:39, 15.29it/s] 54%|█████▍    | 715/1319 [00:49<00:38, 15.66it/s] 54%|█████▍    | 717/1319 [00:49<00:38, 15.66it/s] 55%|█████▍    | 719/1319 [00:49<00:38, 15.59it/s] 55%|█████▍    | 721/1319 [00:49<00:37, 15.91it/s] 55%|█████▍    | 723/1319 [00:50<00:37, 15.87it/s] 55%|█████▍    | 725/1319 [00:50<00:37, 15.68it/s] 55%|█████▌    | 727/1319 [00:50<00:37, 15.93it/s] 55%|█████▌    | 729/1319 [00:50<00:36, 15.98it/s] 55%|█████▌    | 731/1319 [00:50<00:36, 15.94it/s] 56%|█████▌    | 733/1319 [00:50<00:36, 16.00it/s] 56%|█████▌    | 735/1319 [00:50<00:36, 15.92it/s] 56%|█████▌    | 737/1319 [00:50<00:36, 15.95it/s] 56%|█████▌    | 739/1319 [00:51<00:36, 15.95it/s] 56%|█████▌    | 741/1319 [00:51<00:36, 15.90it/s] 56%|█████▋    | 743/1319 [00:51<00:36, 15.94it/s] 56%|█████▋    | 745/1319 [00:51<00:35, 16.24it/s] 57%|█████▋    | 747/1319 [00:51<00:35, 16.21it/s] 57%|█████▋    | 749/1319 [00:51<00:35, 16.11it/s] 57%|█████▋    | 751/1319 [00:51<00:35, 16.17it/s] 57%|█████▋    | 753/1319 [00:51<00:34, 16.32it/s] 57%|█████▋    | 756/1319 [00:52<00:31, 17.79it/s] 58%|█████▊    | 759/1319 [00:52<00:28, 19.44it/s] 58%|█████▊    | 762/1319 [00:52<00:27, 19.99it/s] 58%|█████▊    | 765/1319 [00:52<00:27, 20.44it/s] 58%|█████▊    | 768/1319 [00:52<00:26, 21.08it/s] 58%|█████▊    | 771/1319 [00:52<00:25, 21.39it/s] 59%|█████▊    | 774/1319 [00:52<00:25, 21.69it/s] 59%|█████▉    | 777/1319 [00:52<00:24, 22.03it/s] 59%|█████▉    | 780/1319 [00:53<00:24, 22.32it/s] 59%|█████▉    | 783/1319 [00:53<00:24, 22.18it/s] 60%|█████▉    | 786/1319 [00:53<00:23, 22.29it/s] 60%|█████▉    | 789/1319 [00:53<00:23, 22.58it/s] 60%|██████    | 792/1319 [00:53<00:23, 22.76it/s] 60%|██████    | 795/1319 [00:53<00:23, 22.60it/s] 61%|██████    | 798/1319 [00:53<00:24, 21.14it/s] 61%|██████    | 801/1319 [00:54<00:24, 21.50it/s] 61%|██████    | 804/1319 [00:54<00:23, 21.81it/s] 61%|██████    | 807/1319 [00:54<00:23, 22.14it/s] 61%|██████▏   | 810/1319 [00:54<00:23, 21.88it/s] 62%|██████▏   | 813/1319 [00:54<00:23, 21.86it/s] 62%|██████▏   | 816/1319 [00:54<00:22, 22.08it/s] 62%|██████▏   | 819/1319 [00:54<00:22, 21.82it/s] 62%|██████▏   | 822/1319 [00:55<00:22, 21.86it/s] 63%|██████▎   | 825/1319 [00:55<00:22, 22.13it/s] 63%|██████▎   | 828/1319 [00:55<00:22, 22.02it/s] 63%|██████▎   | 831/1319 [00:55<00:22, 22.18it/s] 63%|██████▎   | 834/1319 [00:55<00:22, 21.81it/s] 63%|██████▎   | 837/1319 [00:55<00:22, 21.50it/s] 64%|██████▎   | 840/1319 [00:55<00:23, 20.61it/s] 64%|██████▍   | 843/1319 [00:56<00:24, 19.60it/s] 64%|██████▍   | 845/1319 [00:56<00:25, 18.59it/s] 64%|██████▍   | 847/1319 [00:56<00:26, 17.95it/s] 64%|██████▍   | 850/1319 [00:56<00:24, 18.99it/s] 65%|██████▍   | 852/1319 [00:56<00:25, 18.57it/s] 65%|██████▍   | 855/1319 [00:56<00:24, 19.31it/s] 65%|██████▍   | 857/1319 [00:56<00:24, 19.02it/s] 65%|██████▌   | 860/1319 [00:56<00:23, 19.76it/s] 65%|██████▌   | 863/1319 [00:57<00:23, 19.60it/s] 66%|██████▌   | 866/1319 [00:57<00:22, 20.27it/s] 66%|██████▌   | 869/1319 [00:57<00:21, 20.59it/s] 66%|██████▌   | 872/1319 [00:57<00:22, 20.30it/s] 66%|██████▋   | 875/1319 [00:57<00:21, 20.81it/s] 67%|██████▋   | 878/1319 [00:57<00:21, 20.42it/s] 67%|██████▋   | 881/1319 [00:57<00:20, 20.91it/s] 67%|██████▋   | 884/1319 [00:58<00:20, 21.20it/s] 67%|██████▋   | 887/1319 [00:58<00:20, 20.64it/s] 67%|██████▋   | 890/1319 [00:58<00:20, 21.04it/s] 68%|██████▊   | 893/1319 [00:58<00:20, 20.54it/s] 68%|██████▊   | 896/1319 [00:58<00:20, 20.93it/s] 68%|██████▊   | 899/1319 [00:58<00:19, 21.23it/s] 68%|██████▊   | 902/1319 [00:58<00:20, 20.77it/s] 69%|██████▊   | 905/1319 [00:59<00:19, 21.14it/s] 69%|██████▉   | 908/1319 [00:59<00:19, 21.37it/s] 69%|██████▉   | 911/1319 [00:59<00:18, 21.59it/s] 69%|██████▉   | 914/1319 [00:59<00:19, 20.95it/s] 70%|██████▉   | 917/1319 [00:59<00:18, 21.18it/s] 70%|██████▉   | 920/1319 [00:59<00:19, 20.92it/s] 70%|██████▉   | 923/1319 [00:59<00:18, 20.84it/s] 70%|███████   | 926/1319 [01:00<00:19, 20.43it/s] 70%|███████   | 929/1319 [01:00<00:18, 21.21it/s] 71%|███████   | 932/1319 [01:00<00:18, 21.40it/s] 71%|███████   | 935/1319 [01:00<00:18, 20.85it/s] 71%|███████   | 938/1319 [01:00<00:18, 21.15it/s] 71%|███████▏  | 941/1319 [01:00<00:17, 21.44it/s] 72%|███████▏  | 944/1319 [01:00<00:17, 21.53it/s] 72%|███████▏  | 947/1319 [01:01<00:17, 21.70it/s] 72%|███████▏  | 950/1319 [01:01<00:17, 21.06it/s] 72%|███████▏  | 953/1319 [01:01<00:17, 21.45it/s] 72%|███████▏  | 956/1319 [01:01<00:16, 21.44it/s] 73%|███████▎  | 959/1319 [01:01<00:18, 19.88it/s] 73%|███████▎  | 962/1319 [01:01<00:18, 19.73it/s] 73%|███████▎  | 964/1319 [01:01<00:18, 19.69it/s] 73%|███████▎  | 966/1319 [01:02<00:18, 19.55it/s] 73%|███████▎  | 968/1319 [01:02<00:18, 18.74it/s] 74%|███████▎  | 971/1319 [01:02<00:18, 19.21it/s] 74%|███████▍  | 974/1319 [01:02<00:17, 20.11it/s] 74%|███████▍  | 977/1319 [01:02<00:16, 20.71it/s] 74%|███████▍  | 980/1319 [01:02<00:17, 19.85it/s] 75%|███████▍  | 983/1319 [01:02<00:16, 20.12it/s] 75%|███████▍  | 986/1319 [01:03<00:16, 20.49it/s] 75%|███████▍  | 989/1319 [01:03<00:15, 20.75it/s] 75%|███████▌  | 992/1319 [01:03<00:16, 20.26it/s] 75%|███████▌  | 995/1319 [01:03<00:15, 20.74it/s] 76%|███████▌  | 998/1319 [01:03<00:15, 21.06it/s] 76%|███████▌  | 1001/1319 [01:03<00:14, 21.34it/s] 76%|███████▌  | 1004/1319 [01:03<00:14, 21.24it/s] 76%|███████▋  | 1007/1319 [01:04<00:15, 20.68it/s] 77%|███████▋  | 1010/1319 [01:04<00:15, 19.51it/s] 77%|███████▋  | 1012/1319 [01:04<00:15, 19.53it/s] 77%|███████▋  | 1014/1319 [01:04<00:15, 19.50it/s] 77%|███████▋  | 1016/1319 [01:04<00:15, 19.46it/s] 77%|███████▋  | 1018/1319 [01:04<00:16, 18.52it/s] 77%|███████▋  | 1020/1319 [01:04<00:15, 18.78it/s] 77%|███████▋  | 1022/1319 [01:04<00:15, 18.97it/s] 78%|███████▊  | 1024/1319 [01:04<00:15, 19.14it/s] 78%|███████▊  | 1026/1319 [01:05<00:16, 18.20it/s] 78%|███████▊  | 1028/1319 [01:05<00:15, 18.58it/s] 78%|███████▊  | 1030/1319 [01:05<00:15, 18.91it/s] 78%|███████▊  | 1032/1319 [01:05<00:14, 19.17it/s] 78%|███████▊  | 1034/1319 [01:05<00:15, 18.21it/s] 79%|███████▊  | 1036/1319 [01:05<00:15, 18.60it/s] 79%|███████▉  | 1039/1319 [01:05<00:14, 19.81it/s] 79%|███████▉  | 1042/1319 [01:05<00:13, 20.54it/s] 79%|███████▉  | 1045/1319 [01:06<00:13, 20.26it/s] 79%|███████▉  | 1048/1319 [01:06<00:13, 19.76it/s] 80%|███████▉  | 1050/1319 [01:06<00:13, 19.70it/s] 80%|███████▉  | 1052/1319 [01:06<00:14, 18.83it/s] 80%|███████▉  | 1054/1319 [01:06<00:14, 18.24it/s] 80%|████████  | 1056/1319 [01:06<00:14, 18.65it/s] 80%|████████  | 1059/1319 [01:06<00:13, 19.19it/s] 80%|████████  | 1061/1319 [01:06<00:13, 19.32it/s] 81%|████████  | 1063/1319 [01:06<00:13, 18.45it/s] 81%|████████  | 1065/1319 [01:07<00:13, 18.75it/s] 81%|████████  | 1067/1319 [01:07<00:13, 19.02it/s] 81%|████████  | 1069/1319 [01:07<00:13, 19.19it/s] 81%|████████  | 1071/1319 [01:07<00:13, 17.93it/s] 81%|████████▏ | 1074/1319 [01:07<00:13, 18.72it/s] 82%|████████▏ | 1077/1319 [01:07<00:12, 19.89it/s] 82%|████████▏ | 1079/1319 [01:07<00:12, 19.56it/s] 82%|████████▏ | 1082/1319 [01:07<00:11, 20.36it/s] 82%|████████▏ | 1085/1319 [01:08<00:11, 20.08it/s] 82%|████████▏ | 1088/1319 [01:08<00:11, 20.48it/s] 83%|████████▎ | 1091/1319 [01:08<00:11, 20.12it/s] 83%|████████▎ | 1094/1319 [01:08<00:10, 20.74it/s] 83%|████████▎ | 1097/1319 [01:08<00:10, 20.40it/s] 83%|████████▎ | 1100/1319 [01:08<00:10, 20.88it/s] 84%|████████▎ | 1103/1319 [01:08<00:10, 21.14it/s] 84%|████████▍ | 1106/1319 [01:09<00:09, 21.44it/s] 84%|████████▍ | 1109/1319 [01:09<00:10, 20.57it/s] 84%|████████▍ | 1112/1319 [01:09<00:09, 21.09it/s] 85%|████████▍ | 1115/1319 [01:09<00:09, 21.55it/s] 85%|████████▍ | 1118/1319 [01:09<00:09, 21.52it/s] 85%|████████▍ | 1121/1319 [01:09<00:09, 21.72it/s] 85%|████████▌ | 1124/1319 [01:09<00:09, 21.02it/s] 85%|████████▌ | 1127/1319 [01:10<00:09, 21.27it/s] 86%|████████▌ | 1130/1319 [01:10<00:09, 20.67it/s] 86%|████████▌ | 1133/1319 [01:10<00:08, 21.09it/s] 86%|████████▌ | 1136/1319 [01:10<00:08, 21.53it/s] 86%|████████▋ | 1139/1319 [01:10<00:08, 20.90it/s] 87%|████████▋ | 1142/1319 [01:10<00:08, 21.63it/s] 87%|████████▋ | 1145/1319 [01:10<00:07, 21.81it/s] 87%|████████▋ | 1148/1319 [01:11<00:08, 20.91it/s] 87%|████████▋ | 1151/1319 [01:11<00:07, 21.18it/s] 87%|████████▋ | 1154/1319 [01:11<00:07, 21.49it/s] 88%|████████▊ | 1157/1319 [01:11<00:07, 20.90it/s] 88%|████████▊ | 1160/1319 [01:11<00:07, 21.30it/s] 88%|████████▊ | 1163/1319 [01:11<00:07, 21.53it/s] 88%|████████▊ | 1166/1319 [01:11<00:07, 20.84it/s] 89%|████████▊ | 1169/1319 [01:12<00:07, 19.78it/s] 89%|████████▉ | 1172/1319 [01:12<00:07, 20.19it/s] 89%|████████▉ | 1175/1319 [01:12<00:07, 20.29it/s] 89%|████████▉ | 1178/1319 [01:12<00:06, 20.21it/s] 90%|████████▉ | 1181/1319 [01:12<00:06, 20.89it/s] 90%|████████▉ | 1184/1319 [01:12<00:06, 20.33it/s] 90%|████████▉ | 1187/1319 [01:12<00:06, 20.99it/s] 90%|█████████ | 1190/1319 [01:13<00:06, 21.47it/s] 90%|█████████ | 1193/1319 [01:13<00:05, 21.80it/s] 91%|█████████ | 1196/1319 [01:13<00:05, 21.11it/s] 91%|█████████ | 1199/1319 [01:13<00:05, 21.53it/s] 91%|█████████ | 1202/1319 [01:13<00:05, 21.87it/s] 91%|█████████▏| 1205/1319 [01:13<00:05, 21.32it/s] 92%|█████████▏| 1208/1319 [01:13<00:05, 20.84it/s] 92%|█████████▏| 1211/1319 [01:14<00:05, 21.32it/s] 92%|█████████▏| 1214/1319 [01:14<00:04, 21.72it/s] 92%|█████████▏| 1217/1319 [01:14<00:04, 22.06it/s] 92%|█████████▏| 1220/1319 [01:14<00:04, 21.25it/s] 93%|█████████▎| 1223/1319 [01:14<00:04, 21.67it/s] 93%|█████████▎| 1226/1319 [01:14<00:04, 21.81it/s] 93%|█████████▎| 1229/1319 [01:14<00:04, 21.24it/s] 93%|█████████▎| 1232/1319 [01:15<00:04, 20.88it/s] 94%|█████████▎| 1235/1319 [01:15<00:03, 21.32it/s] 94%|█████████▍| 1238/1319 [01:15<00:03, 22.02it/s] 94%|█████████▍| 1241/1319 [01:15<00:03, 21.14it/s] 94%|█████████▍| 1244/1319 [01:15<00:03, 21.56it/s] 95%|█████████▍| 1247/1319 [01:15<00:03, 20.90it/s] 95%|█████████▍| 1250/1319 [01:15<00:03, 20.71it/s] 95%|█████████▍| 1253/1319 [01:16<00:03, 20.34it/s] 95%|█████████▌| 1256/1319 [01:16<00:03, 19.04it/s] 95%|█████████▌| 1259/1319 [01:16<00:03, 19.96it/s] 96%|█████████▌| 1262/1319 [01:16<00:02, 19.81it/s] 96%|█████████▌| 1265/1319 [01:16<00:02, 19.47it/s] 96%|█████████▌| 1268/1319 [01:16<00:02, 19.23it/s] 96%|█████████▋| 1270/1319 [01:16<00:02, 18.26it/s] 97%|█████████▋| 1273/1319 [01:17<00:02, 19.36it/s] 97%|█████████▋| 1276/1319 [01:17<00:02, 19.34it/s] 97%|█████████▋| 1279/1319 [01:17<00:01, 20.11it/s] 97%|█████████▋| 1282/1319 [01:17<00:01, 19.95it/s] 97%|█████████▋| 1284/1319 [01:17<00:01, 19.09it/s] 97%|█████████▋| 1286/1319 [01:17<00:01, 18.87it/s] 98%|█████████▊| 1288/1319 [01:17<00:01, 19.00it/s] 98%|█████████▊| 1290/1319 [01:18<00:01, 18.50it/s] 98%|█████████▊| 1292/1319 [01:18<00:01, 17.87it/s] 98%|█████████▊| 1295/1319 [01:18<00:01, 18.97it/s] 98%|█████████▊| 1297/1319 [01:18<00:01, 18.55it/s] 98%|█████████▊| 1299/1319 [01:18<00:01, 18.06it/s] 99%|█████████▊| 1301/1319 [01:18<00:01, 17.55it/s] 99%|█████████▉| 1303/1319 [01:18<00:00, 17.45it/s] 99%|█████████▉| 1306/1319 [01:18<00:00, 19.01it/s] 99%|█████████▉| 1308/1319 [01:18<00:00, 18.55it/s] 99%|█████████▉| 1311/1319 [01:19<00:00, 18.82it/s]100%|█████████▉| 1313/1319 [01:19<00:00, 18.60it/s]100%|█████████▉| 1315/1319 [01:19<00:00, 17.88it/s]100%|█████████▉| 1318/1319 [01:19<00:00, 18.43it/s]100%|██████████| 1319/1319 [01:19<00:00, 16.57it/s]
+Running greedy_until requests
+  0%|          | 0/189 [00:00<?, ?it/s][INFO|configuration_utils.py:575] 2024-05-02 16:32:07,930 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  1%|          | 1/189 [00:09<29:55,  9.55s/it][INFO|configuration_utils.py:575] 2024-05-02 16:32:17,477 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  1%|          | 2/189 [00:18<28:17,  9.08s/it][INFO|configuration_utils.py:575] 2024-05-02 16:32:26,228 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  2%|▏         | 3/189 [00:26<27:10,  8.77s/it][INFO|configuration_utils.py:575] 2024-05-02 16:32:34,625 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  2%|▏         | 4/189 [00:35<26:38,  8.64s/it][INFO|configuration_utils.py:575] 2024-05-02 16:32:43,073 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  3%|▎         | 5/189 [00:43<26:14,  8.56s/it][INFO|configuration_utils.py:575] 2024-05-02 16:32:51,475 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  3%|▎         | 6/189 [00:52<26:09,  8.57s/it][INFO|configuration_utils.py:575] 2024-05-02 16:33:00,086 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  4%|▎         | 7/189 [01:00<26:06,  8.60s/it][INFO|configuration_utils.py:575] 2024-05-02 16:33:08,752 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  4%|▍         | 8/189 [01:09<25:49,  8.56s/it][INFO|configuration_utils.py:575] 2024-05-02 16:33:17,219 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  5%|▍         | 9/189 [01:17<25:36,  8.53s/it][INFO|configuration_utils.py:575] 2024-05-02 16:33:25,694 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  5%|▌         | 10/189 [01:26<25:24,  8.52s/it][INFO|configuration_utils.py:575] 2024-05-02 16:33:34,179 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  6%|▌         | 11/189 [01:34<25:14,  8.51s/it][INFO|configuration_utils.py:575] 2024-05-02 16:33:42,660 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  6%|▋         | 12/189 [01:43<25:13,  8.55s/it][INFO|configuration_utils.py:575] 2024-05-02 16:33:51,315 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  7%|▋         | 13/189 [01:51<25:02,  8.54s/it][INFO|configuration_utils.py:575] 2024-05-02 16:33:59,826 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  7%|▋         | 14/189 [02:00<24:50,  8.52s/it][INFO|configuration_utils.py:575] 2024-05-02 16:34:08,295 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  8%|▊         | 15/189 [02:09<24:49,  8.56s/it][INFO|configuration_utils.py:575] 2024-05-02 16:34:16,945 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  8%|▊         | 16/189 [02:17<24:36,  8.54s/it][INFO|configuration_utils.py:575] 2024-05-02 16:34:25,427 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+  9%|▉         | 17/189 [02:25<24:26,  8.53s/it][INFO|configuration_utils.py:575] 2024-05-02 16:34:33,929 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 10%|▉         | 18/189 [02:34<24:13,  8.50s/it][INFO|configuration_utils.py:575] 2024-05-02 16:34:42,372 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 10%|█         | 19/189 [02:42<24:01,  8.48s/it][INFO|configuration_utils.py:575] 2024-05-02 16:34:50,806 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 11%|█         | 20/189 [02:51<23:49,  8.46s/it][INFO|configuration_utils.py:575] 2024-05-02 16:34:59,205 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 11%|█         | 21/189 [02:59<23:50,  8.52s/it][INFO|configuration_utils.py:575] 2024-05-02 16:35:07,860 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 12%|█▏        | 22/189 [03:08<24:01,  8.63s/it][INFO|configuration_utils.py:575] 2024-05-02 16:35:16,757 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 12%|█▏        | 23/189 [03:17<24:06,  8.71s/it][INFO|configuration_utils.py:575] 2024-05-02 16:35:25,667 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 13%|█▎        | 24/189 [03:26<23:38,  8.60s/it][INFO|configuration_utils.py:575] 2024-05-02 16:35:33,992 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 13%|█▎        | 25/189 [03:34<23:18,  8.53s/it][INFO|configuration_utils.py:575] 2024-05-02 16:35:42,359 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 14%|█▍        | 26/189 [03:42<22:59,  8.46s/it][INFO|configuration_utils.py:575] 2024-05-02 16:35:50,666 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 14%|█▍        | 27/189 [03:51<22:51,  8.46s/it][INFO|configuration_utils.py:575] 2024-05-02 16:35:59,135 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 15%|█▍        | 28/189 [03:59<22:52,  8.53s/it][INFO|configuration_utils.py:575] 2024-05-02 16:36:07,805 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 15%|█▌        | 29/189 [04:08<22:46,  8.54s/it][INFO|configuration_utils.py:575] 2024-05-02 16:36:16,375 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 16%|█▌        | 30/189 [04:10<17:18,  6.53s/it][INFO|configuration_utils.py:575] 2024-05-02 16:36:18,222 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 16%|█▋        | 31/189 [04:18<18:33,  7.05s/it][INFO|configuration_utils.py:575] 2024-05-02 16:36:26,469 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 17%|█▋        | 32/189 [04:26<19:22,  7.41s/it][INFO|configuration_utils.py:575] 2024-05-02 16:36:34,715 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 17%|█▋        | 33/189 [04:35<20:03,  7.72s/it][INFO|configuration_utils.py:575] 2024-05-02 16:36:43,151 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 18%|█▊        | 34/189 [04:43<20:20,  7.88s/it][INFO|configuration_utils.py:575] 2024-05-02 16:36:51,405 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 19%|█▊        | 35/189 [04:51<20:31,  7.99s/it][INFO|configuration_utils.py:575] 2024-05-02 16:36:59,675 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 19%|█▉        | 36/189 [04:59<20:34,  8.07s/it][INFO|configuration_utils.py:575] 2024-05-02 16:37:07,909 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 20%|█▉        | 37/189 [05:08<20:34,  8.12s/it][INFO|configuration_utils.py:575] 2024-05-02 16:37:16,157 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 20%|██        | 38/189 [05:16<20:34,  8.18s/it][INFO|configuration_utils.py:575] 2024-05-02 16:37:24,458 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 21%|██        | 39/189 [05:24<20:32,  8.21s/it][INFO|configuration_utils.py:575] 2024-05-02 16:37:32,764 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 21%|██        | 40/189 [05:33<20:25,  8.22s/it][INFO|configuration_utils.py:575] 2024-05-02 16:37:41,011 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 22%|██▏       | 41/189 [05:41<20:20,  8.25s/it][INFO|configuration_utils.py:575] 2024-05-02 16:37:49,312 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 22%|██▏       | 42/189 [05:49<20:12,  8.25s/it][INFO|configuration_utils.py:575] 2024-05-02 16:37:57,572 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 23%|██▎       | 43/189 [05:57<20:04,  8.25s/it][INFO|configuration_utils.py:575] 2024-05-02 16:38:05,826 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 23%|██▎       | 44/189 [06:06<20:11,  8.35s/it][INFO|configuration_utils.py:575] 2024-05-02 16:38:14,414 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 24%|██▍       | 45/189 [06:16<21:24,  8.92s/it][INFO|configuration_utils.py:575] 2024-05-02 16:38:24,662 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 24%|██▍       | 46/189 [06:25<21:00,  8.81s/it][INFO|configuration_utils.py:575] 2024-05-02 16:38:33,228 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 25%|██▍       | 47/189 [06:34<21:01,  8.88s/it][INFO|configuration_utils.py:575] 2024-05-02 16:38:42,264 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 25%|██▌       | 48/189 [06:36<15:55,  6.77s/it][INFO|configuration_utils.py:575] 2024-05-02 16:38:44,123 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 26%|██▌       | 49/189 [06:45<17:16,  7.40s/it][INFO|configuration_utils.py:575] 2024-05-02 16:38:52,984 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 26%|██▋       | 50/189 [06:53<17:53,  7.72s/it][INFO|configuration_utils.py:575] 2024-05-02 16:39:01,448 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 27%|██▋       | 51/189 [07:01<18:15,  7.94s/it][INFO|configuration_utils.py:575] 2024-05-02 16:39:09,886 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 28%|██▊       | 52/189 [07:10<18:27,  8.08s/it][INFO|configuration_utils.py:575] 2024-05-02 16:39:18,317 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 28%|██▊       | 53/189 [07:18<18:32,  8.18s/it][INFO|configuration_utils.py:575] 2024-05-02 16:39:26,726 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 29%|██▊       | 54/189 [07:27<18:35,  8.26s/it][INFO|configuration_utils.py:575] 2024-05-02 16:39:35,172 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 29%|██▉       | 55/189 [07:35<18:33,  8.31s/it][INFO|configuration_utils.py:575] 2024-05-02 16:39:43,607 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 30%|██▉       | 56/189 [07:44<18:30,  8.35s/it][INFO|configuration_utils.py:575] 2024-05-02 16:39:52,033 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 30%|███       | 57/189 [07:52<18:24,  8.37s/it][INFO|configuration_utils.py:575] 2024-05-02 16:40:00,445 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 31%|███       | 58/189 [08:00<18:17,  8.38s/it][INFO|configuration_utils.py:575] 2024-05-02 16:40:08,857 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 31%|███       | 59/189 [08:09<18:32,  8.56s/it][INFO|configuration_utils.py:575] 2024-05-02 16:40:17,822 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 32%|███▏      | 60/189 [08:19<18:47,  8.74s/it][INFO|configuration_utils.py:575] 2024-05-02 16:40:27,003 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 32%|███▏      | 61/189 [08:28<18:58,  8.90s/it][INFO|configuration_utils.py:575] 2024-05-02 16:40:36,254 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 33%|███▎      | 62/189 [08:36<18:37,  8.80s/it][INFO|configuration_utils.py:575] 2024-05-02 16:40:44,836 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 33%|███▎      | 63/189 [08:45<18:19,  8.73s/it][INFO|configuration_utils.py:575] 2024-05-02 16:40:53,393 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 34%|███▍      | 64/189 [08:54<18:04,  8.67s/it][INFO|configuration_utils.py:575] 2024-05-02 16:41:01,940 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 34%|███▍      | 65/189 [09:03<18:08,  8.78s/it][INFO|configuration_utils.py:575] 2024-05-02 16:41:10,975 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 35%|███▍      | 66/189 [09:11<18:04,  8.82s/it][INFO|configuration_utils.py:575] 2024-05-02 16:41:19,876 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 35%|███▌      | 67/189 [09:20<17:52,  8.79s/it][INFO|configuration_utils.py:575] 2024-05-02 16:41:28,599 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 36%|███▌      | 68/189 [09:29<17:56,  8.90s/it][INFO|configuration_utils.py:575] 2024-05-02 16:41:37,744 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 37%|███▋      | 69/189 [09:39<18:07,  9.06s/it][INFO|configuration_utils.py:575] 2024-05-02 16:41:47,183 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 37%|███▋      | 70/189 [09:48<17:54,  9.03s/it][INFO|configuration_utils.py:575] 2024-05-02 16:41:56,150 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 38%|███▊      | 71/189 [09:56<17:28,  8.88s/it][INFO|configuration_utils.py:575] 2024-05-02 16:42:04,684 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 38%|███▊      | 72/189 [10:05<17:07,  8.78s/it][INFO|configuration_utils.py:575] 2024-05-02 16:42:13,221 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 39%|███▊      | 73/189 [10:15<17:41,  9.15s/it][INFO|configuration_utils.py:575] 2024-05-02 16:42:23,226 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 39%|███▉      | 74/189 [10:24<17:30,  9.14s/it][INFO|configuration_utils.py:575] 2024-05-02 16:42:32,342 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 40%|███▉      | 75/189 [10:32<17:01,  8.96s/it][INFO|configuration_utils.py:575] 2024-05-02 16:42:40,878 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 40%|████      | 76/189 [10:41<16:38,  8.84s/it][INFO|configuration_utils.py:575] 2024-05-02 16:42:49,432 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 41%|████      | 77/189 [10:50<16:27,  8.82s/it][INFO|configuration_utils.py:575] 2024-05-02 16:42:58,201 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 41%|████▏     | 78/189 [10:58<16:07,  8.72s/it][INFO|configuration_utils.py:575] 2024-05-02 16:43:06,688 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 42%|████▏     | 79/189 [11:07<15:51,  8.65s/it][INFO|configuration_utils.py:575] 2024-05-02 16:43:15,191 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 42%|████▏     | 80/189 [11:15<15:35,  8.59s/it][INFO|configuration_utils.py:575] 2024-05-02 16:43:23,621 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 43%|████▎     | 81/189 [11:24<15:23,  8.55s/it][INFO|configuration_utils.py:575] 2024-05-02 16:43:32,103 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 43%|████▎     | 82/189 [11:32<15:16,  8.57s/it][INFO|configuration_utils.py:575] 2024-05-02 16:43:40,703 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 44%|████▍     | 83/189 [11:41<15:23,  8.71s/it][INFO|configuration_utils.py:575] 2024-05-02 16:43:49,736 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 44%|████▍     | 84/189 [11:50<15:09,  8.66s/it][INFO|configuration_utils.py:575] 2024-05-02 16:43:58,290 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 45%|████▍     | 85/189 [11:58<14:56,  8.62s/it][INFO|configuration_utils.py:575] 2024-05-02 16:44:06,825 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 46%|████▌     | 86/189 [12:07<14:45,  8.60s/it][INFO|configuration_utils.py:575] 2024-05-02 16:44:15,362 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 46%|████▌     | 87/189 [12:15<14:35,  8.59s/it][INFO|configuration_utils.py:575] 2024-05-02 16:44:23,924 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 47%|████▋     | 88/189 [12:24<14:28,  8.60s/it][INFO|configuration_utils.py:575] 2024-05-02 16:44:32,555 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 47%|████▋     | 89/189 [12:33<14:19,  8.60s/it][INFO|configuration_utils.py:575] 2024-05-02 16:44:41,152 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 48%|████▊     | 90/189 [12:41<14:13,  8.62s/it][INFO|configuration_utils.py:575] 2024-05-02 16:44:49,817 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 48%|████▊     | 91/189 [12:50<14:07,  8.65s/it][INFO|configuration_utils.py:575] 2024-05-02 16:44:58,533 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 49%|████▊     | 92/189 [12:59<13:54,  8.61s/it][INFO|configuration_utils.py:575] 2024-05-02 16:45:07,038 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 49%|████▉     | 93/189 [13:08<13:55,  8.70s/it][INFO|configuration_utils.py:575] 2024-05-02 16:45:15,973 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 50%|████▉     | 94/189 [13:16<13:38,  8.61s/it][INFO|configuration_utils.py:575] 2024-05-02 16:45:24,376 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 50%|█████     | 95/189 [13:24<13:23,  8.55s/it][INFO|configuration_utils.py:575] 2024-05-02 16:45:32,778 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 51%|█████     | 96/189 [13:33<13:12,  8.52s/it][INFO|configuration_utils.py:575] 2024-05-02 16:45:41,241 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 51%|█████▏    | 97/189 [13:41<13:02,  8.50s/it][INFO|configuration_utils.py:575] 2024-05-02 16:45:49,699 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 52%|█████▏    | 98/189 [13:50<12:55,  8.53s/it][INFO|configuration_utils.py:575] 2024-05-02 16:45:58,277 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 52%|█████▏    | 99/189 [13:58<12:45,  8.51s/it][INFO|configuration_utils.py:575] 2024-05-02 16:46:06,744 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 53%|█████▎    | 100/189 [14:07<12:43,  8.58s/it][INFO|configuration_utils.py:575] 2024-05-02 16:46:15,502 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 53%|█████▎    | 101/189 [14:16<12:40,  8.64s/it][INFO|configuration_utils.py:575] 2024-05-02 16:46:24,272 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 54%|█████▍    | 102/189 [14:24<12:28,  8.60s/it][INFO|configuration_utils.py:575] 2024-05-02 16:46:32,787 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 54%|█████▍    | 103/189 [14:33<12:26,  8.67s/it][INFO|configuration_utils.py:575] 2024-05-02 16:46:41,631 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 55%|█████▌    | 104/189 [14:42<12:15,  8.66s/it][INFO|configuration_utils.py:575] 2024-05-02 16:46:50,241 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 56%|█████▌    | 105/189 [14:50<12:04,  8.62s/it][INFO|configuration_utils.py:575] 2024-05-02 16:46:58,794 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 56%|█████▌    | 106/189 [14:59<11:54,  8.61s/it][INFO|configuration_utils.py:575] 2024-05-02 16:47:07,371 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 57%|█████▋    | 107/189 [15:07<11:43,  8.57s/it][INFO|configuration_utils.py:575] 2024-05-02 16:47:15,857 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 57%|█████▋    | 108/189 [15:17<12:04,  8.94s/it][INFO|configuration_utils.py:575] 2024-05-02 16:47:25,661 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 58%|█████▊    | 109/189 [15:26<12:02,  9.04s/it][INFO|configuration_utils.py:575] 2024-05-02 16:47:34,913 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 58%|█████▊    | 110/189 [15:35<11:45,  8.93s/it][INFO|configuration_utils.py:575] 2024-05-02 16:47:43,587 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 59%|█████▊    | 111/189 [15:44<11:31,  8.87s/it][INFO|configuration_utils.py:575] 2024-05-02 16:47:52,327 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 59%|█████▉    | 112/189 [15:53<11:17,  8.80s/it][INFO|configuration_utils.py:575] 2024-05-02 16:48:00,960 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 60%|█████▉    | 113/189 [16:02<11:13,  8.87s/it][INFO|configuration_utils.py:575] 2024-05-02 16:48:09,988 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 60%|██████    | 114/189 [16:12<11:43,  9.37s/it][INFO|configuration_utils.py:575] 2024-05-02 16:48:20,546 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 61%|██████    | 115/189 [16:24<12:19,  9.99s/it][INFO|configuration_utils.py:575] 2024-05-02 16:48:31,970 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 61%|██████▏   | 116/189 [16:34<12:23, 10.18s/it][INFO|configuration_utils.py:575] 2024-05-02 16:48:42,592 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 62%|██████▏   | 117/189 [16:45<12:22, 10.31s/it][INFO|configuration_utils.py:575] 2024-05-02 16:48:53,207 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 62%|██████▏   | 118/189 [16:56<12:35, 10.64s/it][INFO|configuration_utils.py:575] 2024-05-02 16:49:04,632 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 63%|██████▎   | 119/189 [17:05<11:39, 10.00s/it][INFO|configuration_utils.py:575] 2024-05-02 16:49:13,121 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 63%|██████▎   | 120/189 [17:13<10:58,  9.54s/it][INFO|configuration_utils.py:575] 2024-05-02 16:49:21,592 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 64%|██████▍   | 121/189 [17:22<10:27,  9.23s/it][INFO|configuration_utils.py:575] 2024-05-02 16:49:30,110 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 65%|██████▍   | 122/189 [17:30<10:07,  9.07s/it][INFO|configuration_utils.py:575] 2024-05-02 16:49:38,805 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 65%|██████▌   | 123/189 [17:39<09:48,  8.92s/it][INFO|configuration_utils.py:575] 2024-05-02 16:49:47,374 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 66%|██████▌   | 124/189 [17:48<09:33,  8.82s/it][INFO|configuration_utils.py:575] 2024-05-02 16:49:55,954 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 66%|██████▌   | 125/189 [17:56<09:19,  8.74s/it][INFO|configuration_utils.py:575] 2024-05-02 16:50:04,521 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 67%|██████▋   | 126/189 [18:05<09:07,  8.68s/it][INFO|configuration_utils.py:575] 2024-05-02 16:50:13,070 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 67%|██████▋   | 127/189 [18:13<08:56,  8.66s/it][INFO|configuration_utils.py:575] 2024-05-02 16:50:21,656 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 68%|██████▊   | 128/189 [18:22<08:45,  8.62s/it][INFO|configuration_utils.py:575] 2024-05-02 16:50:30,202 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 68%|██████▊   | 129/189 [18:30<08:37,  8.62s/it][INFO|configuration_utils.py:575] 2024-05-02 16:50:38,825 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 69%|██████▉   | 130/189 [18:39<08:30,  8.64s/it][INFO|configuration_utils.py:575] 2024-05-02 16:50:47,521 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 69%|██████▉   | 131/189 [18:48<08:21,  8.64s/it][INFO|configuration_utils.py:575] 2024-05-02 16:50:56,151 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 70%|██████▉   | 132/189 [18:57<08:17,  8.73s/it][INFO|configuration_utils.py:575] 2024-05-02 16:51:05,075 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 70%|███████   | 133/189 [19:05<08:05,  8.67s/it][INFO|configuration_utils.py:575] 2024-05-02 16:51:13,615 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 71%|███████   | 134/189 [19:14<07:54,  8.62s/it][INFO|configuration_utils.py:575] 2024-05-02 16:51:22,125 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 71%|███████▏  | 135/189 [19:22<07:45,  8.63s/it][INFO|configuration_utils.py:575] 2024-05-02 16:51:30,765 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 72%|███████▏  | 136/189 [19:31<07:36,  8.62s/it][INFO|configuration_utils.py:575] 2024-05-02 16:51:39,370 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 72%|███████▏  | 137/189 [19:39<07:26,  8.59s/it][INFO|configuration_utils.py:575] 2024-05-02 16:51:47,878 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 73%|███████▎  | 138/189 [19:49<07:28,  8.80s/it][INFO|configuration_utils.py:575] 2024-05-02 16:51:57,179 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 74%|███████▎  | 139/189 [19:58<07:21,  8.83s/it][INFO|configuration_utils.py:575] 2024-05-02 16:52:06,074 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 74%|███████▍  | 140/189 [20:06<07:07,  8.72s/it][INFO|configuration_utils.py:575] 2024-05-02 16:52:14,553 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 75%|███████▍  | 141/189 [20:15<06:55,  8.66s/it][INFO|configuration_utils.py:575] 2024-05-02 16:52:23,052 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 75%|███████▌  | 142/189 [20:23<06:48,  8.68s/it][INFO|configuration_utils.py:575] 2024-05-02 16:52:31,802 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 76%|███████▌  | 143/189 [20:32<06:38,  8.65s/it][INFO|configuration_utils.py:575] 2024-05-02 16:52:40,387 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 76%|███████▌  | 144/189 [20:41<06:29,  8.66s/it][INFO|configuration_utils.py:575] 2024-05-02 16:52:49,044 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 77%|███████▋  | 145/189 [20:49<06:22,  8.69s/it][INFO|configuration_utils.py:575] 2024-05-02 16:52:57,810 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 77%|███████▋  | 146/189 [20:58<06:15,  8.73s/it][INFO|configuration_utils.py:575] 2024-05-02 16:53:06,630 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 78%|███████▊  | 147/189 [21:07<06:08,  8.76s/it][INFO|configuration_utils.py:575] 2024-05-02 16:53:15,478 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 78%|███████▊  | 148/189 [21:16<06:00,  8.78s/it][INFO|configuration_utils.py:575] 2024-05-02 16:53:24,310 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 79%|███████▉  | 149/189 [21:25<05:51,  8.79s/it][INFO|configuration_utils.py:575] 2024-05-02 16:53:33,099 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 79%|███████▉  | 150/189 [21:34<05:43,  8.81s/it][INFO|configuration_utils.py:575] 2024-05-02 16:53:41,950 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 80%|███████▉  | 151/189 [21:42<05:31,  8.73s/it][INFO|configuration_utils.py:575] 2024-05-02 16:53:50,507 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 80%|████████  | 152/189 [21:51<05:22,  8.71s/it][INFO|configuration_utils.py:575] 2024-05-02 16:53:59,178 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 81%|████████  | 153/189 [22:01<05:35,  9.31s/it][INFO|configuration_utils.py:575] 2024-05-02 16:54:09,886 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 81%|████████▏ | 154/189 [22:11<05:26,  9.34s/it][INFO|configuration_utils.py:575] 2024-05-02 16:54:19,299 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 82%|████████▏ | 155/189 [22:19<05:07,  9.04s/it][INFO|configuration_utils.py:575] 2024-05-02 16:54:27,648 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 83%|████████▎ | 156/189 [22:28<04:51,  8.84s/it][INFO|configuration_utils.py:575] 2024-05-02 16:54:36,024 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 83%|████████▎ | 157/189 [22:36<04:38,  8.70s/it][INFO|configuration_utils.py:575] 2024-05-02 16:54:44,373 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 84%|████████▎ | 158/189 [22:44<04:27,  8.62s/it][INFO|configuration_utils.py:575] 2024-05-02 16:54:52,834 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 84%|████████▍ | 159/189 [22:53<04:16,  8.56s/it][INFO|configuration_utils.py:575] 2024-05-02 16:55:01,254 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 85%|████████▍ | 160/189 [23:01<04:07,  8.54s/it][INFO|configuration_utils.py:575] 2024-05-02 16:55:09,737 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 85%|████████▌ | 161/189 [23:10<03:59,  8.56s/it][INFO|configuration_utils.py:575] 2024-05-02 16:55:18,330 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 86%|████████▌ | 162/189 [23:18<03:50,  8.53s/it][INFO|configuration_utils.py:575] 2024-05-02 16:55:26,810 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 86%|████████▌ | 163/189 [23:27<03:40,  8.50s/it][INFO|configuration_utils.py:575] 2024-05-02 16:55:35,225 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 87%|████████▋ | 164/189 [23:35<03:32,  8.49s/it][INFO|configuration_utils.py:575] 2024-05-02 16:55:43,708 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 87%|████████▋ | 165/189 [23:44<03:23,  8.49s/it][INFO|configuration_utils.py:575] 2024-05-02 16:55:52,180 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 88%|████████▊ | 166/189 [23:52<03:14,  8.47s/it][INFO|configuration_utils.py:575] 2024-05-02 16:56:00,615 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 88%|████████▊ | 167/189 [24:01<03:06,  8.47s/it][INFO|configuration_utils.py:575] 2024-05-02 16:56:09,080 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 89%|████████▉ | 168/189 [24:09<02:57,  8.45s/it][INFO|configuration_utils.py:575] 2024-05-02 16:56:17,497 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 89%|████████▉ | 169/189 [24:17<02:48,  8.44s/it][INFO|configuration_utils.py:575] 2024-05-02 16:56:25,919 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 90%|████████▉ | 170/189 [24:26<02:40,  8.45s/it][INFO|configuration_utils.py:575] 2024-05-02 16:56:34,370 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 90%|█████████ | 171/189 [24:34<02:32,  8.45s/it][INFO|configuration_utils.py:575] 2024-05-02 16:56:42,841 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 91%|█████████ | 172/189 [24:43<02:23,  8.45s/it][INFO|configuration_utils.py:575] 2024-05-02 16:56:51,279 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 92%|█████████▏| 173/189 [24:43<01:36,  6.04s/it][INFO|configuration_utils.py:575] 2024-05-02 16:56:51,681 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 92%|█████████▏| 174/189 [24:52<01:41,  6.77s/it][INFO|configuration_utils.py:575] 2024-05-02 16:57:00,175 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 93%|█████████▎| 175/189 [25:00<01:41,  7.28s/it][INFO|configuration_utils.py:575] 2024-05-02 16:57:08,651 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 93%|█████████▎| 176/189 [25:09<01:39,  7.66s/it][INFO|configuration_utils.py:575] 2024-05-02 16:57:17,181 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 94%|█████████▎| 177/189 [25:10<01:09,  5.78s/it][INFO|configuration_utils.py:575] 2024-05-02 16:57:18,594 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 94%|█████████▍| 178/189 [25:19<01:12,  6.61s/it][INFO|configuration_utils.py:575] 2024-05-02 16:57:27,135 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 95%|█████████▍| 179/189 [25:27<01:11,  7.20s/it][INFO|configuration_utils.py:575] 2024-05-02 16:57:35,707 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 95%|█████████▌| 180/189 [25:36<01:08,  7.58s/it][INFO|configuration_utils.py:575] 2024-05-02 16:57:44,178 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 96%|█████████▌| 181/189 [25:44<01:02,  7.84s/it][INFO|configuration_utils.py:575] 2024-05-02 16:57:52,635 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 96%|█████████▋| 182/189 [25:53<00:56,  8.07s/it][INFO|configuration_utils.py:575] 2024-05-02 16:58:01,245 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 97%|█████████▋| 183/189 [26:02<00:49,  8.32s/it][INFO|configuration_utils.py:575] 2024-05-02 16:58:10,124 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 97%|█████████▋| 184/189 [26:10<00:42,  8.40s/it][INFO|configuration_utils.py:575] 2024-05-02 16:58:18,731 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 98%|█████████▊| 185/189 [26:17<00:31,  7.78s/it][INFO|configuration_utils.py:575] 2024-05-02 16:58:25,053 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 98%|█████████▊| 186/189 [26:25<00:24,  8.04s/it][INFO|configuration_utils.py:575] 2024-05-02 16:58:33,686 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 99%|█████████▉| 187/189 [26:34<00:16,  8.21s/it][INFO|configuration_utils.py:575] 2024-05-02 16:58:42,300 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+ 99%|█████████▉| 188/189 [26:43<00:08,  8.38s/it][INFO|configuration_utils.py:575] 2024-05-02 16:58:51,064 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.0"
+}
+
+100%|██████████| 189/189 [26:51<00:00,  8.43s/it]100%|██████████| 189/189 [26:51<00:00,  8.53s/it]
+STDOUT: {'results': {'hendrycksTest-elementary_mathematics': {'acc': 0.25925925925925924, 'acc_stderr': 0.03196107138009966, 'acc_norm': 0.25925925925925924, 'acc_norm_stderr': 0.03196107138009966}, 'bigbench_logical_deduction_three_objects': {'multiple_choice_grade': 0.328042328042328, 'multiple_choice_grade_stderr': 0.0342418307585366}, 'gsm8k': {'acc': 0.0, 'acc_stderr': 0.0}}}
+STDOUT: Finetuning the Model:  False

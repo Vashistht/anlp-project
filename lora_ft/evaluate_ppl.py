@@ -53,12 +53,14 @@ def evaluate_ppl(dataset_name, model, tokenizer, ctx_length, ignore_last=False):
     elif dataset_name == "gsm8k":
         trainenc, testenc = get_raw_dataset('gsm8k', tokenizer)
                                             # , split_list=[0,3])
-        _, testloader = get_loaders("gsm8k", trainenc, testenc, seed=0, seqlen=model.seqlen, tokenizer=tokenizer)  
+        _, testloader = get_loaders("gsm8k", trainenc, testenc, seed=0, seqlen=model.seqlen, tokenizer=tokenizer, example=False)  
         start_time = time()
+        testloader = testloader[100:201]
         ppl = eval_ppl_test_gsm8k(model, testloader, device = model.device)
-        total_iters = len(testenc)
+        total_iters = len(testloader)
         end_time = time()
         total_time = end_time - start_time
+        print(f"Dataset: {dataset_name}, n_samples {total_iters}, Perplexity: {ppl}")
         return ppl, total_time / total_iters
 
     nlls = []
@@ -89,4 +91,5 @@ def evaluate_ppl(dataset_name, model, tokenizer, ctx_length, ignore_last=False):
             break
     ppl = torch.exp(torch.stack(nlls).mean())
     ppl = ppl.item()
+    print(f"Dataset: {dataset_name}, n_samples {total_iters}, Perplexity: {ppl}")
     return ppl, total_time / total_iters
