@@ -89,6 +89,33 @@ prune_info='ppl_gsm8k'
 location='/home/vashistt/Desktop/anlp-project/outdir_gsm8k/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=100_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-llama2_Adaptive=Yes'
 outdir="/home/vashistt/Desktop/anlp-project/finetuned_model/${prune_info}"
 
+```
 CUDA_VISIBLE_DEVICES=7 python3 Run_evals_math-qa.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512    --learning_rate 1e-4               --per_device_train_batch_size 1         --per_device_eval_batch_size 8  --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"   --do_eleuther_eval True  --dataset_name 'gsm8k' --prune_target_epoch 3 --add_finetuned_adapter False --do_eleuther_eval_og_model False --save_info 'pruned_gsm8k_metrics_ppl' > pruned_gsm8k_pplmath.txt 2>&1
+```
 
-CUDA_VISIBLE_DEVICES=7 python3 Run_evals_non_math-qa.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512    --learning_rate 1e-4               --per_device_train_batch_size 1         --per_device_eval_batch_size 8  --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"   --do_eleuther_eval True  --dataset_name 'gsm8k' --prune_target_epoch 3 --add_finetuned_adapter False --do_eleuther_eval_og_model False --save_info 'pruned_gsm8k_metrics_ppl' > pruned_gsm8k_ppl_no_math.txt 2>&1
+```
+CUDA_VISIBLE_DEVICES=7 python3 Run_evals_non_math.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512    --learning_rate 1e-4               --per_device_train_batch_size 1         --per_device_eval_batch_size 8  --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"   --do_eleuther_eval True  --dataset_name 'gsm8k' --prune_target_epoch 3 --add_finetuned_adapter False --do_eleuther_eval_og_model False --save_info 'pruned_gsm8k_metrics_ppl' > pruned_gsm8k_ppl_no_math.txt 2>&1
+```
+
+
+# 9 gsm8k (hybrid)
+```
+    ppl_term_train = ppl_weight * ppl_train
+	other_terms = lexsim_weight * lexsim_train + cossim_weight * cossim_train + acc_weight * acc_train
+	if (ppl_term_train)> (other_terms):
+		combined_train =  -1*ppl_term_train
+	else:
+		combined_train = other_terms
+```
+
+prune_info='hybrdid_gsm8k' 
+location='/home/vashistt/Desktop/anlp-project/outdir_gsm8k_a4_hybrid/nsamp=8_sp=0.5_pfrac=0.2_bsz=1_ma_ratio=1.0_mpi=100_Lin.regtype=l1_pmethod=wanda_mlp_attn_ratio=1.0_Lin.regweight=100.0-0.0001-0_Lin.lr=100-10-1-0.1_Lin.bsz=32-64-128_Lin.nepochs=50_Lin.type=global_name=pruning-llama2_Adaptive=Yes'
+outdir="/home/vashistt/Desktop/anlp-project/finetuned_model/${prune_info}"
+
+```
+CUDA_VISIBLE_DEVICES=7 python3 Run_evals_math-qa.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512    --learning_rate 1e-4               --per_device_train_batch_size 1         --per_device_eval_batch_size 8  --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"   --do_eleuther_eval True  --dataset_name 'gsm8k' --prune_target_epoch 3 --add_finetuned_adapter False --do_eleuther_eval_og_model False --save_info 'pruned_gsm8k_metrics_hybrid' > pruned_gsm8k_hybridmath.txt 2>&1
+```
+
+```
+CUDA_VISIBLE_DEVICES=7 python3 Run_evals_non_math.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512    --learning_rate 1e-4               --per_device_train_batch_size 1         --per_device_eval_batch_size 8  --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"   --do_eleuther_eval True  --dataset_name 'gsm8k' --prune_target_epoch 3 --add_finetuned_adapter False --do_eleuther_eval_og_model False --save_info 'pruned_gsm8k_metrics_hybrid' > pruned_gsm8k_hybrid_no_math.txt 2>&1
+```
