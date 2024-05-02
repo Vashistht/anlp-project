@@ -625,8 +625,8 @@ def main():
         results = evaluator.simple_evaluate(
             model="hf-causal-experimental",
             model_args="pretrained={}".format(model_args.model_name_or_path),
-            tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
-            # tasks = ['gsm8k'],
+            # tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
+            tasks = ['gsm8k'],
             num_fewshot=5,
             limit = .5, # how much of the original dataset to test on 
             no_cache=True,
