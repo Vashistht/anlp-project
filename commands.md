@@ -128,3 +128,12 @@ CUDA_VISIBLE_DEVICES=0 python finetune_lm.py      --model_name_or_path "meta-lla
 
 
 git add ../commands.md Run_evals.py Run_evals_gsm8k_5shots.py
+
+
+
+
+
+CUDA_VISIBLE_DEVICES=7 python3 Run_evals_math-qa.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512    --learning_rate 1e-4               --per_device_train_batch_size 1         --per_device_eval_batch_size 8  --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"   --do_eleuther_eval True  --dataset_name 'gsm8k' --prune_target_epoch 3 --add_finetuned_adapter False --do_eleuther_eval_og_model False --save_info 'pruned_wikitext_metrics_ppl' > pruned_gsm8k_metrics_lex-cos_3_math.txt 2>&1
+
+
+CUDA_VISIBLE_DEVICES=7 python3 Run_evals_math-qa.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512    --learning_rate 1e-4               --per_device_train_batch_size 1         --per_device_eval_batch_size 8  --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"   --do_eleuther_eval True  --dataset_name 'wiki' --prune_target_epoch 3 --add_finetuned_adapter False --do_eleuther_eval_og_model False --save_info 'pruned_wikitext_metrics_ppl' > pruned_wiki_math.txt 2>&1
