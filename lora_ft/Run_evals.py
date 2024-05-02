@@ -76,8 +76,7 @@ from peft import (
     # prepare_model_for_int8_training,
     set_peft_model_state_dict,
 )
-
-# from evaluate_ppl import evaluate_ppl
+from evaluate_ppl import evaluate_ppl
 
 # Will error if the minimal version of Transformers is not installed. Remove at your own risks.
 # check_min_version("4.29.0.dev0")
@@ -190,6 +189,11 @@ class ModelArguments:
     add_finetuned_adapter: bool = field(
         default=False,
         metadata={"help": "Whether to add a finetuned adapter to the model"},
+    )
+    
+    finetune_adapter_dataset: Optional[str] = field(
+        default=None,
+        metadata={"help": "The dataset on which the adapter is finetuned"},
     )
     
     prune_target_epoch : Optional[int] = field(
@@ -449,7 +453,6 @@ def get_param_count(model, exclude=['embed', 'head']):
     return sum([p.numel() for n, p in model.named_parameters() if not any(x in n for x in exclude)])
 
 def main():
-    torch.cuda.empty_cache()
     # See all possible arguments in src/transformers/training_args.py
     # or by passing the --help flag to this script.
     # We now keep distinct sets of args, for a cleaner separation of concerns.
@@ -561,14 +564,17 @@ def main():
     '''
     # Do the pre-training evaluation
     # Evaluation
-    if training_args.do_eval:
+    
+    if (training_args.do_eval) and (model_args.do_eleuther_eval_og_model):
         logger.info("*** Evaluate ***")
         model.eval()
         print(f'STDOUT: Evaluating on {data_args.dataset_name}')
-        # og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-        # out_str = "STDOUT: Original perplexity on {} = {:.3f}".format(data_args.dataset_name, og_ppl)
-        # print(out_str)
-
+        og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+        out_str = "STDOUT: Original perplexity on {} = {:.3f}".format(data_args.dataset_name, og_ppl)
+        print(out_str)
+    else:
+        print('STDOUT: Not evaluating the og ppl')
+    
     # since this will be pickled to avoid _LazyModule error in Hasher force logger loading before tokenize_function
     tok_logger = transformers.utils.logging.get_logger("transformers.tokenization_utils_base")
 
@@ -581,8 +587,7 @@ def main():
                 " of 1024. If you would like to use a longer `block_size` up to `tokenizer.model_max_length` you can"
                 " override this default with `--block_size xxx`."
             )
-            # block_size = 1024
-            block_size = 256
+            block_size = 1024
     else:
         if data_args.block_size > tokenizer.model_max_length:
             logger.warning(
@@ -620,10 +625,10 @@ def main():
         results = evaluator.simple_evaluate(
             model="hf-causal-experimental",
             model_args="pretrained={}".format(model_args.model_name_or_path),
-            tasks=["winogrande", "olq"], #, "arc_challenge", "arc_easy", "hellaswag"], # main one here
+            tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
             # tasks = ['gsm8k'],
             num_fewshot=0,
-            limit = .3, # how much of the original dataset to test on 
+            limit = .5, # how much of the original dataset to test on 
             no_cache=True,
             pretrained_model=model,
             write_out=True, 
@@ -647,12 +652,16 @@ def main():
         torch.cuda.empty_cache()
         logger.info("*** Evaluate ***")
         model.eval()
-        # start_time = time.time()
-        # before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-        # speedup = og_runtime / final_runtime
-        # out_str = "STDOUT: [Dataset: {}| SpeedUp={:.3f}] Original perplexity = {:.3f} | Before Training perplexity = {:.3f}".format(data_args.dataset_name,speedup, og_ppl, before_train_ppl, speedup)
-        # # out_file.write(out_str + "\n")
-        # print('STDOUT: ', out_str)
+        if training_args.do_eval:
+            start_time = time.time()
+            before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+            speedup = og_runtime / final_runtime
+            out_str = "STDOUT: [Dataset: {}| SpeedUp={:.3f}] Original perplexity = {:.3f} | Before Training perplexity = {:.3f}".format(data_args.dataset_name,speedup, og_ppl, before_train_ppl, speedup)
+            print('STDOUT: ', out_str)
+
+        else:
+            print('STDOUT: Not evaluating the ppl')
+        # out_file.write(out_str + "\n")
 
         should_i_do_eleuther_eval = model_args.do_eleuther_eval
         print(f'STDOUT: Eleuther eval for pruned model (no finetuning): {should_i_do_eleuther_eval}')
@@ -662,10 +671,10 @@ def main():
             results = evaluator.simple_evaluate(
                 model="hf-causal-experimental",
                 model_args="pretrained={}".format(model_args.model_name_or_path),
-                tasks=["winogrande", "boolq"], #, "arc_challenge", "arc_easy", "hellaswag"], # main one here
+                tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
                 # tasks = ['gsm8k'],
                 num_fewshot=0,
-                limit = .3, # how much of the original dataset to test on 
+                limit = .5, # how much of the original dataset to test on 
                 # num_fewshot={"hellaswag": 0, "arc_challenge":0}
                 no_cache=True,
                 pretrained_model=model,
@@ -679,15 +688,14 @@ def main():
     finetuned_model = model_args.add_finetuned_adapter
     print('STDOUT: Finetuning the Model: ', finetuned_model)
     # if model_args.add_finetuned_adapter, meaning the adapters for finetuning are there and we want to finetune
-    model.args.finetune_adapter_dataset = 'not_given'
     if finetuned_model:
-        if model.args.finetune_ft_dataset is 'wiki' or model.args.finetune_adapter_dataset is 'not_given':
-            adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_c4_ft_wiki/'
+        if model_args.finetune_ft_dataset == 'wiki' or model_args.finetune_adapter_dataset == None:
+            adapter_name = '/home/vash==tt/Desktop/anlp-project/finetuned_model_prune_c4_ft_wiki/'
             model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_c4_ft_wiki_adapter")
-        elif model.args.finetune_adapter_dataset is 'c4':
-            adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_gsm8k_ft_c4/'
+        elif model_args.finetune_adapter_dataset == 'c4':
+            adapter_name = '/home/vash==tt/Desktop/anlp-project/finetuned_model_prune_gsm8k_ft_c4/'
             model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_wiki_ft_wiki_adapter")
-        elif model.args.finetune_adapter_dataset is 'gsm8k':
+        elif model_args.finetune_adapter_dataset == 'gsm8k':
             adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_gsm8k_ft_gsm8k/'
             model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_gsm8k_ft_gsm8k_adapter")
         else:
@@ -700,10 +708,10 @@ def main():
             results = evaluator.simple_evaluate(
                 model="hf-causal-experimental",
                 model_args="pretrained={}".format(model_args.model_name_or_path),
-                tasks=["winogrande", "boolq"], #, "arc_challenge", "arc_easy", "hellaswag"], # main one here
+                tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
                 # tasks = ['gsm8k'],
                 num_fewshot=0,
-                limit = .3, # how much of the original dataset to test on 
+                limit = .5, # how much of the original dataset to test on 
                 # num_fewshot={"hellaswag": 0, "arc_challenge":0}
                 no_cache=True,
                 pretrained_model=model,
@@ -711,9 +719,8 @@ def main():
                 output_base_path=f'finetuned_sparsity-{final_sparsity:.3f}_all_dataset', # writes to the current dir
             )
             
-        updated_results = {'results': results['results']}
-        print('STDOUT:', updated_results)
-        
+            updated_results = {'results': results['results']}
+            print('STDOUT:', updated_results)
     # with open(file_path, 'w') as out_file:
     #     out_file.write("\n")
     #     out_file.write(results_str + "\n")
@@ -725,17 +732,3 @@ def _mp_fn(index):
 
 if __name__ == "__main__":
     main()
-
-    
-#     results = evaluator.simple_evaluate(
-#     model="hf-causal-experimental",
-#     model_args="pretrained={}".format(model_args.model_name_or_path),
-#     tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
-#     # tasks = ['gsm8k'],
-#     num_fewshot=0,
-#     limit = .01, # how much of the original dataset to test on 
-#     no_cache=True,
-#     pretrained_model=model,
-#     write_out=True, 
-#     output_base_path='/Users/vashisth/Documents/GitHub/ANLP_projects/anlp-project/logs_errors_outputs/gsm8k-pruned/finetuned-all-ds.json', # writes to the current dir if commented out 
-# )
