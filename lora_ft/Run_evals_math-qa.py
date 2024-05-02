@@ -550,9 +550,7 @@ def main():
         print(out_str)
     else:
         print('STDOUT: Not evaluating the og ppl')
-    
-    # since this will be pickled to avoid _LazyModule error in Hasher force logger loading before tokenize_function
-    tok_logger = transformers.utils.logging.get_logger("transformers.tokenization_utils_base")
+        tok_logger = transformers.utils.logging.get_logger("transformers.tokenization_utils_base")
 
 
     if data_args.block_size is None:
@@ -602,7 +600,7 @@ def main():
             model="hf-causal-experimental",
             model_args="pretrained={}".format(model_args.model_name_or_path),
             # tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
-            tasks = ['hendrycksTest-elementary_mathematics','bigbench_logical_deduction_three_objects', 'gsm8k'],
+            tasks = ['hendrycksTest-elementary_mathematics','bigbench_logical_deduction_three_objects'],
             num_fewshot=5,
             limit = .5, # how much of the original dataset to test on 
             no_cache=True,
@@ -645,7 +643,7 @@ def main():
                 model="hf-causal-experimental",
                 model_args="pretrained={}".format(model_args.model_name_or_path),
                 # tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
-                tasks = ['hendrycksTest-elementary_mathematics','bigbench_logical_deduction_three_objects', 'gsm8k'],
+                tasks = ['hendrycksTest-elementary_mathematics','bigbench_logical_deduction_three_objects'],
                 num_fewshot=5,
                 limit = .5, # how much of the original dataset to test on 
                 # num_fewshot={"hellaswag": 0, "arc_challenge":0}
@@ -666,7 +664,7 @@ def main():
             adapter_name = '/home/vash==tt/Desktop/anlp-project/finetuned_model_prune_c4_ft_wiki/'
             model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_c4_ft_wiki_adapter")
         elif model_args.finetune_adapter_dataset == 'c4':
-            adapter_name = '/home/vash==tt/Desktop/anlp-project/finetuned_model_prune_gsm8k_ft_c4/'
+            adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_gsm8k_ft_c4/'
             model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_wiki_ft_wiki_adapter")
         elif model_args.finetune_adapter_dataset == 'gsm8k':
             adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_gsm8k_ft_gsm8k/'
@@ -682,7 +680,7 @@ def main():
                 model="hf-causal-experimental",
                 model_args="pretrained={}".format(model_args.model_name_or_path),
                 # tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
-                tasks = ['hendrycksTest-elementary_mathematics','bigbench_logical_deduction_three_objects', 'gsm8k'],
+                tasks = ['hendrycksTest-elementary_mathematics','bigbench_logical_deduction_three_objects'],
                 num_fewshot=5,
                 limit = .5, # how much of the original dataset to test on 
                 # num_fewshot={"hellaswag": 0, "arc_challenge":0}
@@ -694,10 +692,6 @@ def main():
             
             updated_results = {'results': results['results']}
             print('STDOUT:', updated_results)
-    # with open(file_path, 'w') as out_file:
-    #     out_file.write("\n")
-    #     out_file.write(results_str + "\n")
-    #     out_file.flush()
 
 def _mp_fn(index):
     # For xla_spawn (TPUs)
