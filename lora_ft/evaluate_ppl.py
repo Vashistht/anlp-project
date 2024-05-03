@@ -55,7 +55,7 @@ def evaluate_ppl(dataset_name, model, tokenizer, ctx_length, ignore_last=False):
                                             # , split_list=[0,3])
         _, testloader = get_loaders("gsm8k", trainenc, testenc, seed=0, seqlen=model.seqlen, tokenizer=tokenizer, example=False)  
         start_time = time()
-        testloader = testloader[100:201]
+        testloader = testloader[:101]
         ppl = eval_ppl_test_gsm8k(model, testloader, device = model.device)
         total_iters = len(testloader)
         end_time = time()
