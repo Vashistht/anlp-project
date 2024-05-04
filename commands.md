@@ -72,8 +72,13 @@ huggingface-cli login --token YOUR_HF_API_TOKEN
 
 ## Prune LLaMA 2 7B
 ```
-CUDA_VISIBLE_DEVICES=0 python3 main.py --model meta-llama/Llama-2-7b-hf --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-llama2 --masks_per_iter 100 --nsamples 8 --save outdir --prune_frac 0.2 --bsz 1 --prune_method wanda
+# wiki
+CUDA_VISIBLE_DEVICES=0 python3 main.py --model meta-llama/Llama-2-7b-hf --dataset wikitext2 --sparsity_ratio 0.5 --wandb_project_name pruning-llama2 --masks_per_iter 100 --nsamples 8 --save outdir_wikitext_a4 --prune_frac 0.2 --bsz 1 --prune_method wanda
+
+# gsm
+CUDA_VISIBLE_DEVICES=9 python3 main.py --model meta-llama/Llama-2-7b-hf --dataset gsm8k --sparsity_ratio 0.5 --wandb_project_name pruning-llama2 --masks_per_iter 100 --nsamples 8 --save outdir_gsm8k_a4_100toks --prune_frac 0.2 --bsz 1 --prune_method wanda --weights 2 
 ```
+
 
 
 # Evaluations
@@ -92,35 +97,20 @@ outdir="/home/vashistt/Desktop/anlp-project/finetuned_model/${prune_info}"
 ```
 CUDA_VISIBLE_DEVICES=0 python3 lora_ft/Run_evals.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512    --learning_rate 1e-4               --per_device_train_batch_size 1         --per_device_eval_batch_size 8       --do_eval       --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"
 ```
-- if you want to calculate stats for different sparsity than the final one + whether to use finetuned or not 
+## Modified
 
-CUDA_VISIBLE_DEVICES=0 python3 lora_ft/Run_evals.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512    --learning_rate 1e-4               --per_device_train_batch_size 1         --per_device_eval_batch_size 8       --do_eval       --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"   --do_eleuther_eval True --prune_target_epoch 1 --add_finetuned_adapter False --do_eleuther_eval_og_model False --dataset_name 'gsm8k'
-
-
-- Generally these are the arguments 
+- eval on ppl (`--do_eval` remove it otherwise)
+- `--do_eleuther_eval_og_model True` (if u want stats on the og model)
+- `--add_finetuned_adapter True`: if you want to calculate stats for different sparsity than the final one + whether to use finetuned or not 
+- `--prune_target_epoch 3` (3 means .5 sparsity, 2 for .4, and 1 for .2) ideally want to run for each of them all else same
 
 ```
-CUDA_VISIBLE_DEVICES=0 python3 Run_evals.py \
-	--model_name_or_path "meta-llama/Llama-2-7b-hf" \
-	--config_name "meta-llama/Llama-2-7b-hf" \
-	--num_train_epochs 1 \
-	--block_size 512 \
-	--lora_r 128 \
-	--learning_rate 1e-4 \
-	--lora_alpha_ratio 4 \
-	--per_device_train_batch_size 1 \
-	--per_device_eval_batch_size 8 \
-	--do_train  \
-	--do_eval  \
- 	--do_eleuther_eval True
-	--max_train_samples 15000 \
-	--max_eval_samples 128 \
-	--overwrite_output_dir \
-	--output_dir "${output_dir}" \
-	--prune_info_path "${location}" \
-	--hidden_mse_weight 0.0 \
-	--kl_weight 0.01 \
-	--dataset_name "wikitext"
+CUDA_VISIBLE_DEVICES=7 python3 Run_evals.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512    --learning_rate 1e-4               --per_device_train_batch_size 1         --per_device_eval_batch_size 8  --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"   --do_eleuther_eval True  --dataset_name 'gsm8k' --prune_target_epoch 3 --add_finetuned_adapter True --do_eleuther_eval_og_model True --do_eval > prune_ds_MetricWeights_FT_epoch_{targetEpoch}.txt
+```
+
+## Just to get evals for Eleuther DS  on non-finetuned and pruned model 
+```
+CUDA_VISIBLE_DEVICES=7 python3 Run_evals.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512    --learning_rate 1e-4               --per_device_train_batch_size 1         --per_device_eval_batch_size 8  --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"   --do_eleuther_eval True  --dataset_name 'gsm8k' --prune_target_epoch 3 --add_finetuned_adapter False --do_eleuther_eval_og_model False > prune_ds_MetricWeights_FT_epoch_{targetEpoch}.txt
 ```
 
 
@@ -135,3 +125,16 @@ CUDA_VISIBLE_DEVICES=0 python3 main.py --model princeton-nlp/Sheared-LLaMA-2.7B 
 
 ## Finetuning worked
 CUDA_VISIBLE_DEVICES=0 python finetune_lm.py      --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"       --num_train_epochs 1    --block_size 512 --block_size 512 --per_device_train_batch_size 1 --per_device_eval_batch_size 8  --do_train  --max_train_samples 15000  --max_eval_samples 128  --output_dir "${outdir}" --prune_info_path "${location}"  --hidden_mse_weight 0.0 --kl_weight 0.01 --dataset_name "wikitext" --overwrite_output_dir --do_eval
+
+
+
+git add ../commands.md Run_evals.py Run_evals_gsm8k_5shots.py
+
+
+
+
+
+CUDA_VISIBLE_DEVICES=7 python3 Run_evals_math-qa.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512    --learning_rate 1e-4               --per_device_train_batch_size 1         --per_device_eval_batch_size 8  --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"   --do_eleuther_eval True  --dataset_name 'gsm8k' --prune_target_epoch 3 --add_finetuned_adapter False --do_eleuther_eval_og_model False --save_info 'pruned_wikitext_metrics_ppl' > pruned_gsm8k_metrics_lex-cos_3_math.txt 2>&1
+
+
+CUDA_VISIBLE_DEVICES=7 python3 Run_evals_math-qa.py  --model_name_or_path "meta-llama/Llama-2-7b-hf"         --config_name "meta-llama/Llama-2-7b-hf"        --num_train_epochs 1         --block_size 512    --learning_rate 1e-4               --per_device_train_batch_size 1         --per_device_eval_batch_size 8  --max_eval_samples 128  --overwrite_output_dir  --output_dir "${outdir}"    --prune_info_path "${location}"   --do_eleuther_eval True  --dataset_name 'wiki' --prune_target_epoch 3 --add_finetuned_adapter False --do_eleuther_eval_og_model False --save_info 'pruned_wikitext_metrics_ppl' > pruned_wiki_math.txt 2>&1

@@ -191,6 +191,11 @@ class ModelArguments:
         metadata={"help": "Whether to add a finetuned adapter to the model"},
     )
     
+    finetune_adapter_dataset: Optional[str] = field(
+        default=None,
+        metadata={"help": "The dataset on which the adapter is finetuned"},
+    )
+    
     prune_target_epoch : Optional[int] = field(
         default=3,
         metadata={"help": "The number of masks we have for the model in the prune_info_path"},
@@ -559,14 +564,17 @@ def main():
     '''
     # Do the pre-training evaluation
     # Evaluation
-    if training_args.do_eval:
+    
+    if (training_args.do_eval) and (model_args.do_eleuther_eval_og_model):
         logger.info("*** Evaluate ***")
         model.eval()
         print(f'STDOUT: Evaluating on {data_args.dataset_name}')
         og_ppl, og_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
         out_str = "STDOUT: Original perplexity on {} = {:.3f}".format(data_args.dataset_name, og_ppl)
         print(out_str)
-
+    else:
+        print('STDOUT: Not evaluating the og ppl')
+    
     # since this will be pickled to avoid _LazyModule error in Hasher force logger loading before tokenize_function
     tok_logger = transformers.utils.logging.get_logger("transformers.tokenization_utils_base")
 
@@ -620,7 +628,7 @@ def main():
             tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
             # tasks = ['gsm8k'],
             num_fewshot=0,
-            limit = .005, # how much of the original dataset to test on 
+            limit = .5, # how much of the original dataset to test on 
             no_cache=True,
             pretrained_model=model,
             write_out=True, 
@@ -644,12 +652,16 @@ def main():
         torch.cuda.empty_cache()
         logger.info("*** Evaluate ***")
         model.eval()
-        start_time = time.time()
-        before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
-        speedup = og_runtime / final_runtime
-        out_str = "STDOUT: [Dataset: {}| SpeedUp={:.3f}] Original perplexity = {:.3f} | Before Training perplexity = {:.3f}".format(data_args.dataset_name,speedup, og_ppl, before_train_ppl, speedup)
+        if training_args.do_eval:
+            start_time = time.time()
+            before_train_ppl, final_runtime = evaluate_ppl(data_args.dataset_name, model, tokenizer, model.seqlen)
+            speedup = og_runtime / final_runtime
+            out_str = "STDOUT: [Dataset: {}| SpeedUp={:.3f}] Original perplexity = {:.3f} | Before Training perplexity = {:.3f}".format(data_args.dataset_name,speedup, og_ppl, before_train_ppl, speedup)
+            print('STDOUT: ', out_str)
+
+        else:
+            print('STDOUT: Not evaluating the ppl')
         # out_file.write(out_str + "\n")
-        print('STDOUT: ', out_str)
 
         should_i_do_eleuther_eval = model_args.do_eleuther_eval
         print(f'STDOUT: Eleuther eval for pruned model (no finetuning): {should_i_do_eleuther_eval}')
@@ -662,7 +674,7 @@ def main():
                 tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
                 # tasks = ['gsm8k'],
                 num_fewshot=0,
-                limit = .005, # how much of the original dataset to test on 
+                limit = .5, # how much of the original dataset to test on 
                 # num_fewshot={"hellaswag": 0, "arc_challenge":0}
                 no_cache=True,
                 pretrained_model=model,
@@ -672,14 +684,24 @@ def main():
             updated_results = {'results': results['results']}
             print('STDOUT:', updated_results)
     
-           
+    
     finetuned_model = model_args.add_finetuned_adapter
     print('STDOUT: Finetuning the Model: ', finetuned_model)
     # if model_args.add_finetuned_adapter, meaning the adapters for finetuning are there and we want to finetune
     if finetuned_model:
-        adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_c4_ft_wiki/'
-        model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_c4_ft_wiki_adapter")
+        if model_args.finetune_ft_dataset == 'wiki' or model_args.finetune_adapter_dataset == None:
+            adapter_name = '/home/vash==tt/Desktop/anlp-project/finetuned_model_prune_c4_ft_wiki/'
+            model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_c4_ft_wiki_adapter")
+        elif model_args.finetune_adapter_dataset == 'c4':
+            adapter_name = '/home/vash==tt/Desktop/anlp-project/finetuned_model_prune_gsm8k_ft_c4/'
+            model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_wiki_ft_wiki_adapter")
+        elif model_args.finetune_adapter_dataset == 'gsm8k':
+            adapter_name = '/home/vashistt/Desktop/anlp-project/finetuned_model_prune_gsm8k_ft_gsm8k/'
+            model = PeftModel.from_pretrained(model, adapter_name, adapter_name="prune_gsm8k_ft_gsm8k_adapter")
+        else:
+            raise ValueError("Invalid adapter dataset name")
 
+        # eleuther eval for finetuned model
         if should_i_do_eleuther_eval:
             #transformers.modeling_utils.load_sharded_checkpoint(model, training_args.output_dir)
             print('STDOUT: Eleuther eval for pruned model + finetuning')
@@ -689,7 +711,7 @@ def main():
                 tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
                 # tasks = ['gsm8k'],
                 num_fewshot=0,
-                limit = .005, # how much of the original dataset to test on 
+                limit = .5, # how much of the original dataset to test on 
                 # num_fewshot={"hellaswag": 0, "arc_challenge":0}
                 no_cache=True,
                 pretrained_model=model,
@@ -697,9 +719,8 @@ def main():
                 output_base_path=f'finetuned_sparsity-{final_sparsity:.3f}_all_dataset', # writes to the current dir
             )
             
-        updated_results = {'results': results['results']}
-        print('STDOUT:', updated_results)
-        
+            updated_results = {'results': results['results']}
+            print('STDOUT:', updated_results)
     # with open(file_path, 'w') as out_file:
     #     out_file.write("\n")
     #     out_file.write(results_str + "\n")
@@ -709,20 +730,5 @@ def _mp_fn(index):
     # For xla_spawn (TPUs)
     main()
 
-
 if __name__ == "__main__":
     main()
-
-    
-#     results = evaluator.simple_evaluate(
-#     model="hf-causal-experimental",
-#     model_args="pretrained={}".format(model_args.model_name_or_path),
-#     tasks=["winogrande", "boolq", "arc_challenge", "arc_easy", "hellaswag"], # main one here
-#     # tasks = ['gsm8k'],
-#     num_fewshot=0,
-#     limit = .01, # how much of the original dataset to test on 
-#     no_cache=True,
-#     pretrained_model=model,
-#     write_out=True, 
-#     output_base_path='/Users/vashisth/Documents/GitHub/ANLP_projects/anlp-project/logs_errors_outputs/gsm8k-pruned/finetuned-all-ds.json', # writes to the current dir if commented out 
-# )

@@ -17,7 +17,7 @@ import wandb
 from transformers.pytorch_utils import  find_pruneable_heads_and_indices, prune_linear_layer
 import gc
 import random
-from lib.data import get_raw_dataset
+from lib.data import get_raw_dataset, get_loaders
 
 print('torch', version('torch'))
 print('transformers', version('transformers'))
@@ -573,8 +573,9 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(args.model, use_fast=False)
     print('tokenizer done')
     trainenc, testenc = get_raw_dataset(args.dataset, tokenizer)
+    trainloader, testloader = get_loaders(args.dataset, trainenc, testenc, seed=0, seqlen=model.seqlen, tokenizer=tokenizer)
     # Getting the initial evaluation of the model
-    _, orig_test_ppl = eval_ppl(model, tokenizer, trainenc, testenc, model.device, dataset=args.dataset, bsz= args.bsz)
+    _, orig_test_ppl = eval_ppl(model, tokenizer, trainloader, testloader, model.device, dataset=args.dataset, bsz= args.bsz)
     print('eval done original_test_ppl:', orig_test_ppl)
     original_param_count = get_param_count(model)
     model.original_param_count = original_param_count
@@ -613,7 +614,7 @@ def main():
         print(model)
 
         # Evaluate the performance of the pruned model
-        ppl_train, ppl_test = eval_ppl(model, tokenizer, trainenc, testenc, model.device, dataset=args.dataset, bsz=args.bsz)
+        ppl_train, ppl_test = eval_ppl(model, tokenizer, trainloader, testloader, model.device, dataset=args.dataset, bsz=args.bsz)
         # acc_train, acc_test = eval_acc(model, tokenizer, model.device, dataset=args.dataset)
 
         wandb_run.log({'Sparsity': cur_sparsity, 'TrainPPL': ppl_train, 'TestPPL': ppl_test})

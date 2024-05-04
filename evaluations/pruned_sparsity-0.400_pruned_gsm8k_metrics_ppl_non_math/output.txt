@@ -1,0 +1,194 @@
+05/03/2024 00:13:12 - WARNING - __main__ - Process rank: -1, device: cuda:0, n_gpu: 1distributed training: False, 16-bits training: False
+05/03/2024 00:13:12 - INFO - __main__ - Training/evaluation parameters TrainingArguments(
+_n_gpu=1,
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_pin_memory=True,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+do_eval=False,
+do_predict=False,
+do_train=False,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_steps=None,
+evaluation_strategy=no,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'fsdp_min_num_params': 0, 'xla': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=0.0001,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=-1,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=“/home/ec2-user/anlp-project/finetuned_model/‘gsm8k-382428-100’”/runs/May03_00-13-12_ip-172-31-71-155.ec2.internal,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+no_cuda=False,
+num_train_epochs=1.0,
+optim=adamw_hf,
+optim_args=None,
+output_dir=“/home/ec2-user/anlp-project/finetuned_model/‘gsm8k-382428-100’”,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=1,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['wandb'],
+resume_from_checkpoint=None,
+run_name=“/home/ec2-user/anlp-project/finetuned_model/‘gsm8k-382428-100’”,
+save_on_each_node=False,
+save_safetensors=False,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+sharded_ddp=[],
+skip_memory_metrics=True,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+xpu_backend=None,
+)
+STDOUT: Not evaluating the og ppl
+STDOUT: Eleuther eval for og model:  False
+STDOUT: Num params = :  6476271616
+STDOUT: original model param count : 6476271616
+STDOUT: Pruning for epoch : 1
+STDOUT: epoch 1, param count is 5181022208
+STDOUT: Pruning for epoch : 2
+STDOUT: epoch 2, param count is 3886034944
+STDOUT: Final model sparsity is : 0.400 
+STDOUT: Final model param count : 3886034944
+STDOUT: Num params = :  3886034944
+STDOUT: Final sparsity is : 0.400
+05/03/2024 00:14:31 - INFO - __main__ - *** Evaluate ***
+STDOUT: Not evaluating the ppl
+STDOUT: Eleuther eval for pruned model (no finetuning): True
+We have loaded the new model !
+05/03/2024 00:15:23 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+05/03/2024 00:15:23 - INFO - datasets.info - Loading Dataset info from /home/ec2-user/.cache/huggingface/datasets/winogrande/winogrande_xl/1.1.0/85ac5b5a3b7a930e22d590176e39460400d19e41
+05/03/2024 00:15:23 - INFO - datasets.builder - Found cached dataset winogrande (/home/ec2-user/.cache/huggingface/datasets/winogrande/winogrande_xl/1.1.0/85ac5b5a3b7a930e22d590176e39460400d19e41)
+05/03/2024 00:15:23 - INFO - datasets.info - Loading Dataset info from /home/ec2-user/.cache/huggingface/datasets/winogrande/winogrande_xl/1.1.0/85ac5b5a3b7a930e22d590176e39460400d19e41
+05/03/2024 00:15:24 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+05/03/2024 00:15:24 - INFO - datasets.info - Loading Dataset info from /home/ec2-user/.cache/huggingface/datasets/super_glue/boolq/1.0.3/b051de3f07b5fd5ab80398a4836458db56234e24
+05/03/2024 00:15:24 - INFO - datasets.builder - Found cached dataset super_glue (/home/ec2-user/.cache/huggingface/datasets/super_glue/boolq/1.0.3/b051de3f07b5fd5ab80398a4836458db56234e24)
+05/03/2024 00:15:24 - INFO - datasets.info - Loading Dataset info from /home/ec2-user/.cache/huggingface/datasets/super_glue/boolq/1.0.3/b051de3f07b5fd5ab80398a4836458db56234e24
+05/03/2024 00:15:25 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+05/03/2024 00:15:25 - INFO - datasets.info - Loading Dataset info from /home/ec2-user/.cache/huggingface/datasets/ai2_arc/ARC-Challenge/0.0.0/210d026faf9955653af8916fad021475a3f00453
+05/03/2024 00:15:25 - INFO - datasets.builder - Found cached dataset ai2_arc (/home/ec2-user/.cache/huggingface/datasets/ai2_arc/ARC-Challenge/0.0.0/210d026faf9955653af8916fad021475a3f00453)
+05/03/2024 00:15:25 - INFO - datasets.info - Loading Dataset info from /home/ec2-user/.cache/huggingface/datasets/ai2_arc/ARC-Challenge/0.0.0/210d026faf9955653af8916fad021475a3f00453
+05/03/2024 00:15:27 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+05/03/2024 00:15:27 - INFO - datasets.info - Loading Dataset info from /home/ec2-user/.cache/huggingface/datasets/ai2_arc/ARC-Easy/0.0.0/210d026faf9955653af8916fad021475a3f00453
+05/03/2024 00:15:27 - INFO - datasets.builder - Found cached dataset ai2_arc (/home/ec2-user/.cache/huggingface/datasets/ai2_arc/ARC-Easy/0.0.0/210d026faf9955653af8916fad021475a3f00453)
+05/03/2024 00:15:27 - INFO - datasets.info - Loading Dataset info from /home/ec2-user/.cache/huggingface/datasets/ai2_arc/ARC-Easy/0.0.0/210d026faf9955653af8916fad021475a3f00453
+05/03/2024 00:15:27 - INFO - datasets.info - Loading Dataset Infos from /home/ec2-user/.cache/huggingface/modules/datasets_modules/datasets/hellaswag/512a66dd8b1b1643ab4a48aa4f150d04c91680da6a4096498a5e5f799623d5ae
+05/03/2024 00:15:27 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+05/03/2024 00:15:27 - INFO - datasets.info - Loading Dataset info from /home/ec2-user/.cache/huggingface/datasets/hellaswag/default/0.1.0/512a66dd8b1b1643ab4a48aa4f150d04c91680da6a4096498a5e5f799623d5ae
+05/03/2024 00:15:27 - INFO - datasets.builder - Found cached dataset hellaswag (/home/ec2-user/.cache/huggingface/datasets/hellaswag/default/0.1.0/512a66dd8b1b1643ab4a48aa4f150d04c91680da6a4096498a5e5f799623d5ae)
+05/03/2024 00:15:27 - INFO - datasets.info - Loading Dataset info from /home/ec2-user/.cache/huggingface/datasets/hellaswag/default/0.1.0/512a66dd8b1b1643ab4a48aa4f150d04c91680da6a4096498a5e5f799623d5ae
+Task: winogrande; number of docs: 1267
+Task: winogrande; document 0; context prompt (starting on next line):
+People think Rebecca
+(end of prompt on previous line)
+Requests: [Req_loglikelihood('People think Samantha', ' is embarassed, because Samantha made snide comments about the shirt Rebecca was wearing.')[0]
+, Req_loglikelihood('People think Rebecca', ' is embarassed, because Samantha made snide comments about the shirt Rebecca was wearing.')[0]
+]
+Task: boolq; number of docs: 3270
+Task: boolq; document 0; context prompt (starting on next line):
+NCIS: New Orleans (season 4) -- The fourth season of NCIS: New Orleans premiered on September 26, 2017 on CBS. The series continues to air following Bull, Tuesday at 10:00 p.m. (ET) and contained 24 episodes. The season concluded on May 15, 2018.
+Question: is ncis new orleans over for the season?
+Answer:
+(end of prompt on previous line)
+Requests: (Req_loglikelihood('NCIS: New Orleans (season 4) -- The fourth season of NCIS: New Orleans premiered on September 26, 2017 on CBS. The series continues to air following Bull, Tuesday at 10:00 p.m. (ET) and contained 24 episodes. The season concluded on May 15, 2018.\nQuestion: is ncis new orleans over for the season?\nAnswer:', ' yes')[0]
+, Req_loglikelihood('NCIS: New Orleans (season 4) -- The fourth season of NCIS: New Orleans premiered on September 26, 2017 on CBS. The series continues to air following Bull, Tuesday at 10:00 p.m. (ET) and contained 24 episodes. The season concluded on May 15, 2018.\nQuestion: is ncis new orleans over for the season?\nAnswer:', ' no')[0]
+)
+Task: arc_challenge; number of docs: 1172
+Task: arc_challenge; document 0; context prompt (starting on next line):
+Question: Cities control the amount of pollution that is allowed to come from cars. How does this most likely help people?
+Answer:
+(end of prompt on previous line)
+Requests: [Req_loglikelihood('Question: Cities control the amount of pollution that is allowed to come from cars. How does this most likely help people?\nAnswer:', ' The air stays cleaner.')[0]
+, Req_loglikelihood('Question: Cities control the amount of pollution that is allowed to come from cars. How does this most likely help people?\nAnswer:', ' Cars can travel at faster speeds.')[0]
+, Req_loglikelihood('Question: Cities control the amount of pollution that is allowed to come from cars. How does this most likely help people?\nAnswer:', ' The skills of the drivers improve.')[0]
+, Req_loglikelihood('Question: Cities control the amount of pollution that is allowed to come from cars. How does this most likely help people?\nAnswer:', ' It becomes safer to drive on the roads.')[0]
+]
+Task: arc_easy; number of docs: 2376
+Task: arc_easy; document 0; context prompt (starting on next line):
+Question: Which is the function of the gallbladder?
+Answer:
+(end of prompt on previous line)
+Requests: [Req_loglikelihood('Question: Which is the function of the gallbladder?\nAnswer:', ' store bile')[0]
+, Req_loglikelihood('Question: Which is the function of the gallbladder?\nAnswer:', ' produce bile')[0]
+, Req_loglikelihood('Question: Which is the function of the gallbladder?\nAnswer:', ' store digestive enzymes')[0]
+, Req_loglikelihood('Question: Which is the function of the gallbladder?\nAnswer:', ' produce digestive enzymes')[0]
+]
+Task: hellaswag; number of docs: 10042
+Task: hellaswag; document 0; context prompt (starting on next line):
+Personal Care and Style: How to increase breast size with a bra. Check your bra size. Wearing a bra that is too big will not make your breasts look larger. That is why it is important to wear the right size bra for you.
+(end of prompt on previous line)
+Requests: [Req_loglikelihood('Personal Care and Style: How to increase breast size with a bra. Check your bra size. Wearing a bra that is too big will not make your breasts look larger. That is why it is important to wear the right size bra for you.', ' You can visit a lingerie shop and have them measure you to help you fit a bra to your size, or measure yourself before you shop for a new bra to ensure that you get a good fit. Use a flexible tape measure, like one found in a sewing kit.')[0]
+, Req_loglikelihood('Personal Care and Style: How to increase breast size with a bra. Check your bra size. Wearing a bra that is too big will not make your breasts look larger. That is why it is important to wear the right size bra for you.', ' This is why it is important to keep your breasts under protection when in the shower and only wear bras that are larger than your breast size. If you are not wearing a bra, try wearing something that is a little bigger.')[0]
+, Req_loglikelihood('Personal Care and Style: How to increase breast size with a bra. Check your bra size. Wearing a bra that is too big will not make your breasts look larger. That is why it is important to wear the right size bra for you.', ' For a girl, a bra with a support strap will be easier for her, because most women are unable to pull through bra straps and bras that are too small will not be able to support breasts from side-to-side. Many bras have even been created that cover the breast side, and can be sent to other women in the world to make them look bigger.')[0]
+, Req_loglikelihood('Personal Care and Style: How to increase breast size with a bra. Check your bra size. Wearing a bra that is too big will not make your breasts look larger. That is why it is important to wear the right size bra for you.', ' Choose a color that is flattering to your breast type and specific event, in addition to those that make you uncomfortable. Look for sports bras made from natural material, such as spandex or lycra, as this is a more breathable bra.')[0]
+]
+Running loglikelihood requests
+STDOUT: {'results': {'winogrande': {'acc': 0.5308056872037915, 'acc_stderr': 0.019851147403144465}, 'boolq': {'acc': 0.6129541864139021, 'acc_stderr': 0.019374774468739343}, 'arc_challenge': {'acc': 0.2480252764612954, 'acc_stderr': 0.017178729981055584, 'acc_norm': 0.2843601895734597, 'acc_norm_stderr': 0.017944158818260177}, 'arc_easy': {'acc': 0.40916271721958924, 'acc_stderr': 0.01955795461437368, 'acc_norm': 0.4218009478672986, 'acc_norm_stderr': 0.019644180872733657}, 'hellaswag': {'acc': 0.3902053712480253, 'acc_stderr': 0.01940349128090102, 'acc_norm': 0.47709320695102686, 'acc_norm_stderr': 0.019868048853393747}}}
+STDOUT: Finetuning the Model:  False
