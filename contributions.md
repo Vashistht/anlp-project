@@ -16,4 +16,9 @@
   - Wrote up results sections, parts of dataset sections, etc
 
 ## Emily
-- 
+- Code
+  - Implemented semantic similarity calculations for combined pruning metric
+  - Generated pruning masks for various combinations of metric weights
+  - Small corrections to original code base
+- Report
+  - Method, Limitations, contributions to various other sections
